@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "rightclickharvest",
+  "version": "${version}",
+  "name": "RightClickHarvest",
+  "description": "Allows you to harvest crops with a right click",
+  "authors": [
+    "Jamalam360"
+  ],
+  "contributors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/rightclickharvest/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.jamalam360.RightClickInit"
+    ],
+    "client": [],
+    "server": []
+  },
+  "mixins": [
+    "rightclickharvest.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.2",
+    "fabric": "*"
+  }
+}
