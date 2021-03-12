@@ -22,7 +22,7 @@ public abstract class ChildMixin extends CropBlockMixin {
         if (instance.isMature(state) && !world.isClient) {
             world.setBlockState(pos, instance.withAge(0), 2);
 
-            instance.dropStacks(state, world, pos);
+            instance.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
         }
     }
 }
