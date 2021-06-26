@@ -2,7 +2,7 @@
   "required": true,
   "package": "com.jamalam360.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": ["ChildMixin", "CropBlockMixin"],
+  "mixins": ["ChildMixin", "CocoaBlockMixin", "CropBlockMixin"],
   "client": [],
   "server": [],
   "injectors": {
