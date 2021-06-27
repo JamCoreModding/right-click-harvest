@@ -1,6 +1,7 @@
 plugins {
 	id 'fabric-loom' version '0.8-SNAPSHOT'
 	id 'maven-publish'
+	id 'org.cadixdev.licenser' version '0.6.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -13,6 +14,12 @@ group = project.maven_group
 minecraft {
 }
 
+repositories {
+	maven{
+		url "https://maven.terraformersmc.com/releases"
+	}
+}
+
 dependencies {
 	//to change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -20,6 +27,8 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	modCompileOnly "com.terraformersmc:modmenu:2.0.0-beta.7"
 }
 
 processResources {
