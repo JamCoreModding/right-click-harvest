@@ -5,14 +5,20 @@
   "name": "Right Click Harvest",
   "description": "Allows you to harvest crops with a right click",
   "authors": [
-    "Jamalam360"
+    "Jamalam360 - Owner, Developer"
   ],
-  "contributors": [],
-  "contact": {},
+  "contributors": [
+    "Fourmisain - Developer"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/rightclickharvest-fabric",
+    "issues": "https://github.com/Jamalam360/RightClickHarvestFabric/issues",
+    "sources": "https://github.com/Jamalam360/RightClickHarvestFabric"
+  },
   "license": "MIT",
   "icon": "assets/rightclickharvest/icon.png",
   "environment": "*",
-  "mixins": [
+  "mixins": [k
     "rightclickharvest.mixins.json"
   ],
   "depends": {
