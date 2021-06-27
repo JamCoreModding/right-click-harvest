@@ -12,11 +12,6 @@
   "license": "MIT",
   "icon": "assets/rightclickharvest/icon.png",
   "environment": "*",
-  "entrypoints": {
-    "main": [],
-    "client": [],
-    "server": []
-  },
   "mixins": [
     "rightclickharvest.mixins.json"
   ],
