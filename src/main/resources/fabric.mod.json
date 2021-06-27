@@ -13,9 +13,7 @@
   "icon": "assets/rightclickharvest/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "com.jamalam360.RightClickInit"
-    ],
+    "main": [],
     "client": [],
     "server": []
   },

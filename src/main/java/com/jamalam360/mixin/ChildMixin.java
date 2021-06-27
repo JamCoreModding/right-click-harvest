@@ -1,5 +1,6 @@
 package com.jamalam360.mixin;
 
+import net.minecraft.block.Block;
 import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -20,10 +21,10 @@ public abstract class ChildMixin extends CropBlockMixin {
         CropBlock instance = (CropBlock) (Object) this;
 
         if (instance.isMature(state)) {
-            if(!world.isClient) {
+            if (!world.isClient) {
                 world.setBlockState(pos, instance.withAge(0), 2);
-                instance.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
-            } else{
+                Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
+            } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
             }
 
