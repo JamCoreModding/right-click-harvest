@@ -47,7 +47,7 @@ public abstract class CropBlockMixin extends AbstractBlockMixin {
     public void onUseMixin(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
         if (this.isMature(state)) {
             if (!world.isClient) {
-                world.setBlockState(pos, ((CropBlock) (Object) this).withAge(0), 2);
+                world.setBlockState(pos, ((CropBlock) (Object) this).withAge(0));
                 Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
             } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
