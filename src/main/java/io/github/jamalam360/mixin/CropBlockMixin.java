@@ -22,11 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.jamalam360.mixin;
+package io.github.jamalam360.mixin;
 
 import net.minecraft.block.Block;
 import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.minecraft.block.CropBlock;
@@ -39,14 +40,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 @Mixin(CropBlock.class)
-public abstract class ChildMixin extends CropBlockMixin {
-    @Override
-    protected void handlerMethod(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
-        CropBlock instance = (CropBlock) (Object) this;
+public abstract class CropBlockMixin extends AbstractBlockMixin {
+    @Shadow public abstract boolean isMature(BlockState state);
 
-        if (instance.isMature(state)) {
+    @Override
+    public void onUseMixin(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+        if (this.isMature(state)) {
             if (!world.isClient) {
-                world.setBlockState(pos, instance.withAge(0), 2);
+                world.setBlockState(pos, ((CropBlock) (Object) this).withAge(0), 2);
                 Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
             } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
