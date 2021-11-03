@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CocoaBlock.class)
 public abstract class CocoaBlockMixin extends AbstractBlockMixin {
 	@Override
-	public void onUseMixin(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+	public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
 		if (state.get(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE) {
 			if (!world.isClient) {
 				world.setBlockState(pos, state.with(CocoaBlock.AGE, 0));

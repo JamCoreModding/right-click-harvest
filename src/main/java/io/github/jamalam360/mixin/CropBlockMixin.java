@@ -44,7 +44,7 @@ public abstract class CropBlockMixin extends AbstractBlockMixin {
     @Shadow public abstract boolean isMature(BlockState state);
 
     @Override
-    public void onUseMixin(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+    public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
         if (this.isMature(state)) {
             if (!world.isClient) {
                 world.setBlockState(pos, ((CropBlock) (Object) this).withAge(0));

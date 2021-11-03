@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(NetherWartBlock.class)
 public abstract class NetherWartBlockMixin extends AbstractBlockMixin {
     @Override
-    public void onUseMixin(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+    public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
         if (state.get(NetherWartBlock.AGE) >= NetherWartBlock.field_31199) {
             if (!world.isClient) {
                 world.setBlockState(pos, state.with(NetherWartBlock.AGE, 0));
