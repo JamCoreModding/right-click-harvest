@@ -6,6 +6,7 @@
     "AbstractBlockMixin",
     "CocoaBlockMixin",
     "CropBlockMixin",
+    "NetherWartBlockMixin",
     "SugarcaneBlockMixin"
   ],
   "client": [],
