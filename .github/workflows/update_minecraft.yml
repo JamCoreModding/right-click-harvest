@@ -1,0 +1,59 @@
+name: Update Minecraft
+on: 
+  schedule:
+    - cron: '35 1,13 * * *'
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      matrix:
+        java: [
+            17
+        ]
+        os: [ ubuntu-20.04 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          
+      - name: Check for Minecraft Updates
+        uses: ByMartrixX/minecraft-update-check-action@v0
+        id: check
+        with:
+          cache-base-key: mc-manifest-
+      
+      - name: Validate Gradle Wrapper
+        if: ${{ steps.check.outputs.id == 'release' }}
+        uses: gradle/wrapper-validation-action@v1
+        
+      - name: Setup JDK ${{ matrix.java }}
+        if: ${{ steps.check.outputs.id == 'release' }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Make Gradle Wrapper Executable
+        if: ${{ runner.os != 'Windows' && steps.check.outputs.id == 'release' }}
+        run: chmod +x ./gradlew
+
+      - name: Update Minecraft
+        if: ${{ steps.check.outputs.id == 'release' }}
+        uses: JamCoreModding/FabricUpdateAction@1.0.3
+        with:
+          game-version: ${{ steps.check.outputs.id }}
+          
+      - name: Build
+        if: ${{ steps.check.outputs.id == 'release' }}
+        run: ./gradlew build
+      
+      - name: Create Pull Request
+        if: ${{ steps.check.outputs.id == 'release' }}
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: 'Update Minecraft to ${{ steps.check.outputs.id }}'
+          title: 'Update Minecraft to ${{ steps.check.outputs.id }}'
+          body: 'Automated Update by GitHub Actions'
+          branch: 'update-minecraft/${{ steps.check.outputs.id }}'
+          assignees: 'Jamalam360'

@@ -19,3 +19,7 @@ bin/
 
 #fabric
 run/
+
+#update action
+version_manifest_v2.json
+.cache/

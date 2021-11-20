@@ -1,12 +1,12 @@
-name: Error Checker
+name: Build
+on: push
 
-on: [ push, pull_request ]
 jobs:
-  build:
+  update-license:
     strategy:
       matrix:
         java: [
-            16
+            17
         ]
         os: [ ubuntu-20.04 ]
     runs-on: ${{ matrix.os }}
@@ -16,45 +16,93 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
+
+      - name: Get Branch Name
+        id: branch-name
+        uses: tj-actions/branch-names@v5
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup JDK ${{ matrix.java }}
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+
+      - name: Make Gradle Wrapper Executable
+        if: ${{ runner.os != 'Windows' }}
+        run: chmod +x ./gradlew
+
+      - name: Update Licenses
+        continue-on-error: true
+        run: |
+          ./gradlew updateLicenses
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions"
+          git pull origin ${{ steps.branch-name.outputs.current_branch }}
+          git commit -m "Update License [bot]" -a
+      - name: Push License Changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  build:
+    needs: update-license
+    strategy:
+      matrix:
+        java: [
+            17
+        ]
+        os: [ ubuntu-20.04 ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Get Branch Name
+        id: branch-name
+        uses: tj-actions/branch-names@v5
+
       - name: Check If Running In Template Repository
         if: ${{ github.event.repository.name == 'FabricTemplateMod' }}
         run: echo "run=false" >> $GITHUB_ENV
+
       - name: Check If Initial Commit
         if: ${{ github.event.commits[0].message == 'Initial commit' }}
         run: echo "run=false" >> $GITHUB_ENV
+
       - name: Check For --no-actions Flag
         if: ${{ contains(github.event.commits[0].message, '--no-actions') }}
         run: echo "run=false" >> $GITHUB_ENV
+
       - name: Validate Gradle Wrapper
         if: ${{  env.run != 'false'  }}
         uses: gradle/wrapper-validation-action@v1
+
       - name: Setup JDK ${{ matrix.java }}
         if: ${{  env.run != 'false'  }}
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
+
       - name: Make Gradle Wrapper Executable
         if: ${{ runner.os != 'Windows' && env.run != 'false' }}
         run: chmod +x ./gradlew
-      - name: Update Licenses
-        continue-on-error: true
+        
+      - name: Pull License Changes
         if: ${{  env.run != 'false'  }}
-        run: |
-          ./gradlew updateLicenses
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions"
-          git commit -m "Update License [bot]" -a
+        run: git pull origin ${{ steps.branch-name.outputs.current_branch }}
+
       - name: Build
         if: ${{  env.run != 'false'  }}
         run: ./gradlew build
-      - name: Push License Changes
-        if: ${{  env.run != 'false'  }}
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+
       - name: Capture Build Artifacts
-        if: ${{ runner.os == 'Linux' && matrix.java == '16' && env.run != 'false' }}
+        if: ${{ env.run != 'false' }}
         uses: actions/upload-artifact@v2
         with:
           name: Artifacts
