@@ -26,30 +26,30 @@ jobs:
           cache-base-key: mc-manifest-
       
       - name: Validate Gradle Wrapper
-        if: ${{ steps.check.outputs.id == 'release' }}
+        if: ${{ steps.check.outputs.type == 'release' }}
         uses: gradle/wrapper-validation-action@v1
         
       - name: Setup JDK ${{ matrix.java }}
-        if: ${{ steps.check.outputs.id == 'release' }}
+        if: ${{ steps.check.outputs.type == 'release' }}
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
       - name: Make Gradle Wrapper Executable
-        if: ${{ runner.os != 'Windows' && steps.check.outputs.id == 'release' }}
+        if: ${{ runner.os != 'Windows' && steps.check.outputs.type == 'release' }}
         run: chmod +x ./gradlew
 
       - name: Update Minecraft
-        if: ${{ steps.check.outputs.id == 'release' }}
+        if: ${{ steps.check.outputs.type == 'release' }}
         uses: JamCoreModding/FabricUpdateAction@1.0.3
         with:
           game-version: ${{ steps.check.outputs.id }}
           
       - name: Build
-        if: ${{ steps.check.outputs.id == 'release' }}
+        if: ${{ steps.check.outputs.type == 'release' }}
         run: ./gradlew build
       
       - name: Create Pull Request
-        if: ${{ steps.check.outputs.id == 'release' }}
+        if: ${{ steps.check.outputs.type == 'release' }}
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: 'Update Minecraft to ${{ steps.check.outputs.id }}'
