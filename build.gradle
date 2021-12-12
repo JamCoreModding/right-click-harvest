@@ -12,20 +12,23 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-minecraft {
-}
 
 repositories {
+
+    mavenCentral()
+
     maven {
-        url = "https://maven.terraformersmc.com/releases"
+        name = "Terraformersmc"
+        url = "https://maven.terraformersmc.com/"
     }
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${project.minecraft_version}")
-    mappings("net.fabricmc:yarn:${project.yarn_mappings}:v2")
-    modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
-    modRuntime("com.terraformersmc:modmenu:${project.mod_menu_version}")
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // ModMenu dependency
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 processResources {
@@ -36,9 +39,9 @@ processResources {
     }
 }
 
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-    options.release = 16
+tasks.withType(JavaCompile).configureEach {
+    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+    it.options.release = 17
 }
 
 java {

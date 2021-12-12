@@ -22,9 +22,14 @@
     "rightclickharvest.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.11.2"
+    "fabricloader": ">=0.11.2",
+    "minecraft": ">=1.18",
+    "java": "17"
   },
   "custom": {
     "notify_version_url": "https://raw.githubusercontent.com/JamCoreModding/Meta/main/data/mod_versions.json"
+  },
+  "recommends": {
+    "modmenu": ">=3.0.0"
   }
 }
