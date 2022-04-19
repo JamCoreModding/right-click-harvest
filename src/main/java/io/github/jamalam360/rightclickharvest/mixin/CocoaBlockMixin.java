@@ -22,52 +22,34 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.mixin;
+package io.github.jamalam360.rightclickharvest.mixin;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SugarCaneBlock;
+import net.minecraft.block.CocoaBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(SugarCaneBlock.class)
-public abstract class SugarcaneBlockMixin extends AbstractBlockMixin {
-    @Override
-    public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
-        // allow placing sugar cane on top of sugar cane
-        if (hit.getSide() == Direction.UP) {
-            return;
-        }
+@Mixin(CocoaBlock.class)
+public abstract class CocoaBlockMixin extends AbstractBlockMixin {
+	@Override
+	public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+		if (state.get(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE) {
+			if (!world.isClient) {
+				world.setBlockState(pos, state.with(CocoaBlock.AGE, 0));
+				Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
+			} else {
+				player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
+			}
 
-        int count = 1;
-
-        // find the block the sugar cane stands on
-        BlockPos bottom = pos.down();
-        while (world.getBlockState(bottom).isOf(Blocks.SUGAR_CANE)) {
-            count++;
-            bottom = bottom.down();
-        }
-
-        // when the sugar cane is only 1 tall, do nothing
-        if (count == 1 && !world.getBlockState(pos.up()).isOf(Blocks.SUGAR_CANE)) {
-            return;
-        }
-
-        // else break the 2nd from bottom cane
-        if (!world.isClient) {
-            world.breakBlock(bottom.up(2), true);
-        } else {
-            player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
-        }
-
-        info.setReturnValue(ActionResult.SUCCESS);
-    }
+			info.setReturnValue(ActionResult.SUCCESS);
+		}
+	}
 }

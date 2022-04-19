@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.mixin;
+package io.github.jamalam360.rightclickharvest.mixin;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -41,7 +41,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class NetherWartBlockMixin extends AbstractBlockMixin {
     @Override
     public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
-        if (state.get(NetherWartBlock.AGE) >= NetherWartBlock.field_31199) {
+        if (state.get(NetherWartBlock.AGE) >= NetherWartBlock.MAX_AGE) {
             if (!world.isClient) {
                 world.setBlockState(pos, state.with(NetherWartBlock.AGE, 0));
                 Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));

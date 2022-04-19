@@ -1,7 +1,7 @@
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT'
-    id 'io.github.juuxel.loom-quiltflower-mini' version '1.1.0'
-    id 'maven-publish'
+    id 'fabric-loom' version '0.11-SNAPSHOT'
+    id 'io.github.juuxel.loom-quiltflower' version '1.7.+'
+    id 'org.quiltmc.quilt-mappings-on-loom' version '4.0.0'
     id 'org.cadixdev.licenser' version '0.6.1'
 }
 
@@ -12,21 +12,34 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-minecraft {
+dependencies {
+    if (System.getenv().get("gametest_minecraft_version")) {
+        minecraft("com.mojang:minecraft:${System.getenv().get("gametest_minecraft_version")}")
+    } else {
+        minecraft("com.mojang:minecraft:${project.minecraft_version}")
+    }
+
+    mappings(loom.layered {
+        addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:v2"))
+    })
+
+    modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
+    include(modImplementation(fabricApi.module("fabric-gametest-api-v1", "0.51.0+1.18.2")))
 }
 
-repositories {
-    maven {
-        url = "https://maven.terraformersmc.com/releases"
+loom {
+    runs {
+        gametest {
+            server()
+            name "Game Test"
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+            runDir "build/gametest"
+        }
     }
 }
 
-dependencies {
-    minecraft("com.mojang:minecraft:${project.minecraft_version}")
-    mappings("net.fabricmc:yarn:${project.yarn_mappings}:v2")
-    modImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
-    modRuntime("com.terraformersmc:modmenu:${project.mod_menu_version}")
-}
+test.dependsOn runGametest
 
 processResources {
     inputs.property "version", project.version
@@ -38,7 +51,7 @@ processResources {
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
-    options.release = 16
+    options.release = 17
 }
 
 java {
