@@ -1,0 +1,4 @@
+- Update build script
+- Automate publishing of builds
+- Add tests
+- Release for more MC versions

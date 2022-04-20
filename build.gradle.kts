@@ -1,7 +1,12 @@
+import java.util.*
+import com.matthewprenger.cursegradle.CurseProject
+import com.matthewprenger.cursegradle.Options
+
 plugins {
     id("fabric-loom") version "0.11-SNAPSHOT"
     id("io.github.juuxel.loom-quiltflower") version "1.7.1"
     id("org.quiltmc.quilt-mappings-on-loom") version "4.0.0"
+    id("com.matthewprenger.cursegradle") version "1.4.0"
     id("org.cadixdev.licenser") version "0.6.1"
 }
 
@@ -48,6 +53,44 @@ loom {
             vmArg("-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml")
             runDir("build/gametest")
         }
+    }
+}
+
+curseforge {
+    if (project.rootProject.file("local.properties").exists()) {
+        val localProperties = Properties()
+        localProperties.load(project.rootProject.file("local.properties").inputStream())
+
+        apiKey = localProperties["CURSEFORGE_API_KEY"] as String
+
+        project(closureOf<CurseProject> {
+            id = "452834"
+
+            if (project.rootProject.file("CHANGELOG.md").exists()) {
+                changelog = project.rootProject.file("CHANGELOG.md")
+            } else {
+                changelog = "No changelog provided"
+            }
+
+            releaseType = "release"
+
+            mainArtifact(tasks.get("remapJar"))
+
+            afterEvaluate {
+                uploadTask.dependsOn("remapJar")
+            }
+
+            addGameVersion("Fabric")
+
+            project.rootProject.file("VERSIONS.txt").readText().split("\r\n").forEach {
+                addGameVersion(it)
+            }
+        })
+
+        options(closureOf<Options> {
+            forgeGradleIntegration = false
+            debug = true
+        })
     }
 }
 
