@@ -19,6 +19,12 @@
   "icon": "assets/rightclickharvest/icon.png",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "io.github.jamalam360.rightclickharvest.RightClickHarvestModInit"
+    ],
+    "modmenu": [
+      "io.github.jamalam360.rightclickharvest.RightClickHarvestModInit"
+    ],
     "fabric-gametest": [
       "io.github.jamalam360.rightclickharvest.RightClickHarvestGameTest"
     ]

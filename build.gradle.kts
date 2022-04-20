@@ -42,6 +42,7 @@ dependencies {
 
     modImplementation(libs.loader)
     modImplementation(libs.fabric.api) // For gametest API
+    modImplementation(libs.mod.menu)
 }
 
 loom {

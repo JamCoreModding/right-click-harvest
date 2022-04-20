@@ -2,3 +2,5 @@
 - Automate publishing of builds
 - Add tests
 - Release for more MC versions
+- Add a config menu
+- Add a config option to require a hoe to be held to right-click-harvest

@@ -24,6 +24,7 @@
 
 package io.github.jamalam360.rightclickharvest.mixin;
 
+import io.github.jamalam360.rightclickharvest.RightClickHarvestModInit;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SugarCaneBlock;
@@ -43,7 +44,7 @@ public abstract class SugarcaneBlockMixin extends AbstractBlockMixin {
     @Override
     public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
         // allow placing sugar cane on top of sugar cane
-        if (hit.getSide() == Direction.UP) {
+        if (hit.getSide() == Direction.UP || !RightClickHarvestModInit.canRightClickHarvest(player)) {
             return;
         }
 
