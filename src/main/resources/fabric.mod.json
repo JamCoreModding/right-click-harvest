@@ -23,7 +23,7 @@
       "io.github.jamalam360.rightclickharvest.RightClickHarvestModInit"
     ],
     "modmenu": [
-      "io.github.jamalam360.rightclickharvest.RightClickHarvestModInit"
+      "io.github.jamalam360.rightclickharvest.ModMenuScreen"
     ],
     "fabric-gametest": [
       "io.github.jamalam360.rightclickharvest.RightClickHarvestGameTest"
