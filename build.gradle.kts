@@ -89,7 +89,6 @@ curseforge {
 
         options(closureOf<Options> {
             forgeGradleIntegration = false
-            debug = true
         })
     }
 }
