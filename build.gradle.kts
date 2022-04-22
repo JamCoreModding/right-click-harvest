@@ -1,26 +1,23 @@
-import java.util.*
-import com.matthewprenger.cursegradle.CurseProject
-import com.matthewprenger.cursegradle.Options
-
 plugins {
     id("fabric-loom") version "0.11-SNAPSHOT"
     id("io.github.juuxel.loom-quiltflower") version "1.7.1"
     id("org.quiltmc.quilt-mappings-on-loom") version "4.0.0"
-    id("com.matthewprenger.cursegradle") version "1.4.0"
     id("org.cadixdev.licenser") version "0.6.1"
 }
 
-val modVersion = "2.0.0"
+apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/main/publishing.gradle.kts")
+apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/main/misc.gradle.kts")
 
-group = "io.github.jamalam360"
-version = modVersion
+val mod_version: String by project
+val archive_base_name: String by project
+
+group = archive_base_name
+version = mod_version
 
 repositories {
     val mavenUrls = mapOf(
         Pair("https://maven.terraformersmc.com/releases", listOf("com.terraformersmc"))
     )
-
-    mavenLocal()
 
     for (mavenPair in mavenUrls) {
         maven {
@@ -57,72 +54,8 @@ loom {
     }
 }
 
-curseforge {
-    if (project.rootProject.file("local.properties").exists()) {
-        val localProperties = Properties()
-        localProperties.load(project.rootProject.file("local.properties").inputStream())
-
-        apiKey = localProperties["CURSEFORGE_API_KEY"] as String
-
-        project(closureOf<CurseProject> {
-            id = "452834"
-
-            if (project.rootProject.file("CHANGELOG.md").exists()) {
-                changelog = project.rootProject.file("CHANGELOG.md")
-            } else {
-                changelog = "No changelog provided"
-            }
-
-            releaseType = "release"
-
-            mainArtifact(tasks.get("remapJar"))
-
-            afterEvaluate {
-                uploadTask.dependsOn("remapJar")
-            }
-
-            addGameVersion("Fabric")
-
-            project.rootProject.file("VERSIONS.txt").readText().split("\r\n").forEach {
-                addGameVersion(it)
-            }
-        })
-
-        options(closureOf<Options> {
-            forgeGradleIntegration = false
-        })
-    }
-}
-
 tasks {
-    processResources {
-        inputs.property("version", project.version)
-        filesMatching("fabric.mod.json") {
-            expand(
-                mutableMapOf(
-                    "version" to project.version
-                )
-            )
-        }
-    }
-
-    build {
-        dependsOn("updateLicenses")
-    }
-
     test {
         dependsOn("runGametest")
-    }
-
-    jar {
-        archiveBaseName.set("rightclickharvest")
-    }
-
-    remapJar {
-        archiveBaseName.set("rightclickharvest")
-    }
-
-    withType<JavaCompile> {
-        options.release.set(17)
     }
 }

@@ -4,6 +4,7 @@ build/
 out/
 classes/
 local.properties
+secrets.properties
 
 #IDEA
 .idea/
