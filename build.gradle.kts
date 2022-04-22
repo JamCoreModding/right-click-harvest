@@ -9,9 +9,8 @@ apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/main/publis
 apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/main/misc.gradle.kts")
 
 val mod_version: String by project
-val archive_base_name: String by project
 
-group = archive_base_name
+group = "io.github.jamalam360"
 version = mod_version
 
 repositories {
