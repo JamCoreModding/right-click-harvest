@@ -24,7 +24,6 @@
 
 package io.github.jamalam360.rightclickharvest;
 
-import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.HoeItem;
