@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.rightclickharvest;
+package io.github.jamalam360.rightclickharvest.config;
 
 /**
  * @author Jamalam360
  */
-public class Config extends MidnightConfig{
+public class Config extends MidnightConfig {
     @Entry
     public static boolean requireHoe = false;
 }

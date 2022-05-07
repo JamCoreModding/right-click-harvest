@@ -24,24 +24,32 @@
 
 package io.github.jamalam360.rightclickharvest;
 
+import io.github.jamalam360.rightclickharvest.config.Config;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CocoaBlock;
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.NetherWartBlock;
+import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.test.GameTest;
+import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 import java.lang.reflect.Method;
 
 /**
  * @author Jamalam360
  */
+@SuppressWarnings("unused")
 public class RightClickHarvestGameTest implements FabricGameTest {
     @Override
     public void invokeTestMethod(TestContext context, Method method) {
+        Config.requireHoe = false;
         FabricGameTest.super.invokeTestMethod(context, method);
     }
 
@@ -58,6 +66,33 @@ public class RightClickHarvestGameTest implements FabricGameTest {
         });
     }
 
+    @GameTest(structureName = EMPTY_STRUCTURE)
+    public void testRegularCropsWithHoe(TestContext context) {
+        Config.requireHoe = true;
+        context.setBlockState(0, 2, 0, Blocks.FARMLAND);
+        context.setBlockState(0, 3, 0, Blocks.WHEAT.getDefaultState().with(CropBlock.AGE, CropBlock.MAX_AGE));
+
+        BlockPos blockPos = context.getAbsolutePos(new BlockPos(0, 3, 0));
+        BlockState blockState = context.getWorld().getBlockState(blockPos);
+
+        PlayerEntity player = context.createMockPlayer();
+        player.setStackInHand(Hand.MAIN_HAND, Items.WOODEN_HOE.getDefaultStack());
+
+        blockState.onUse(
+                context.getWorld(), player, Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(blockPos), Direction.NORTH, blockPos, true)
+        );
+
+        context.addInstantFinalTask(() -> {
+            context.expectEntity(EntityType.ITEM);
+            context.expectBlockProperty(new BlockPos(0, 3, 0), CropBlock.AGE, 0);
+
+            if (player.getMainHandStack().getDamage() == ToolMaterials.DIAMOND.getDurability()) {
+                throw new GameTestException("Expected hoe to be damaged");
+            }
+
+            context.complete();
+        });
+    }
     @GameTest(structureName = EMPTY_STRUCTURE)
     public void testCocoaBeans(TestContext context) {
         context.setBlockState(0, 2, 0, Blocks.JUNGLE_LOG);

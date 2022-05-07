@@ -24,6 +24,7 @@
 
 package io.github.jamalam360.rightclickharvest.mixin;
 
+import io.github.jamalam360.rightclickharvest.config.Config;
 import io.github.jamalam360.rightclickharvest.RightClickHarvestModInit;
 import net.minecraft.block.Block;
 import net.minecraft.sound.SoundEvents;
@@ -50,6 +51,10 @@ public abstract class CropBlockMixin extends AbstractBlockMixin {
             if (!world.isClient) {
                 world.setBlockState(pos, ((CropBlock) (Object) this).withAge(0));
                 Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
+
+                if (Config.requireHoe) {
+                    player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
+                }
             } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
             }

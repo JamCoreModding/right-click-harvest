@@ -24,6 +24,7 @@
 
 package io.github.jamalam360.rightclickharvest.mixin;
 
+import io.github.jamalam360.rightclickharvest.config.Config;
 import io.github.jamalam360.rightclickharvest.RightClickHarvestModInit;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -65,6 +66,10 @@ public abstract class SugarcaneBlockMixin extends AbstractBlockMixin {
         // else break the 2nd from bottom cane
         if (!world.isClient) {
             world.breakBlock(bottom.up(2), true);
+
+            if (Config.requireHoe) {
+                player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
+            }
         } else {
             player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
         }

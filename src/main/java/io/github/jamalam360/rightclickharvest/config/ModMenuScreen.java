@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package io.github.jamalam360.rightclickharvest;
+package io.github.jamalam360.rightclickharvest.config;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
