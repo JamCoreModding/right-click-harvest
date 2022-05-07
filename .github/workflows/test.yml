@@ -29,5 +29,5 @@ jobs:
         if: ${{ runner.os != 'Windows' }}
         run: chmod +x ./gradlew
 
-      - name: Build
+      - name: Test
         run: ./gradlew test
