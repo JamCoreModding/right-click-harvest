@@ -62,12 +62,4 @@ tasks {
     test {
         dependsOn("runGametest")
     }
-
-    named("prepareRemapJar") {
-	    dependsOn("optimizeOutputsOfJar")
-    }
- 
-    named("remapJar") {
-	    dependsOn("optimizeOutputsOfJar")
-    }
 }
