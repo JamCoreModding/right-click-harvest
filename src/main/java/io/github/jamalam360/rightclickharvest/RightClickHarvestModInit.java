@@ -24,11 +24,12 @@
 
 package io.github.jamalam360.rightclickharvest;
 
-import net.fabricmc.api.ModInitializer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.HoeItem;
 import io.github.jamalam360.rightclickharvest.config.Config;
 import io.github.jamalam360.rightclickharvest.config.MidnightConfig;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.HoeItem;
 import org.apache.logging.log4j.LogManager;
 
 /**
@@ -42,7 +43,12 @@ public class RightClickHarvestModInit implements ModInitializer {
     }
 
     public static boolean canRightClickHarvest(PlayerEntity player) {
-        return (Config.requireHoe && player.getMainHandStack().getItem() instanceof HoeItem)
-                || (!Config.requireHoe && player.getMainHandStack().isEmpty());
+        return (
+                Config.requireHoe &&
+                (player.getMainHandStack().isIn(ConventionalItemTags.HOES) || player.getMainHandStack().getItem() instanceof HoeItem)
+        )
+                || (
+                        !Config.requireHoe && player.getMainHandStack().isEmpty()
+        );
     }
 }

@@ -93,6 +93,29 @@ public class RightClickHarvestGameTest implements FabricGameTest {
             context.complete();
         });
     }
+
+    @GameTest(structureName = EMPTY_STRUCTURE)
+    public void testRegularCropsWithNonEmptyHand(TestContext context) {
+        context.setBlockState(0, 2, 0, Blocks.FARMLAND);
+        context.setBlockState(0, 3, 0, Blocks.WHEAT.getDefaultState().with(CropBlock.AGE, CropBlock.MAX_AGE));
+
+        BlockPos blockPos = context.getAbsolutePos(new BlockPos(0, 3, 0));
+        BlockState blockState = context.getWorld().getBlockState(blockPos);
+
+        PlayerEntity player = context.createMockPlayer();
+        player.setStackInHand(Hand.MAIN_HAND, Items.WOODEN_HOE.getDefaultStack());
+
+        blockState.onUse(
+                context.getWorld(), player, Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(blockPos), Direction.NORTH, blockPos, true)
+        );
+
+        context.addInstantFinalTask(() -> {
+            context.dontExpectEntity(EntityType.ITEM);
+            context.expectBlockProperty(new BlockPos(0, 3, 0), CropBlock.AGE, CropBlock.MAX_AGE);
+            context.complete();
+        });
+    }
+
     @GameTest(structureName = EMPTY_STRUCTURE)
     public void testCocoaBeans(TestContext context) {
         context.setBlockState(0, 2, 0, Blocks.JUNGLE_LOG);
