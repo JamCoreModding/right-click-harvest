@@ -2,12 +2,12 @@
 
 ### Features
 
-- Use the `c:hoes` tag as well as checking `instanceof HoeItem` for greater mod compatibility.
+- Update icon.
 
 ### Fixes
 
-- Add a test for a potential future issue.
+- No bugs were fixed in this release.
 
 Closed Issues: None
 
-[Full Changelog](https://github.com/JamCoreModding/RightClickHarvestFabric/compare/2.0.1...2.0.2)
+[Full Changelog](https://github.com/JamCoreModding/RightClickHarvestFabric/compare/2.0.2...2.0.3)
