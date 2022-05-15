@@ -24,10 +24,12 @@
 
 package io.github.jamalam360.rightclickharvest.config;
 
+import io.github.jamalam360.jamlib.config.JamLibConfig;
+
 /**
  * @author Jamalam360
  */
-public class Config extends MidnightConfig {
+public class Config extends JamLibConfig {
     @Entry
     public static boolean requireHoe = false;
 }

@@ -24,8 +24,8 @@
 
 package io.github.jamalam360.rightclickharvest;
 
+import io.github.jamalam360.jamlib.config.JamLibConfig;
 import io.github.jamalam360.rightclickharvest.config.Config;
-import io.github.jamalam360.rightclickharvest.config.MidnightConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,19 +36,19 @@ import org.apache.logging.log4j.LogManager;
  * @author Jamalam360
  */
 public class RightClickHarvestModInit implements ModInitializer {
-    @Override
-    public void onInitialize() {
-        LogManager.getLogger("RightClickHarvest/Initializer").info("Initializing RightClickHarvest...");
-        MidnightConfig.init("rightclickharvest", Config.class);
-    }
-
     public static boolean canRightClickHarvest(PlayerEntity player) {
         return (
                 Config.requireHoe &&
-                (player.getMainHandStack().isIn(ConventionalItemTags.HOES) || player.getMainHandStack().getItem() instanceof HoeItem)
+                        (player.getMainHandStack().isIn(ConventionalItemTags.HOES) || player.getMainHandStack().getItem() instanceof HoeItem)
         )
                 || (
-                        !Config.requireHoe && player.getMainHandStack().isEmpty()
+                !Config.requireHoe && player.getMainHandStack().isEmpty()
         );
+    }
+
+    @Override
+    public void onInitialize() {
+        LogManager.getLogger("RightClickHarvest/Initializer").info("Initializing RightClickHarvest...");
+        JamLibConfig.init("rightclickharvest", Config.class);
     }
 }

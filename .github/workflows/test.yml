@@ -17,6 +17,17 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
+      - name: Enable Caching
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/loom-cache
+            ~/.gradle/machete-build
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle
+
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 

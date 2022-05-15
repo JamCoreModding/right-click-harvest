@@ -18,6 +18,7 @@ repositories {
     val mavenUrls = mapOf(
         Pair("https://maven.terraformersmc.com/releases", listOf("com.terraformersmc")),
         Pair("https://api.modrinth.com/maven/", listOf("maven.modrinth")),
+        Pair("https://maven.jamalam.tech/releases", listOf("io.github.jamalam360")),
     )
 
     for (mavenPair in mavenUrls) {
@@ -41,6 +42,7 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
 
+    modImplementation(libs.required.jam.lib)
     modImplementation(libs.optional.mod.menu)
 
     modRuntimeOnly(libs.runtime.lazy.dfu)
