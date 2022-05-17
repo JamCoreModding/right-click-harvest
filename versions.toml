@@ -4,7 +4,7 @@ loader = "0.13.3"
 fabric-api = "0.51.1+1.18.2"
 mod-menu = "3.2.1"
 lazy-dfu = "0.1.2"
-jam-lib = "0.0.2"
+jam-lib = "0.0.3"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
