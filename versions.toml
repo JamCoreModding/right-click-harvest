@@ -1,0 +1,15 @@
+[versions]
+minecraft = "1.18.2"
+loader = "0.13.3"
+fabric-api = "0.51.1+1.18.2"
+mod-menu = "3.2.1"
+lazy-dfu = "0.1.2"
+jam-lib = "0.0.3"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "loader" }
+fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+required-jam-lib = { module = "io.github.jamalam360:jam-lib", version.ref = "jam-lib" }
+optional-mod-menu = { module = "com.terraformersmc:modmenu", version.ref = "mod-menu" }
+runtime-lazy-dfu = { module = "maven.modrinth:lazydfu", version.ref = "lazy-dfu" }
