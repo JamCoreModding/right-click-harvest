@@ -1,0 +1,7 @@
+[versions]
+minecraft = "1.14.4"
+loader = "0.13.3"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft"  }
+loader = { module = "net.fabricmc:fabric-loader", version.ref = "loader" }
