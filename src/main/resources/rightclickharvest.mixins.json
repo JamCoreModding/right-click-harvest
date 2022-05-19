@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "io.github.jamalam360.rightclickharvest.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BlockMixin",
+    "CocoaBlockMixin",
+    "CropBlockMixin",
+    "NetherWartBlockMixin",
+    "SugarcaneBlockMixin"
+  ],
+  "client": [],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

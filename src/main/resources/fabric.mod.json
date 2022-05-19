@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "rightclickharvest",
+  "version": "${version}",
+  "name": "Right Click Harvest",
+  "description": "Allows you to harvest crops with a right click",
+  "authors": [
+    "Jamalam360 - Author"
+  ],
+  "contributors": [
+    "Fourmisain - Developer"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/rightclickharvest-fabric",
+    "issues": "https://github.com/JamCoreModding/RightClickHarvestFabric/issues",
+    "sources": "https://github.com/JamCoreModding/RightClickHarvestFabric"
+  },
+  "license": "MIT",
+  "icon": "assets/rightclickharvest/icon.png",
+  "environment": "*",
+  "mixins": [
+    "rightclickharvest.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.2"
+  },
+  "custom": {
+    "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/RightClickHarvestFabric/main/gradle.properties",
+    "notify_gradle_properties_key": "mod_version"
+  }
+}
