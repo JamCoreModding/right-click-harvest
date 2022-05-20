@@ -1,7 +1,7 @@
 plugins {
     id("fabric-loom") version "0.11-SNAPSHOT"
     id("org.quiltmc.quilt-mappings-on-loom") version "4.2.0"
-    id("io.github.juuxel.loom-quiltflower") version "1.7.1"
+    id("io.github.juuxel.loom-quiltflower") version "1.7.+"
     id("io.github.p03w.machete") version "1.0.11"
     id("org.cadixdev.licenser") version "0.6.1"
 }
@@ -36,7 +36,7 @@ repositories {
 dependencies {
     minecraft(libs.minecraft)
     mappings(loom.layered {
-        addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:1.18.2+build.22:v2"))
+        addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:1.18.2+build.23:v2"))
     })
 
     modImplementation(libs.fabric.loader)
@@ -63,5 +63,11 @@ loom {
 tasks {
     test {
         dependsOn("runGametest")
+    }
+
+    check {
+        dependsOn {
+            remove(test)
+        }
     }
 }
