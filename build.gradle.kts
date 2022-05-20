@@ -36,7 +36,7 @@ repositories {
 dependencies {
     minecraft(libs.minecraft)
     mappings(loom.layered {
-        addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:1.18.2+build.23:v2"))
+        addLayer(quiltMappings.mappings("org.quiltmc:quilt-mappings:1.19-pre1+build.1:v2"))
     })
 
     modImplementation(libs.fabric.loader)
@@ -63,11 +63,5 @@ loom {
 tasks {
     test {
         dependsOn("runGametest")
-    }
-
-    check {
-        dependsOn {
-            remove(test)
-        }
     }
 }

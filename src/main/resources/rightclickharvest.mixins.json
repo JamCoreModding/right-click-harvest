@@ -9,8 +9,6 @@
     "NetherWartBlockMixin",
     "SugarcaneBlockMixin"
   ],
-  "client": [],
-  "server": [],
   "injectors": {
     "defaultRequire": 1
   }

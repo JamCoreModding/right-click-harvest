@@ -1,5 +1,5 @@
 {
   "rightclickharvest.midnightconfig.title": "Right Click Harvest Config",
   "rightclickharvest.midnightconfig.requireHoe": "Require Hoe",
-  "rightclickharvest.midnightconfig.requireHoe.tooltip": "Only allow right click harvesting if the player is holding a hoe"
+  "rightclickharvest.midnightconfig.requireHoe.tooltip": "Only allow harvesting a crop if the player is holding a hoe"
 }

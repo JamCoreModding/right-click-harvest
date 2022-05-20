@@ -1,7 +1,7 @@
 [versions]
-minecraft = "1.18.2"
+minecraft = "1.16-pre1"
 loader = "0.14.6"
-fabric-api = "0.51.1+1.18.2"
+fabric-api = "0.52.4+1.19"
 mod-menu = "3.2.2"
 lazy-dfu = "0.1.2"
 jam-lib = "0.0.3"
