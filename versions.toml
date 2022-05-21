@@ -1,6 +1,7 @@
 [versions]
-minecraft = "1.16-pre1"
+minecraft = "1.19-pre1"
 loader = "0.14.6"
+mappings-build = "1"
 fabric-api = "0.52.4+1.19"
 mod-menu = "3.2.2"
 lazy-dfu = "0.1.2"
