@@ -2,7 +2,7 @@
 
 ### Features
 
-### Fixes
+- Update to 1.19.
 
 Closed Issues: None
 

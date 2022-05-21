@@ -1,11 +1,11 @@
 [versions]
-minecraft = "1.19-pre1"
+minecraft = "1.18.2"
 loader = "0.14.6"
-mappings-build = "1"
-fabric-api = "0.52.4+1.19"
+mappings-build = "23"
+fabric-api = "0.53.0+1.18.2"
 mod-menu = "3.2.2"
 lazy-dfu = "0.1.2"
-jam-lib = "0.0.3"
+jam-lib = "0.0.4"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
