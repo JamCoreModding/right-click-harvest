@@ -1,9 +1,9 @@
 ## Changelog
 
-### Fixes
+### Features
 
-- Update JamLib.
+### Fixes
 
 Closed Issues: None
 
-[Full Changelog](https://github.com/JamCoreModding/RightClickHarvestFabric/compare/2.0.5...2.0.6)
+[Full Changelog](https://github.com/JamCoreModding/RightClickHarvestFabric/compare/...)
