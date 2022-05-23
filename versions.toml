@@ -5,7 +5,7 @@ mappings-build = "23"
 fabric-api = "0.53.0+1.18.2"
 mod-menu = "3.2.2"
 lazy-dfu = "0.1.2"
-jam-lib = "0.0.4"
+jam-lib = "0.0.5"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
