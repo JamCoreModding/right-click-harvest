@@ -2,6 +2,8 @@
 
 ### Features
 
+- Add FAPI as a required dependency on Curseforge.
+
 ### Fixes
 
 - Bump dependency versions.
