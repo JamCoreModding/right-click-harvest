@@ -41,9 +41,7 @@ public class RightClickHarvestModInit implements ModInitializer {
                 Config.requireHoe &&
                         (player.getMainHandStack().isIn(ConventionalItemTags.HOES) || player.getMainHandStack().getItem() instanceof HoeItem)
         )
-                || (
-                !Config.requireHoe && player.getMainHandStack().isEmpty()
-        );
+                || (!Config.requireHoe);
     }
 
     @Override
