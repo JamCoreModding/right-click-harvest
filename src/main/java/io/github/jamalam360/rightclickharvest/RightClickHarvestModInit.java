@@ -37,11 +37,7 @@ import org.apache.logging.log4j.LogManager;
  */
 public class RightClickHarvestModInit implements ModInitializer {
     public static boolean canRightClickHarvest(PlayerEntity player) {
-        return (
-                Config.requireHoe &&
-                        (player.getMainHandStack().isIn(ConventionalItemTags.HOES) || player.getMainHandStack().getItem() instanceof HoeItem)
-        )
-                || (!Config.requireHoe);
+        return !Config.requireHoe || (player.getMainHandStack().isIn(ConventionalItemTags.HOES) || player.getMainHandStack().getItem() instanceof HoeItem);
     }
 
     @Override
