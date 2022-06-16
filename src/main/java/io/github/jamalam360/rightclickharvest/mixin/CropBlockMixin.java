@@ -27,6 +27,7 @@ package io.github.jamalam360.rightclickharvest.mixin;
 import io.github.jamalam360.rightclickharvest.config.Config;
 import io.github.jamalam360.rightclickharvest.RightClickHarvestModInit;
 import net.minecraft.block.Block;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,14 +44,15 @@ import net.minecraft.world.World;
 
 @Mixin(CropBlock.class)
 public abstract class CropBlockMixin extends AbstractBlockMixin {
-    @Shadow public abstract boolean isMature(BlockState state);
+    @Shadow
+    public abstract boolean isMature(BlockState state);
 
     @Override
     public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
         if (this.isMature(state) && RightClickHarvestModInit.canRightClickHarvest(player)) {
             if (!world.isClient) {
+                RightClickHarvestModInit.dropStacks(state, (ServerWorld) world, pos, player, player.getStackInHand(hand));
                 world.setBlockState(pos, ((CropBlock) (Object) this).withAge(0));
-                Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
 
                 if (Config.requireHoe) {
                     player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));

@@ -28,9 +28,29 @@ import io.github.jamalam360.jamlib.config.JamLibConfig;
 import io.github.jamalam360.rightclickharvest.config.Config;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.HoeItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTables;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.LootContextTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import org.apache.logging.log4j.LogManager;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Jamalam360
@@ -38,6 +58,24 @@ import org.apache.logging.log4j.LogManager;
 public class RightClickHarvestModInit implements ModInitializer {
     public static boolean canRightClickHarvest(PlayerEntity player) {
         return !Config.requireHoe || (player.getMainHandStack().isIn(ConventionalItemTags.HOES) || player.getMainHandStack().getItem() instanceof HoeItem);
+    }
+
+    public static void dropStacks(BlockState state, ServerWorld world, BlockPos pos, Entity entity, ItemStack toolStack) {
+        List<ItemStack> stacks = Block.getDroppedStacks(state, world, pos, null, entity, toolStack);
+        stacks.forEach((s) -> System.out.println(s.getItem().getTranslationKey()));
+        Item replant = state.getBlock().getPickStack(world, pos, state).getItem();
+        boolean removedReplant = false;
+
+        for (ItemStack stack : stacks) {
+            if (!removedReplant && stack.getItem() == replant) {
+                removedReplant = true;
+                continue;
+            }
+
+            Block.dropStack(world, pos, stack);
+        }
+
+        state.onStacksDropped(world, pos, toolStack);
     }
 
     @Override

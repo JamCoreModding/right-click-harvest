@@ -30,6 +30,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CocoaBlock;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -41,21 +42,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CocoaBlock.class)
 public abstract class CocoaBlockMixin extends AbstractBlockMixin {
-	@Override
-	public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
-		if (state.get(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE && RightClickHarvestModInit.canRightClickHarvest(player)) {
-			if (!world.isClient) {
-				world.setBlockState(pos, state.with(CocoaBlock.AGE, 0));
-				Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
+    @Override
+    public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+        if (state.get(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE && RightClickHarvestModInit.canRightClickHarvest(player)) {
+            if (!world.isClient) {
+                world.setBlockState(pos, state.with(CocoaBlock.AGE, 0));
+                Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));
 
-				if (Config.requireHoe) {
-					player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
-				}
-			} else {
-				player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
-			}
+                if (Config.requireHoe) {
+                    player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
+                }
+            } else {
+                player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
+            }
 
-			info.setReturnValue(ActionResult.SUCCESS);
-		}
-	}
+            info.setReturnValue(ActionResult.SUCCESS);
+        }
+    }
 }
