@@ -2,9 +2,9 @@
 
 ### Fixes
 
-- Removes the requirement for an empty hand to RCH.
-- Fixed seeds not being used from inventory when replanting.
+- Fixes an issue on servers due to a missing method.
+- Removes a left over debug log.
 
-Closed Issues: #10, #13, #14.
+Closed Issues: #15.
 
-[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/2.0.8...2.1.0)
+[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/2.1.0...2.1.1)

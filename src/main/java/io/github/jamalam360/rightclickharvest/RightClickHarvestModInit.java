@@ -62,7 +62,6 @@ public class RightClickHarvestModInit implements ModInitializer {
 
     public static void dropStacks(BlockState state, ServerWorld world, BlockPos pos, Entity entity, ItemStack toolStack) {
         List<ItemStack> stacks = Block.getDroppedStacks(state, world, pos, null, entity, toolStack);
-        stacks.forEach((s) -> System.out.println(s.getItem().getTranslationKey()));
         Item replant = state.getBlock().getPickStack(world, pos, state).getItem();
         boolean removedReplant = false;
 
@@ -74,8 +73,6 @@ public class RightClickHarvestModInit implements ModInitializer {
 
             Block.dropStack(world, pos, stack);
         }
-
-        state.onStacksDropped(world, pos, toolStack);
     }
 
     @Override
