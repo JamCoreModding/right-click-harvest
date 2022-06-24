@@ -1,13 +1,15 @@
 ## Changelog
 
+This release also drops 1.18 support, 1.19 will be the only supported version moving forwards.
+
 ### Features
 
 - Add a tag, `rightclickharvest:hoe_required`, that defines blocks that require a hoe to be harvested when `requireHoe`
   is set in the config. These are the default values (although they can of course be extended with datapacks):
-  - Wheat
-  - Carrots
-  - Beetroots
-  - Potatoes
+    - Wheat
+    - Carrots
+    - Beetroots
+    - Potatoes
 
 ### Fixes
 
