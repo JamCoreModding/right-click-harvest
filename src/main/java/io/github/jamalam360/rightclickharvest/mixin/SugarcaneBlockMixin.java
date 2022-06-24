@@ -45,7 +45,7 @@ public abstract class SugarcaneBlockMixin extends AbstractBlockMixin {
     @Override
     public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
         // allow placing sugar cane on top of sugar cane
-        if (hit.getSide() == Direction.UP || !RightClickHarvestModInit.canRightClickHarvest(player)) {
+        if (hit.getSide() == Direction.UP) {
             return;
         }
 
@@ -66,10 +66,6 @@ public abstract class SugarcaneBlockMixin extends AbstractBlockMixin {
         // else break the 2nd from bottom cane
         if (!world.isClient) {
             world.breakBlock(bottom.up(2), true);
-
-            if (Config.requireHoe) {
-                player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
-            }
         } else {
             player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
         }

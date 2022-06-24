@@ -44,7 +44,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class CocoaBlockMixin extends AbstractBlockMixin {
     @Override
     public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
-        if (state.get(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE && RightClickHarvestModInit.canRightClickHarvest(player)) {
+        if (state.get(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE) {
             if (!world.isClient) {
                 world.setBlockState(pos, state.with(CocoaBlock.AGE, 0));
                 Block.dropStacks(state, world, pos, null, player, player.getStackInHand(hand));

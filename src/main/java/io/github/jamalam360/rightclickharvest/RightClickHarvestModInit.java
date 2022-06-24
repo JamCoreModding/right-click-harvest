@@ -36,16 +36,17 @@ import net.minecraft.item.HoeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.tag.TagKey;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 
 /**
  * @author Jamalam360
  */
 public class RightClickHarvestModInit implements ModInitializer {
-    public static boolean canRightClickHarvest(PlayerEntity player) {
-        return !Config.requireHoe || (player.getMainHandStack().isIn(ConventionalItemTags.HOES) || player.getMainHandStack().getItem() instanceof HoeItem);
-    }
+    public static final TagKey<Block> HOE_REQUIRED = TagKey.of(Registry.BLOCK_KEY, new Identifier("rightclickharvest", "hoe_required"));
 
     public static void dropStacks(BlockState state, ServerWorld world, BlockPos pos, Entity entity, ItemStack toolStack) {
         Item replant = state.getBlock().getPickStack(world, pos, state).getItem();
