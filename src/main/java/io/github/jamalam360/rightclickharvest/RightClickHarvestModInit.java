@@ -53,13 +53,14 @@ public class RightClickHarvestModInit implements ModInitializer {
 
         Block.getDroppedStacks(state, world, pos, null, entity, toolStack).forEach(stack -> {
             if (!removedReplant[0] && stack.getItem() == replant) {
+                stack.setCount(stack.getCount() - 1);
                 removedReplant[0] = true;
-            } else {
-                Block.dropStack(world, pos, stack);
             }
+
+            Block.dropStack(world, pos, stack);
         });
 
-        state.onStacksDropped(world, pos, toolStack);
+        state.onStacksDropped(world, pos, toolStack, true);
     }
 
     @Override
