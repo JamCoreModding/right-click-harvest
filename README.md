@@ -30,6 +30,8 @@
             </ul>
             <p><a href="https://discord.jamalam.tech/">Support</a></p>
             <p><a href="https://github.com/JamCoreModding/RightClickHarvest">Issue & feature request tracker</a></p>
+	    <p><a href="https://curseforge.com/mc-mods/rightclickharvest-fabric">Download on Curseforge</a></p>
+	    <p><a href="https://modrinth.com/mod/rightclickharvest">Download on Modrinth</a></p>
         </div>
     </div>
 </div>
