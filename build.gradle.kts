@@ -2,7 +2,7 @@ plugins {
     id("fabric-loom") version "0.12-SNAPSHOT"
     id("org.quiltmc.quilt-mappings-on-loom") version "4.2.0"
     id("io.github.juuxel.loom-quiltflower") version "1.7.+"
-    id("io.github.p03w.machete") version "1.0.11"
+    id("io.github.p03w.machete") version "1.+"
     id("org.cadixdev.licenser") version "0.6.1"
 }
 

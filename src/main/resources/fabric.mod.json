@@ -42,7 +42,7 @@
     "modmenu": "*"
   },
   "custom": {
-    "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/RightClickHarvest/1.16-1.18/gradle.properties",
+    "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/RightClickHarvest/1.18.2/gradle.properties",
     "notify_gradle_properties_key": "mod_version"
   }
 }

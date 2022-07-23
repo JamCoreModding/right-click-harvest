@@ -27,12 +27,9 @@ package io.github.jamalam360.rightclickharvest;
 import io.github.jamalam360.jamlib.config.JamLibConfig;
 import io.github.jamalam360.rightclickharvest.config.Config;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.HoeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -61,12 +58,12 @@ public class RightClickHarvestModInit implements ModInitializer {
             Block.dropStack(world, pos, stack);
         });
 
-        state.onStacksDropped(world, pos, toolStack, true);
+        state.onStacksDropped(world, pos, toolStack);
     }
 
     @Override
     public void onInitialize() {
-        LogManager.getLogger("RightClickHarvest/Initializer").info("Initializing RightClickHarvest...");
+        LogManager.getLogger("rightclickharvest").info("Initializing RightClickHarvest...");
         JamLibConfig.init("rightclickharvest", Config.class);
     }
 }
