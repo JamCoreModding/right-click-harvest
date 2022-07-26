@@ -1,0 +1,5 @@
+{
+  "rightclickharvest.jamlibconfig.title": "Конфігурація Right Click Harvest",
+  "rightclickharvest.jamlibconfig.requireHoe": "Необхідна мотика",
+  "rightclickharvest.jamlibconfig.requireHoe.tooltip": "Дозволяє збирати лише певні культури (наприклад, пшениця, морква), якщо гравець тримає в руці мотику."
+}
