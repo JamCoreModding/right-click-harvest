@@ -2,8 +2,8 @@
 
 ### Features
 
-- Add `uk_ua` translations.
+### Fixes
 
 Closed Issues: None
 
-[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/2.2.1...2.2.2)
+[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/...)
