@@ -44,6 +44,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class SugarcaneBlockMixin extends AbstractBlockMixin {
     @Override
     public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+        if (Config.useHunger) {
+            if (player.getHungerManager().getFoodLevel() <= 0) {
+                return;
+            }
+        }
+
         // allow placing sugar cane on top of sugar cane
         if (hit.getSide() == Direction.UP) {
             return;
@@ -66,6 +72,10 @@ public abstract class SugarcaneBlockMixin extends AbstractBlockMixin {
         // else break the 2nd from bottom cane
         if (!world.isClient) {
             world.breakBlock(bottom.up(2), true);
+
+            if (Config.useHunger && player.world.random.nextBoolean()) {
+                player.addExhaustion(2f);
+            }
         } else {
             player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
         }

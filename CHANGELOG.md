@@ -2,8 +2,8 @@
 
 ### Features
 
-### Fixes
+- Add a config option to use hunger when harvesting.
 
-Closed Issues: None
+Closed Issues: #18
 
-[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/...)
+[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/2.2.2...2.2.3)

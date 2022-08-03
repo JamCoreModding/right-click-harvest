@@ -56,6 +56,12 @@ public abstract class CropBlockMixin extends AbstractBlockMixin {
             }
         }
 
+        if (Config.useHunger) {
+            if (player.getHungerManager().getFoodLevel() <= 0) {
+                return;
+            }
+        }
+
         if (this.isMature(state)) {
             if (!world.isClient) {
                 RightClickHarvestModInit.dropStacks(state, (ServerWorld) world, pos, player, player.getStackInHand(hand));
@@ -63,6 +69,10 @@ public abstract class CropBlockMixin extends AbstractBlockMixin {
 
                 if (Config.requireHoe && state.isIn(RightClickHarvestModInit.HOE_REQUIRED)) {
                     player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
+                }
+
+                if (Config.useHunger && player.world.random.nextBoolean()) {
+                    player.addExhaustion(2f);
                 }
             } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);

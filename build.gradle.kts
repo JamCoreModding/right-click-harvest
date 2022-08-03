@@ -42,7 +42,7 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
 
-    modImplementation(libs.required.jam.lib)
+    modImplementation(libs.required.jamlib)
     modImplementation(libs.optional.mod.menu)
 
     modRuntimeOnly(libs.runtime.lazy.dfu)

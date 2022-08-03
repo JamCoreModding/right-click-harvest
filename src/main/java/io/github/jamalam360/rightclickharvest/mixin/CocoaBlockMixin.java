@@ -25,12 +25,10 @@
 package io.github.jamalam360.rightclickharvest.mixin;
 
 import io.github.jamalam360.rightclickharvest.config.Config;
-import io.github.jamalam360.rightclickharvest.RightClickHarvestModInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CocoaBlock;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -43,7 +41,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(CocoaBlock.class)
 public abstract class CocoaBlockMixin extends AbstractBlockMixin {
     @Override
-    public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+    public void rightClickHarvest(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
+                                  BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+        if (Config.useHunger) {
+            if (player.getHungerManager().getFoodLevel() <= 0) {
+                return;
+            }
+        }
+
         if (state.get(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE) {
             if (!world.isClient) {
                 world.setBlockState(pos, state.with(CocoaBlock.AGE, 0));
@@ -51,6 +56,10 @@ public abstract class CocoaBlockMixin extends AbstractBlockMixin {
 
                 if (Config.requireHoe) {
                     player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
+                }
+
+                if (Config.useHunger && player.world.random.nextBoolean()) {
+                    player.addExhaustion(2f);
                 }
             } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);

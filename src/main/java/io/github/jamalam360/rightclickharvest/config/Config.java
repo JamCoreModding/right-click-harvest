@@ -32,4 +32,7 @@ import io.github.jamalam360.jamlib.config.JamLibConfig;
 public class Config extends JamLibConfig {
     @Entry
     public static boolean requireHoe = false;
+
+    @Entry
+    public static boolean useHunger = false;
 }
