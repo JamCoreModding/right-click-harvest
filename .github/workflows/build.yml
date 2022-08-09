@@ -1,5 +1,7 @@
-name: Build
-on: push
+name: Build and Test
+on:
+  - push
+  - pull_request
 
 jobs:
   update-license:
@@ -58,7 +60,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
 
-  build:
+  build-and-test:
     needs: update-license
     strategy:
       matrix:
