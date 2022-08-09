@@ -54,6 +54,7 @@ public class RightClickHarvestGameTest implements FabricGameTest {
     @Override
     public void invokeTestMethod(TestContext context, Method method) {
         Config.requireHoe = false;
+        Config.harvestInRadius = false;
         FabricGameTest.super.invokeTestMethod(context, method);
     }
 
@@ -94,6 +95,38 @@ public class RightClickHarvestGameTest implements FabricGameTest {
         context.addInstantFinalTask(() -> {
             context.expectEntity(EntityType.ITEM);
             context.expectBlockProperty(new BlockPos(0, 3, 0), CropBlock.AGE, 0);
+
+            if (player.getMainHandStack().getDamage() == ToolMaterials.WOOD.getDurability()) {
+                throw new GameTestException("Expected hoe to be damaged");
+            }
+
+            context.complete();
+        });
+    }
+
+    @GameTest(structureName = EMPTY_STRUCTURE)
+    public void testRegularCropsWithHoeInRadius(TestContext context) {
+        Config.requireHoe = true;
+        Config.harvestInRadius = true;
+
+        for (int y = 0; y < 2; y++) {
+            for (int x = 0; x < 3; x++) {
+                for (int z = 0; z < 3; z++) {
+                    context.setBlockState(x, 2 + y, z, y == 0 ? Blocks.FARMLAND.getDefaultState() : Blocks.WHEAT.getDefaultState().with(CropBlock.AGE, CropBlock.MAX_AGE));
+                }
+            }
+        }
+
+        PlayerEntity player = interactWithBlock(context, new BlockPos(1, 3, 1), Items.DIAMOND_HOE.getDefaultStack());
+
+        context.addInstantFinalTask(() -> {
+            context.expectEntity(EntityType.ITEM);
+
+            for (int x = 0; x < 3; x++) {
+                for (int z = 0; z < 3; z++) {
+                    context.expectBlockProperty(new BlockPos(x, 3, z), CropBlock.AGE, 0);
+                }
+            }
 
             if (player.getMainHandStack().getDamage() == ToolMaterials.DIAMOND.getDurability()) {
                 throw new GameTestException("Expected hoe to be damaged");
