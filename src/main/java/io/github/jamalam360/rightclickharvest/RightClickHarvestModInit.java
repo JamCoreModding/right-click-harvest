@@ -52,26 +52,39 @@ import net.minecraft.world.World;
  * @author Jamalam360
  */
 public class RightClickHarvestModInit implements ModInitializer {
+    public static final String MOD_ID = "rightclickharvest";
     public static final TagKey<Block> HOE_REQUIRED =
-            TagKey.of(Registry.BLOCK_KEY, new Identifier("rightclickharvest", "hoe_required"));
+            TagKey.of(Registry.BLOCK_KEY, new Identifier(MOD_ID, "hoe_required"));
+    public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST =
+            TagKey.of(Registry.BLOCK_KEY, new Identifier(MOD_ID, "radius_harvest_blacklist"));
+    public static final TagKey<Item> LOW_TIER_HOES =
+            TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "low_tier_hoes"));
+    public static final TagKey<Item> MID_TIER_HOES =
+            TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "mid_tier_hoes"));
+    public static final TagKey<Item> HIGH_TIER_HOES =
+            TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "high_tier_hoes"));
+    public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     @Override
     public void onInitialize() {
-        JamLibConfig.init("rightclickharvest", Config.class);
+        JamLibConfig.init(MOD_ID, Config.class);
 
         UseBlockCallback.EVENT.register(RightClickHarvestModInit::onBlockUse);
 
-        JamLibLogger.getLogger("rightclickharvest").logInitialize();
+        JamLibLogger.getLogger(MOD_ID).logInitialize();
     }
 
     public static ActionResult onBlockUse(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
-        if (player.isSpectator()) {
+        return onBlockUse(player, world, hand, hitResult, true);
+    }
+
+    private static ActionResult onBlockUse(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult, boolean initialCall) {
+        if (player.isSpectator() || hand == Hand.OFF_HAND) {
             return ActionResult.PASS;
         }
 
         BlockState state = world.getBlockState(hitResult.getBlockPos());
-
-        System.out.println(state.getBlock());
+        ItemStack stack = player.getStackInHand(hand);
 
         if (Config.useHunger) {
             if (player.getHungerManager().getFoodLevel() <= 0) {
@@ -80,12 +93,43 @@ public class RightClickHarvestModInit implements ModInitializer {
         }
 
         if (state.isIn(HOE_REQUIRED) && Config.requireHoe) {
-            if (!player.getStackInHand(hand).isIn(ConventionalItemTags.HOES)) {
+            if (!stack.isIn(ConventionalItemTags.HOES)) {
                 return ActionResult.PASS;
             }
         }
 
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
+            if (initialCall && Config.requireHoe && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(ConventionalItemTags.HOES)) {
+                int radius = 0;
+                boolean circle = false;
+
+                if (stack.isIn(LOW_TIER_HOES)) {
+                    radius = 1;
+                    circle = true;
+                } else if (stack.isIn(MID_TIER_HOES)) {
+                    radius = 1;
+                } else if (stack.isIn(HIGH_TIER_HOES)) {
+                    radius = 2;
+                    circle = true;
+                }
+
+                if (radius != 0) {
+                    if (radius == 1 && circle) {
+                        for (Direction dir : CARDINAL_DIRECTIONS) {
+                            onBlockUse(player, world, hand, hitResult.withBlockPos(hitResult.getBlockPos().offset(dir)), false);
+                        }
+                    } else {
+                        for (int x = -radius; x <= radius; x++) {
+                            for (int z = -radius; z <= radius; z++) {
+                                BlockPos pos = hitResult.getBlockPos().offset(Direction.Axis.X, x).offset(Direction.Axis.Z, z);
+                                if (circle && pos.getManhattanDistance(hitResult.getBlockPos()) > radius) continue;
+                                onBlockUse(player, world, hand, hitResult.withBlockPos(pos), false);
+                            }
+                        }
+                    }
+                }
+            }
+
             if (isMature(state)) {
                 if (!world.isClient) {
                     world.setBlockState(hitResult.getBlockPos(), getReplantState(state));
@@ -94,7 +138,7 @@ public class RightClickHarvestModInit implements ModInitializer {
                     );
 
                     if (Config.requireHoe) {
-                        player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
+                        stack.damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
                     }
 
                     if (Config.useHunger && player.world.random.nextBoolean()) {
@@ -111,7 +155,7 @@ public class RightClickHarvestModInit implements ModInitializer {
                 return ActionResult.SUCCESS;
             }
         } else if (state.getBlock() instanceof SugarCaneBlock) {
-            if (hitResult.getSide() == Direction.UP && player.getStackInHand(hand).getItem() == Items.SUGAR_CANE) {
+            if (hitResult.getSide() == Direction.UP && stack.getItem() == Items.SUGAR_CANE) {
                 return ActionResult.PASS;
             }
 
