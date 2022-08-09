@@ -142,7 +142,7 @@ public class RightClickHarvestModInit implements ModInitializer {
                     }
 
                     if (Config.useHunger && player.world.random.nextBoolean()) {
-                        player.addExhaustion(2f);
+                        player.addExhaustion(1.5f);
                     }
                 } else {
                     player.playSound(
@@ -175,7 +175,7 @@ public class RightClickHarvestModInit implements ModInitializer {
                 world.breakBlock(bottom.up(2), true);
 
                 if (Config.useHunger && player.world.random.nextBoolean()) {
-                    player.addExhaustion(2f);
+                    player.addExhaustion(1.5f);
                 }
             } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
