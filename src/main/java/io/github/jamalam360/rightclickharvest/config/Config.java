@@ -37,5 +37,5 @@ public class Config extends JamLibConfig {
     public static boolean harvestInRadius = true;
 
     @Entry
-    public static boolean useHunger = false;
+    public static boolean useHunger = true;
 }
