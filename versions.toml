@@ -3,7 +3,7 @@ minecraft = "1.19.2"
 loader = "0.14.9"
 mappings-build = "1"
 fabric-api = "0.59.0+1.19.2"
-mod-menu = "4.0.0"
+mod-menu = "4.0.6"
 lazy-dfu = "0.1.3"
 jamlib = "0.4.2"
 
