@@ -50,8 +50,16 @@ dependencies {
 
 loom {
     runs {
-        this.create("gametest") {
+        create("gametest") {
             server()
+            name("Game Test")
+            vmArg("-Dfabric-api.gametest")
+            vmArg("-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml")
+            runDir("build/gametest")
+        }
+
+        create("gametestDebug") {
+            client()
             name("Game Test")
             vmArg("-Dfabric-api.gametest")
             vmArg("-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml")

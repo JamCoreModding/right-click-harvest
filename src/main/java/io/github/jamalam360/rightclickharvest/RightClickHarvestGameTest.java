@@ -26,9 +26,13 @@ package io.github.jamalam360.rightclickharvest;
 
 import io.github.jamalam360.rightclickharvest.config.Config;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
-import net.minecraft.block.*;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CocoaBlock;
+import net.minecraft.block.CropBlock;
+import net.minecraft.block.NetherWartBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.test.GameTest;
@@ -53,11 +57,24 @@ public class RightClickHarvestGameTest implements FabricGameTest {
         FabricGameTest.super.invokeTestMethod(context, method);
     }
 
+    public void interactWithBlock(TestContext context, BlockPos pos) {
+        interactWithBlock(context, pos, Items.AIR.getDefaultStack());
+    }
+
+    public PlayerEntity interactWithBlock(TestContext context, BlockPos pos, ItemStack stack) {
+        pos = context.getAbsolutePos(pos);
+        PlayerEntity player = context.createMockPlayer();
+        player.setStackInHand(Hand.MAIN_HAND, stack);
+        BlockHitResult hitResult = new BlockHitResult(Vec3d.ofCenter(pos), Direction.NORTH, pos, false);
+        RightClickHarvestModInit.onBlockUse(player, player.world, Hand.MAIN_HAND, hitResult);
+        return player;
+    }
+
     @GameTest(structureName = EMPTY_STRUCTURE)
     public void testRegularCrops(TestContext context) {
         context.setBlockState(0, 2, 0, Blocks.FARMLAND);
         context.setBlockState(0, 3, 0, Blocks.WHEAT.getDefaultState().with(CropBlock.AGE, CropBlock.MAX_AGE));
-        context.useBlock(new BlockPos(0, 3, 0));
+        interactWithBlock(context, new BlockPos(0, 3, 0));
 
         context.addInstantFinalTask(() -> {
             context.expectEntity(EntityType.ITEM);
@@ -72,15 +89,7 @@ public class RightClickHarvestGameTest implements FabricGameTest {
         context.setBlockState(0, 2, 0, Blocks.FARMLAND);
         context.setBlockState(0, 3, 0, Blocks.WHEAT.getDefaultState().with(CropBlock.AGE, CropBlock.MAX_AGE));
 
-        BlockPos blockPos = context.getAbsolutePos(new BlockPos(0, 3, 0));
-        BlockState blockState = context.getWorld().getBlockState(blockPos);
-
-        PlayerEntity player = context.createMockPlayer();
-        player.setStackInHand(Hand.MAIN_HAND, Items.WOODEN_HOE.getDefaultStack());
-
-        blockState.onUse(
-                context.getWorld(), player, Hand.MAIN_HAND, new BlockHitResult(Vec3d.ofCenter(blockPos), Direction.NORTH, blockPos, true)
-        );
+        PlayerEntity player = interactWithBlock(context, new BlockPos(0, 3, 0), Items.WOODEN_HOE.getDefaultStack());
 
         context.addInstantFinalTask(() -> {
             context.expectEntity(EntityType.ITEM);
@@ -98,7 +107,7 @@ public class RightClickHarvestGameTest implements FabricGameTest {
     public void testCocoaBeans(TestContext context) {
         context.setBlockState(0, 2, 0, Blocks.JUNGLE_LOG);
         context.setBlockState(1, 2, 0, Blocks.COCOA.getDefaultState().with(CocoaBlock.AGE, CocoaBlock.MAX_AGE));
-        context.useBlock(new BlockPos(1, 2, 0));
+        interactWithBlock(context, new BlockPos(1, 2, 0));
 
         context.addInstantFinalTask(() -> {
             context.expectEntity(EntityType.ITEM);
@@ -110,8 +119,11 @@ public class RightClickHarvestGameTest implements FabricGameTest {
     @GameTest(structureName = EMPTY_STRUCTURE)
     public void testNetherWart(TestContext context) {
         context.setBlockState(0, 2, 0, Blocks.SOUL_SAND);
-        context.setBlockState(0, 3, 0, Blocks.NETHER_WART.getDefaultState().with(NetherWartBlock.AGE, NetherWartBlock.MAX_AGE));
-        context.useBlock(new BlockPos(0, 3, 0));
+        context.setBlockState(0, 3, 0, Blocks.NETHER_WART.getDefaultState().with(
+                NetherWartBlock.AGE,
+                NetherWartBlock.MAX_AGE
+        ));
+        interactWithBlock(context, new BlockPos(0, 3, 0));
 
         context.addInstantFinalTask(() -> {
             context.expectEntity(EntityType.ITEM);
@@ -122,15 +134,15 @@ public class RightClickHarvestGameTest implements FabricGameTest {
 
     @GameTest(structureName = EMPTY_STRUCTURE)
     public void testSugarcane(TestContext context) {
-        context.setBlockState(0, 2, 0, Blocks.SAND);
+        context.setBlockState(0, 1, 0, Blocks.SAND);
+        context.setBlockState(0, 2, 0, Blocks.SUGAR_CANE);
         context.setBlockState(0, 3, 0, Blocks.SUGAR_CANE);
-        context.setBlockState(0, 4, 0, Blocks.SUGAR_CANE);
-        context.useBlock(new BlockPos(0, 3, 0));
+        interactWithBlock(context, new BlockPos(0, 2, 0));
 
         context.addInstantFinalTask(() -> {
             context.expectEntity(EntityType.ITEM);
-            context.expectBlock(Blocks.SUGAR_CANE, new BlockPos(0, 3, 0));
-            context.expectBlock(Blocks.AIR, new BlockPos(0, 4, 0));
+            context.expectBlock(Blocks.SUGAR_CANE, new BlockPos(0, 2, 0));
+            context.expectBlock(Blocks.AIR, new BlockPos(0, 3, 0));
             context.complete();
         });
     }

@@ -32,6 +32,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -39,20 +40,133 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 
 /**
  * @author Jamalam360
  */
 public class RightClickHarvestModInit implements ModInitializer {
-    public static final TagKey<Block> HOE_REQUIRED = TagKey.of(Registry.BLOCK_KEY, new Identifier("rightclickharvest"
-            , "hoe_required"));
+    public static final TagKey<Block> HOE_REQUIRED =
+            TagKey.of(Registry.BLOCK_KEY, new Identifier("rightclickharvest", "hoe_required"));
 
-    public static void dropStacks(BlockState state, ServerWorld world, BlockPos pos, Entity entity,
-                                  ItemStack toolStack) {
+    @Override
+    public void onInitialize() {
+        JamLibConfig.init("rightclickharvest", Config.class);
+
+        UseBlockCallback.EVENT.register(RightClickHarvestModInit::onBlockUse);
+
+        JamLibLogger.getLogger("rightclickharvest").logInitialize();
+    }
+
+    public static ActionResult onBlockUse(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
+        if (player.isSpectator()) {
+            return ActionResult.PASS;
+        }
+
+        BlockState state = world.getBlockState(hitResult.getBlockPos());
+
+        System.out.println(state.getBlock());
+
+        if (Config.useHunger) {
+            if (player.getHungerManager().getFoodLevel() <= 0) {
+                return ActionResult.PASS;
+            }
+        }
+
+        if (state.isIn(HOE_REQUIRED) && Config.requireHoe) {
+            if (!player.getStackInHand(hand).isIn(ConventionalItemTags.HOES)) {
+                return ActionResult.PASS;
+            }
+        }
+
+        if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
+            if (isMature(state)) {
+                if (!world.isClient) {
+                    world.setBlockState(hitResult.getBlockPos(), getReplantState(state));
+                    dropStacks(state, (ServerWorld) world, hitResult.getBlockPos(), player,
+                            player.getStackInHand(hand)
+                    );
+
+                    if (Config.requireHoe) {
+                        player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
+                    }
+
+                    if (Config.useHunger && player.world.random.nextBoolean()) {
+                        player.addExhaustion(2f);
+                    }
+                } else {
+                    player.playSound(
+                            state.getBlock() instanceof NetherWartBlock ?
+                                    SoundEvents.ITEM_NETHER_WART_PLANT : SoundEvents.ITEM_CROP_PLANT,
+                            1.0f, 1.0f
+                    );
+                }
+
+                return ActionResult.SUCCESS;
+            }
+        } else if (state.getBlock() instanceof SugarCaneBlock) {
+            if (hitResult.getSide() == Direction.UP && player.getStackInHand(hand).getItem() == Items.SUGAR_CANE) {
+                return ActionResult.PASS;
+            }
+
+            int count = 1;
+
+            BlockPos bottom = hitResult.getBlockPos().down();
+            while (world.getBlockState(bottom).isOf(Blocks.SUGAR_CANE)) {
+                count++;
+                bottom = bottom.down();
+            }
+
+            if (count == 1 && !world.getBlockState(hitResult.getBlockPos().up()).isOf(Blocks.SUGAR_CANE)) {
+                return ActionResult.PASS;
+            }
+
+            if (!world.isClient) {
+                world.breakBlock(bottom.up(2), true);
+
+                if (Config.useHunger && player.world.random.nextBoolean()) {
+                    player.addExhaustion(2f);
+                }
+            } else {
+                player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
+            }
+        }
+
+        return ActionResult.PASS;
+    }
+
+    private static boolean isMature(BlockState state) {
+        if (state.getBlock() instanceof CocoaBlock) {
+            return state.get(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE;
+        } else if (state.getBlock() instanceof CropBlock cropBlock) {
+            return cropBlock.isMature(state);
+        } else if (state.getBlock() instanceof NetherWartBlock) {
+            return state.get(NetherWartBlock.AGE) >= NetherWartBlock.MAX_AGE;
+        }
+
+        return false;
+    }
+
+    private static BlockState getReplantState(BlockState state) {
+        if (state.getBlock() instanceof CocoaBlock) {
+            return state.with(CocoaBlock.AGE, 0);
+        } else if (state.getBlock() instanceof CropBlock cropBlock) {
+            return cropBlock.withAge(0);
+        } else if (state.getBlock() instanceof NetherWartBlock) {
+            return state.with(NetherWartBlock.AGE, 0);
+        }
+
+        return state;
+    }
+
+    private static void dropStacks(BlockState state, ServerWorld world, BlockPos pos, Entity entity,
+                                   ItemStack toolStack) {
         Item replant = state.getBlock().getPickStack(world, pos, state).getItem();
         final boolean[] removedReplant = {false};
 
@@ -66,108 +180,5 @@ public class RightClickHarvestModInit implements ModInitializer {
         });
 
         state.onStacksDropped(world, pos, toolStack, true);
-    }
-
-    @Override
-    public void onInitialize() {
-        JamLibConfig.init("rightclickharvest", Config.class);
-
-        UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-            BlockState state = world.getBlockState(hitResult.getBlockPos());
-
-            if (Config.useHunger) {
-                if (player.getHungerManager().getFoodLevel() <= 0) {
-                    return ActionResult.PASS;
-                }
-            }
-
-            if (state.isIn(HOE_REQUIRED) && Config.requireHoe) {
-                if (!player.getStackInHand(hand).isIn(ConventionalItemTags.HOES)) {
-                    return ActionResult.PASS;
-                }
-            }
-
-            if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
-                if (isMature(state)) {
-                    if (!world.isClient) {
-                        world.setBlockState(hitResult.getBlockPos(), getReplantState(state));
-                        dropStacks(state, (ServerWorld) world, hitResult.getBlockPos(), player,
-                                   player.getStackInHand(hand));
-
-                        if (Config.requireHoe) {
-                            player.getMainHandStack().damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
-                        }
-
-                        if (Config.useHunger && player.world.random.nextBoolean()) {
-                            player.addExhaustion(2f);
-                        }
-                    } else {
-                        player.playSound(state.getBlock() instanceof NetherWartBlock ?
-                                                 SoundEvents.ITEM_NETHER_WART_PLANT : SoundEvents.ITEM_CROP_PLANT,
-                                         1.0f, 1.0f);
-                    }
-
-                    return ActionResult.SUCCESS;
-                }
-            } else if (state.getBlock() instanceof SugarCaneBlock) {
-                // allow placing sugar cane on top of sugar cane
-                if (hitResult.getSide() == Direction.UP && player.getStackInHand(hand).getItem() == Items.SUGAR_CANE) {
-                    return ActionResult.PASS;
-                }
-
-                int count = 1;
-
-                // find the block the sugar cane stands on
-                BlockPos bottom = hitResult.getBlockPos().down();
-                while (world.getBlockState(bottom).isOf(Blocks.SUGAR_CANE)) {
-                    count++;
-                    bottom = bottom.down();
-                }
-
-                // when the sugar cane is only 1 tall, do nothing
-                if (count == 1 && !world.getBlockState(hitResult.getBlockPos().up()).isOf(Blocks.SUGAR_CANE)) {
-                    return ActionResult.PASS;
-                }
-
-                // else break the 2nd from bottom cane
-                if (!world.isClient) {
-                    world.breakBlock(bottom.up(2), true);
-
-                    if (Config.useHunger && player.world.random.nextBoolean()) {
-                        player.addExhaustion(2f);
-                    }
-                } else {
-                    player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
-                }
-            }
-
-            return ActionResult.PASS;
-        });
-
-        JamLibLogger.getLogger("rightclickharvest").logInitialize();
-    }
-
-    private boolean isMature(BlockState state) {
-        if (state.getBlock() instanceof CocoaBlock) {
-            return state.get(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE;
-        } else if (state.getBlock() instanceof CropBlock cropBlock) {
-            return cropBlock.isMature(state);
-        } else if (state.getBlock() instanceof NetherWartBlock) {
-            return state.get(NetherWartBlock.AGE) >= NetherWartBlock.MAX_AGE;
-        }
-
-        return false;
-    }
-
-    private BlockState getReplantState(BlockState state) {
-        if (state.getBlock() instanceof CocoaBlock) {
-            return state.with(CocoaBlock.AGE, 0);
-        } else if (state.getBlock() instanceof CropBlock cropBlock) {
-            return cropBlock.withAge(0);
-        } else if (state.getBlock() instanceof NetherWartBlock) {
-            return state.with(NetherWartBlock.AGE, 0);
-        }
-
-        return state;
     }
 }
