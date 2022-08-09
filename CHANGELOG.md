@@ -11,6 +11,7 @@
 
 - Make the hunger used by harvesting more forgiving.
 - Make `useHunger` on by default.
+- Allow harvesting if you have no hunger but are in creative mode.
 
 Closed Issues: #20.
 

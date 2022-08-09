@@ -87,7 +87,7 @@ public class RightClickHarvestModInit implements ModInitializer {
         ItemStack stack = player.getStackInHand(hand);
 
         if (Config.useHunger) {
-            if (player.getHungerManager().getFoodLevel() <= 0) {
+            if (!player.getAbilities().creativeMode && player.getHungerManager().getFoodLevel() <= 0) {
                 return ActionResult.PASS;
             }
         }
@@ -103,38 +103,38 @@ public class RightClickHarvestModInit implements ModInitializer {
         }
 
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
-            if (initialCall && Config.requireHoe && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(ConventionalItemTags.HOES)) {
-                int radius = 0;
-                boolean circle = false;
+            if (isMature(state)) {
+                if (initialCall && Config.requireHoe && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(ConventionalItemTags.HOES)) {
+                    int radius = 0;
+                    boolean circle = false;
 
-                if (stack.isIn(LOW_TIER_HOES)) {
-                    radius = 1;
-                    circle = true;
-                } else if (stack.isIn(MID_TIER_HOES)) {
-                    radius = 1;
-                } else if (stack.isIn(HIGH_TIER_HOES)) {
-                    radius = 2;
-                    circle = true;
-                }
+                    if (stack.isIn(LOW_TIER_HOES)) {
+                        radius = 1;
+                        circle = true;
+                    } else if (stack.isIn(MID_TIER_HOES)) {
+                        radius = 1;
+                    } else if (stack.isIn(HIGH_TIER_HOES)) {
+                        radius = 2;
+                        circle = true;
+                    }
 
-                if (radius != 0) {
-                    if (radius == 1 && circle) {
-                        for (Direction dir : CARDINAL_DIRECTIONS) {
-                            onBlockUse(player, world, hand, hitResult.withBlockPos(hitResult.getBlockPos().offset(dir)), false);
-                        }
-                    } else {
-                        for (int x = -radius; x <= radius; x++) {
-                            for (int z = -radius; z <= radius; z++) {
-                                BlockPos pos = hitResult.getBlockPos().offset(Direction.Axis.X, x).offset(Direction.Axis.Z, z);
-                                if (circle && pos.getManhattanDistance(hitResult.getBlockPos()) > radius) continue;
-                                onBlockUse(player, world, hand, hitResult.withBlockPos(pos), false);
+                    if (radius != 0) {
+                        if (radius == 1 && circle) {
+                            for (Direction dir : CARDINAL_DIRECTIONS) {
+                                onBlockUse(player, world, hand, hitResult.withBlockPos(hitResult.getBlockPos().offset(dir)), false);
+                            }
+                        } else {
+                            for (int x = -radius; x <= radius; x++) {
+                                for (int z = -radius; z <= radius; z++) {
+                                    BlockPos pos = hitResult.getBlockPos().offset(Direction.Axis.X, x).offset(Direction.Axis.Z, z);
+                                    if (circle && pos.getManhattanDistance(hitResult.getBlockPos()) > radius) continue;
+                                    onBlockUse(player, world, hand, hitResult.withBlockPos(pos), false);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            if (isMature(state)) {
                 if (!world.isClient) {
                     world.setBlockState(hitResult.getBlockPos(), getReplantState(state));
                     dropStacks(state, (ServerWorld) world, hitResult.getBlockPos(), player,
