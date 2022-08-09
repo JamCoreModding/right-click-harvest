@@ -3,11 +3,6 @@
   "package": "io.github.jamalam360.rightclickharvest.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "AbstractBlockMixin",
-    "CocoaBlockMixin",
-    "CropBlockMixin",
-    "NetherWartBlockMixin",
-    "SugarcaneBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1
