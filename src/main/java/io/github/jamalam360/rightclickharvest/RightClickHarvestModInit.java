@@ -98,6 +98,10 @@ public class RightClickHarvestModInit implements ModInitializer {
             }
         }
 
+        if (!initialCall && state.isIn(RADIUS_HARVEST_BLACKLIST)) {
+            return ActionResult.PASS;
+        }
+
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
             if (initialCall && Config.requireHoe && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(ConventionalItemTags.HOES)) {
                 int radius = 0;
