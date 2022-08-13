@@ -1,16 +1,16 @@
 [versions]
 minecraft = "1.18.2"
-loader = "0.14.8"
+loader = "0.14.9"
 mappings-build = "24"
-fabric-api = "0.51.1+1.18.2"
-mod-menu = "3.2.1"
+fabric-api = "0.58.0+1.18.2"
+mod-menu = "3.2.3"
 lazy-dfu = "0.1.2"
-jam-lib = "0.0.5"
+jamlib = "0.0.5"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
-required-jam-lib = { module = "io.github.jamalam360:jam-lib", version.ref = "jam-lib" }
+required-jamlib = { module = "io.github.jamalam360:jam-lib", version.ref = "jamlib" }
 optional-mod-menu = { module = "com.terraformersmc:modmenu", version.ref = "mod-menu" }
 runtime-lazy-dfu = { module = "maven.modrinth:lazydfu", version.ref = "lazy-dfu" }

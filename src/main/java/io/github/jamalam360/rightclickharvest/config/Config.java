@@ -31,5 +31,11 @@ import io.github.jamalam360.jamlib.config.JamLibConfig;
  */
 public class Config extends JamLibConfig {
     @Entry
-    public static boolean requireHoe = false;
+    public static boolean requireHoe = true;
+
+    @Entry
+    public static boolean harvestInRadius = true;
+
+    @Entry
+    public static boolean useHunger = true;
 }
