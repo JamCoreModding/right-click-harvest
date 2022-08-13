@@ -30,6 +30,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.CocoaBlock;
 import net.minecraft.block.CropBlock;
 import net.minecraft.block.NetherWartBlock;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -45,12 +47,15 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * @author Jamalam360
  */
 @SuppressWarnings("unused")
 public class RightClickHarvestGameTest implements FabricGameTest {
+    private int fortuneInvocations = 0;
+
     @Override
     public void invokeTestMethod(TestContext context, Method method) {
         Config.requireHoe = false;
@@ -102,6 +107,46 @@ public class RightClickHarvestGameTest implements FabricGameTest {
 
             context.complete();
         });
+    }
+
+    /*
+     * This test runs itself up to 20 times.
+     * It has a 0.097366173% chance of failing, even if the functionality is correct.
+     * Mald.
+     * Seethe.
+     * Cope.
+     * */
+    @GameTest(structureName = EMPTY_STRUCTURE)
+    public void testRegularCropsWithFortuneHoe(TestContext context) {
+        Config.requireHoe = true;
+        fortuneInvocations++;
+        context.killAllEntities();
+        context.setBlockState(0, 2, 0, Blocks.FARMLAND);
+        context.setBlockState(0, 3, 0, Blocks.WHEAT.getDefaultState().with(CropBlock.AGE, CropBlock.MAX_AGE));
+
+        ItemStack hoe = Items.DIAMOND_HOE.getDefaultStack();
+        EnchantmentHelper.set(Map.of(Enchantments.FORTUNE, 3), hoe);
+        PlayerEntity player = interactWithBlock(context, new BlockPos(0, 3, 0), hoe);
+
+        try {
+            // 4+ seeds are only dropped if the hoe is enchanted with fortune. With fortune 3, there is a 29.3% chance of 4 seeds being dropped.
+            context.expectItemsAt(Items.WHEAT_SEEDS, new BlockPos(0, 4, 0), 4, 4);
+        } catch (GameTestException e) {
+            if (fortuneInvocations > 20) {
+                throw new GameTestException("Fortune test failed after 20 invocations");
+            } else {
+                testRegularCropsWithFortuneHoe(context);
+                return;
+            }
+        }
+
+        context.expectBlockProperty(new BlockPos(0, 3, 0), CropBlock.AGE, 0);
+
+        if (player.getMainHandStack().getDamage() == ToolMaterials.DIAMOND.getDurability()) {
+            throw new GameTestException("Expected hoe to be damaged");
+        }
+
+        context.complete();
     }
 
     @GameTest(structureName = EMPTY_STRUCTURE)
