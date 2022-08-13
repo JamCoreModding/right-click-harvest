@@ -6,7 +6,7 @@ plugins {
     id("org.cadixdev.licenser") version "0.6.1"
 }
 
-apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/b64ca7c0cd655238d0eab8e22a4ff2e0b4684b56/publishing.gradle.kts")
+apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/main/publishing.gradle.kts")
 apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/main/misc.gradle.kts")
 
 val mod_version: String by project
@@ -42,7 +42,7 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
 
-    modImplementation(libs.required.jam.lib)
+    modImplementation(libs.required.jamlib)
     modImplementation(libs.optional.mod.menu)
 
     modRuntimeOnly(libs.runtime.lazy.dfu)
@@ -50,8 +50,16 @@ dependencies {
 
 loom {
     runs {
-        this.create("gametest") {
+        create("gametest") {
             server()
+            name("Game Test")
+            vmArg("-Dfabric-api.gametest")
+            vmArg("-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml")
+            runDir("build/gametest")
+        }
+
+        create("gametestDebug") {
+            client()
             name("Game Test")
             vmArg("-Dfabric-api.gametest")
             vmArg("-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml")
