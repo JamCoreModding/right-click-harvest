@@ -30,19 +30,12 @@
       "io.github.jamalam360.rightclickharvest.RightClickHarvestGameTest"
     ]
   },
-  "mixins": [
-    "rightclickharvest.mixins.json"
-  ],
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "jamlib": ">=0.0.3"
+    "jamlib": ">=0.3.0"
   },
   "suggests": {
     "modmenu": "*"
-  },
-  "custom": {
-    "notify_gradle_properties_url": "https://raw.githubusercontent.com/JamCoreModding/RightClickHarvest/1.19.x/gradle.properties",
-    "notify_gradle_properties_key": "mod_version"
   }
 }
