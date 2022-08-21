@@ -2,8 +2,12 @@
 
 ### Features
 
+- Make README nicer.
+
 ### Fixes
 
-Closed Issues: None
+- Fix #22 by deleting mixin config file.
 
-[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/...)
+Closed Issues: #22.
+
+[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/3.0.0+1.18...3.0.1+1.18)
