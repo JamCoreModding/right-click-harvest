@@ -152,6 +152,15 @@ public class RightClickHarvestGameTest implements FabricGameTest {
     @GameTest(structureName = EMPTY_STRUCTURE)
     public void testRegularCropsWithHoeInRadius(TestContext context) {
         Config.requireHoe = true;
+        runHarvestInRadiusTest(context);
+    }
+
+    @GameTest(structureName = EMPTY_STRUCTURE)
+    public void testRegularCropsWithHoeInRadiusWithNonRequiredHoe(TestContext context) {
+        runHarvestInRadiusTest(context);
+    }
+
+    private void runHarvestInRadiusTest(TestContext context) {
         Config.harvestInRadius = true;
 
         for (int y = 0; y < 2; y++) {

@@ -2,12 +2,14 @@
 
 ### Features
 
-- Make README nicer.
+- Use Quilt Mappings on intermediary.
 
 ### Fixes
 
-- Fix #22 by deleting mixin config file.
+- Don't require the config option `requireHoe` to be set to `true` to allow harvesting in radii to occur.
+- Add a test to verify the above.
+- Update dependencies.
 
-Closed Issues: #22.
+Closed Issues: None
 
-[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/3.0.0+1.18...3.0.1+1.18)
+[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/3.0.1+1.18...3.0.2+1.18)

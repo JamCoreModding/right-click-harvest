@@ -11,6 +11,9 @@ jamlib = "0.0.5"
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
+
 required-jamlib = { module = "io.github.jamalam360:jam-lib", version.ref = "jamlib" }
+
 optional-mod-menu = { module = "com.terraformersmc:modmenu", version.ref = "mod-menu" }
+
 runtime-lazy-dfu = { module = "maven.modrinth:lazydfu", version.ref = "lazy-dfu" }
