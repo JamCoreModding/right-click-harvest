@@ -68,9 +68,7 @@ public class RightClickHarvestModInit implements ModInitializer {
     @Override
     public void onInitialize() {
         JamLibConfig.init(MOD_ID, Config.class);
-
         UseBlockCallback.EVENT.register(RightClickHarvestModInit::onBlockUse);
-
         JamLibLogger.getLogger(MOD_ID).logInitialize();
     }
 
@@ -104,7 +102,7 @@ public class RightClickHarvestModInit implements ModInitializer {
 
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
             if (isMature(state)) {
-                if (initialCall && Config.requireHoe && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(ConventionalItemTags.HOES)) {
+                if (initialCall && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(ConventionalItemTags.HOES)) {
                     int radius = 0;
                     boolean circle = false;
 
