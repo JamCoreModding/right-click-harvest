@@ -14,3 +14,19 @@ These tags are used to determine the radius when harvesting in a radius.
 - `low_tier_hoes`: hoes that are equivalent to iron hoes.
 - `mid_tier_hoes`: hoes that are equivalent to diamond and gold hoes.
 - `high_tier_hoes`: hoes that are equivalent to netherite hoes.
+
+## Maven
+
+RightClickHarvest is available on [my maven](https://maven.jamalam.tech). You can check versions by browsing the maven.
+
+```groovy
+repositories {
+    maven {
+        url "https://maven.jamalam.tech/"
+    }
+}
+
+dependencies {
+    modImplementation("io.github.jamalam360:right-click-harvest:VERSION")
+}
+```

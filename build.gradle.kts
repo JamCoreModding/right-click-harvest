@@ -2,7 +2,7 @@ plugins {
     id("fabric-loom") version "0.12-SNAPSHOT"
     id("io.github.juuxel.loom-quiltflower") version "1.7.+"
     id("io.github.p03w.machete") version "1.+"
-    id("org.cadixdev.licenser") version "0.6.1"
+    id("org.cadixdev.licenser") version "0.6.+"
 }
 
 apply(from = "https://raw.githubusercontent.com/JamCoreModding/Gronk/main/publishing.gradle.kts")
@@ -18,7 +18,10 @@ repositories {
         Pair("https://maven.terraformersmc.com/releases", listOf("com.terraformersmc")),
         Pair("https://api.modrinth.com/maven/", listOf("maven.modrinth")),
         Pair("https://maven.jamalam.tech/releases", listOf("io.github.jamalam360")),
-        Pair("https://maven.quiltmc.org/repository/release", listOf("org.quiltmc"))
+        Pair("https://maven.quiltmc.org/repository/release", listOf("org.quiltmc")),
+        Pair("https://ladysnake.jfrog.io/artifactory/mods", listOf("dev.onyxstudios.cardinal-components-api")),
+        Pair("https://jitpack.io", listOf("com.github.p03w-rehost")),
+        Pair("https://server.bbkr.space/artifactory/libs-release", listOf("io.github.cottonmc")),
     )
 
     for (mavenPair in mavenUrls) {
@@ -37,13 +40,10 @@ dependencies {
     minecraft(libs.minecraft)
     mappings(variantOf(libs.quilt.mappings) { classifier("intermediary-v2") })
 
-    modImplementation(libs.fabric.loader)
-    modImplementation(libs.fabric.api)
-
-    modImplementation(libs.required.jamlib)
-    modImplementation(libs.optional.mod.menu)
-
-    modRuntimeOnly(libs.runtime.lazy.dfu)
+    modImplementation(libs.bundles.fabric)
+    modApi(libs.bundles.required)
+    modImplementation(libs.bundles.optional)
+    modRuntimeOnly(libs.bundles.runtime)
 }
 
 loom {
