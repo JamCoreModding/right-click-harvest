@@ -1,19 +1,35 @@
 [versions]
 minecraft = "1.18.2"
-loader = "0.14.9"
 mappings-build = "24"
+fabric-loader = "0.14.10"
 fabric-api = "0.58.0+1.18.2"
+jamlib = "0.0.5"
+rpg-stats = "4.3.13"
+cardinal-components = "4.1.4"
+auto-config = "1.18-SNAPSHOT"
+lib-gui = "5.4.1+1.18.2"
 mod-menu = "3.2.3"
 lazy-dfu = "0.1.2"
-jamlib = "0.0.5"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
-fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "loader" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
-required-jamlib = { module = "io.github.jamalam360:jam-lib", version.ref = "jamlib" }
+jamlib = { module = "io.github.jamalam360:jam-lib", version.ref = "jamlib" }
 
-optional-mod-menu = { module = "com.terraformersmc:modmenu", version.ref = "mod-menu" }
+mod-menu = { module = "com.terraformersmc:modmenu", version.ref = "mod-menu" }
+rpg-stats = { module = "maven.modrinth:rpgstats", version.ref = "rpg-stats" }
+# CCA & Auto Config are dependencies of RPG Stats
+cardinal-components-base = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-base", version.ref = "cardinal-components" }
+cardinal-components-entity = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-entity", version.ref = "cardinal-components" }
+auto-config = { module = "com.github.p03w-rehost:AutoConfig", version.ref = "auto-config" }
+lib-gui = { module = "io.github.cottonmc:LibGui", version.ref = "lib-gui" }
 
-runtime-lazy-dfu = { module = "maven.modrinth:lazydfu", version.ref = "lazy-dfu" }
+lazy-dfu = { module = "maven.modrinth:lazydfu", version.ref = "lazy-dfu" }
+
+[bundles]
+fabric = ["fabric-loader", "fabric-api"]
+required = ["jamlib"]
+optional = ["mod-menu", "rpg-stats", "cardinal-components-base", "cardinal-components-entity", "auto-config", "lib-gui"]
+runtime = ["lazy-dfu"]

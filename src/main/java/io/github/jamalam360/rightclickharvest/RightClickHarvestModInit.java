@@ -48,12 +48,20 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * @author Jamalam360
  */
 public class RightClickHarvestModInit implements ModInitializer {
     public static final String MOD_ID = "rightclickharvest";
+    public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    public static final Map<String, String> COMPAT_CLASSES = Map.of(
+            "rpgstats", "RpgStats"
+    );
     public static final TagKey<Block> HOE_REQUIRED =
             TagKey.of(Registry.BLOCK_KEY, new Identifier(MOD_ID, "hoe_required"));
     public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST =
@@ -64,13 +72,26 @@ public class RightClickHarvestModInit implements ModInitializer {
             TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "mid_tier_hoes"));
     public static final TagKey<Item> HIGH_TIER_HOES =
             TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "high_tier_hoes"));
-    public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     @Override
     public void onInitialize() {
         JamLibConfig.init(MOD_ID, Config.class);
         UseBlockCallback.EVENT.register(RightClickHarvestModInit::onBlockUse);
-        LogManager.getLogger("rightclickharvest").info((FabricLoader.getInstance().isDevelopmentEnvironment() ? "" : "[rightclickharvest]") + "Mod initialized!");
+        Logger logger = LogManager.getLogger("rightclickharvest");
+
+        for (var compatEntry : COMPAT_CLASSES.entrySet()) {
+            if (FabricLoader.getInstance().isModLoaded(compatEntry.getKey())) {
+                try {
+                    Class<?> clazz = Class.forName("io.github.jamalam360.rightclickharvest.compat." + compatEntry.getValue());
+                    Method m = clazz.getDeclaredMethod("onInitialize");
+                    m.invoke(clazz.getDeclaredConstructor().newInstance());
+                } catch (Exception e) {
+                    logger.warn("Failed to initialize mod compatibility with " + compatEntry.getKey() + ". " + e.getMessage());
+                }
+            }
+        }
+
+        logger.info((FabricLoader.getInstance().isDevelopmentEnvironment() ? "" : "[rightclickharvest]") + "Mod initialized!");
     }
 
     public static ActionResult onBlockUse(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
@@ -83,6 +104,7 @@ public class RightClickHarvestModInit implements ModInitializer {
         }
 
         BlockState state = world.getBlockState(hitResult.getBlockPos());
+        Block originalBlock = state.getBlock();
         ItemStack stack = player.getStackInHand(hand);
 
         if (Config.useHunger) {
@@ -155,6 +177,7 @@ public class RightClickHarvestModInit implements ModInitializer {
                     );
                 }
 
+                RightClickHarvestCallbacks.AFTER_HARVEST.invoker().afterHarvest(player, originalBlock);
                 return ActionResult.SUCCESS;
             }
         } else if (state.getBlock() instanceof SugarCaneBlock) {
@@ -183,6 +206,9 @@ public class RightClickHarvestModInit implements ModInitializer {
             } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
             }
+
+            RightClickHarvestCallbacks.AFTER_HARVEST.invoker().afterHarvest(player, originalBlock);
+            return ActionResult.SUCCESS;
         }
 
         return ActionResult.PASS;
