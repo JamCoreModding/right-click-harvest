@@ -9,7 +9,7 @@ cardinal-components = "4.1.4"
 auto-config = "1.18-SNAPSHOT"
 lib-gui = "6.0.0+1.19"
 lazy-dfu = "0.1.3"
-jamlib = "0.4.4"
+jamlib = "0.5.0"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
