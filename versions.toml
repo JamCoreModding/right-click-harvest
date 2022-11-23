@@ -1,22 +1,23 @@
 [versions]
-minecraft = "1.18.2"
-mappings-build = "24"
-fabric-loader = "0.14.10"
-fabric-api = "0.58.0+1.18.2"
-jamlib = "0.0.5"
-rpg-stats = "4.3.13"
+minecraft = "1.19.2"
+loader = "0.14.10"
+quilt-mappings = "1.19.2+build.21"
+fabric-api = "0.64.0+1.19.2"
+mod-menu = "4.0.6"
+rpg-stats = "4.4.1"
 cardinal-components = "4.1.4"
 auto-config = "1.18-SNAPSHOT"
-lib-gui = "5.4.1+1.18.2"
-mod-menu = "3.2.3"
-lazy-dfu = "0.1.2"
+lib-gui = "6.0.0+1.19"
+lazy-dfu = "0.1.3"
+jamlib = "0.4.4"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
-fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
+quilt-mappings = { module = "org.quiltmc:quilt-mappings", version.ref = "quilt-mappings" }
+fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
-jamlib = { module = "io.github.jamalam360:jam-lib", version.ref = "jamlib" }
+jamlib = { module = "io.github.jamalam360:jamlib", version.ref = "jamlib" }
 
 mod-menu = { module = "com.terraformersmc:modmenu", version.ref = "mod-menu" }
 rpg-stats = { module = "maven.modrinth:rpgstats", version.ref = "rpg-stats" }

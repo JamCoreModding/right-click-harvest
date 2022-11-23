@@ -25,6 +25,7 @@
 package io.github.jamalam360.rightclickharvest;
 
 import io.github.jamalam360.jamlib.config.JamLibConfig;
+import io.github.jamalam360.jamlib.log.JamLibLogger;
 import io.github.jamalam360.rightclickharvest.config.Config;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -47,8 +48,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -77,7 +76,8 @@ public class RightClickHarvestModInit implements ModInitializer {
     public void onInitialize() {
         JamLibConfig.init(MOD_ID, Config.class);
         UseBlockCallback.EVENT.register(RightClickHarvestModInit::onBlockUse);
-        Logger logger = LogManager.getLogger("rightclickharvest");
+
+        JamLibLogger logger = JamLibLogger.getLogger(MOD_ID);
 
         for (var compatEntry : COMPAT_CLASSES.entrySet()) {
             if (FabricLoader.getInstance().isModLoaded(compatEntry.getKey())) {
@@ -91,7 +91,7 @@ public class RightClickHarvestModInit implements ModInitializer {
             }
         }
 
-        logger.info((FabricLoader.getInstance().isDevelopmentEnvironment() ? "" : "[rightclickharvest]") + "Mod initialized!");
+        logger.logInitialize();
     }
 
     public static ActionResult onBlockUse(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
@@ -252,6 +252,6 @@ public class RightClickHarvestModInit implements ModInitializer {
             Block.dropStack(world, pos, stack);
         });
 
-        state.onStacksDropped(world, pos, toolStack);
+        state.onStacksDropped(world, pos, toolStack, true);
     }
 }

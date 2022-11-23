@@ -16,8 +16,8 @@
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/rightclickharvest-fabric",
-    "sources": "https://github.com/JamCoreModding/RightClickHarvest",
-    "issues": "https://github.com/JamCoreModding/RightClickHarvest/issues"
+    "sources": "https://github.com/JamCoreModding/right-click-harvest",
+    "issues": "https://github.com/JamCoreModding/right-click-harvest/issues"
   },
   "license": "MIT",
   "icon": "assets/rightclickharvest/icon.png",
@@ -36,7 +36,7 @@
   "depends": {
     "fabricloader": "*",
     "fabric": "*",
-    "jamlib": ">=0.0.3"
+    "jamlib": ">=0.5.0"
   },
   "suggests": {
     "modmenu": "*"
