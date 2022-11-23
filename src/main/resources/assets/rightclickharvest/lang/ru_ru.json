@@ -1,0 +1,9 @@
+{
+  "rightclickharvest.jamlibconfig.title": "Настройки Right Click Harvest",
+  "rightclickharvest.jamlibconfig.requireHoe": "Требовать мотыгу",
+  "rightclickharvest.jamlibconfig.requireHoe.tooltip": "Позволять собирать только определённые культуры (например, пшеницу, морковь), если игрок держит в руках мотыгу.",
+  "rightclickharvest.jamlibconfig.harvestInRadius": "Собирать в радиусе",
+  "rightclickharvest.jamlibconfig.harvestInRadius.tooltip": "Позволять мотыгам разных уровней собирать несколько блоков в радиусе. Требует `requireHoe`.",
+  "rightclickharvest.jamlibconfig.useHunger": "Тратить голод",
+  "rightclickharvest.jamlibconfig.useHunger.tooltip": "Тратить голод при сборе культур."
+}
