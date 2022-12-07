@@ -1,15 +1,15 @@
 [versions]
-minecraft = "1.19.2"
-loader = "0.14.10"
-quilt-mappings = "1.19.2+build.21"
-fabric-api = "0.64.0+1.19.2"
-mod-menu = "4.0.6"
-rpg-stats = "4.4.1"
-cardinal-components = "4.1.4"
-auto-config = "1.18-SNAPSHOT"
-lib-gui = "6.0.0+1.19"
+minecraft = "1.19.3"
+loader = "0.14.11"
+quilt-mappings = "1.19.3+build.1"
+fabric-api = "0.68.1+1.19.3"
+mod-menu = "5.0.0-alpha.4"
+#rpg-stats = "4.4.1"
+#cardinal-components = "4.1.4"
+#auto-config = "1.18-SNAPSHOT"
+#lib-gui = "6.0.0+1.19"
 lazy-dfu = "0.1.3"
-jamlib = "0.5.0"
+jamlib = "0.5.1"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -20,17 +20,18 @@ fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fab
 jamlib = { module = "io.github.jamalam360:jamlib", version.ref = "jamlib" }
 
 mod-menu = { module = "com.terraformersmc:modmenu", version.ref = "mod-menu" }
-rpg-stats = { module = "maven.modrinth:rpgstats", version.ref = "rpg-stats" }
+#rpg-stats = { module = "maven.modrinth:rpgstats", version.ref = "rpg-stats" }
 # CCA & Auto Config are dependencies of RPG Stats
-cardinal-components-base = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-base", version.ref = "cardinal-components" }
-cardinal-components-entity = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-entity", version.ref = "cardinal-components" }
-auto-config = { module = "com.github.p03w-rehost:AutoConfig", version.ref = "auto-config" }
-lib-gui = { module = "io.github.cottonmc:LibGui", version.ref = "lib-gui" }
+#cardinal-components-base = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-base", version.ref = "cardinal-components" }
+#cardinal-components-entity = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-entity", version.ref = "cardinal-components" }
+#auto-config = { module = "com.github.p03w-rehost:AutoConfig", version.ref = "auto-config" }
+#lib-gui = { module = "io.github.cottonmc:LibGui", version.ref = "lib-gui" }
 
 lazy-dfu = { module = "maven.modrinth:lazydfu", version.ref = "lazy-dfu" }
 
 [bundles]
 fabric = ["fabric-loader", "fabric-api"]
 required = ["jamlib"]
-optional = ["mod-menu", "rpg-stats", "cardinal-components-base", "cardinal-components-entity", "auto-config", "lib-gui"]
+#optional = ["mod-menu", "rpg-stats", "cardinal-components-base", "cardinal-components-entity", "auto-config", "lib-gui"]
+optional = ["mod-menu"]
 runtime = ["lazy-dfu"]

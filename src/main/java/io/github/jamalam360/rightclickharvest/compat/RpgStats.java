@@ -24,19 +24,16 @@
 
 package io.github.jamalam360.rightclickharvest.compat;
 
-import io.github.jamalam360.rightclickharvest.RightClickHarvestCallbacks;
-import mc.rpgstats.main.CustomComponents;
-import mc.rpgstats.main.RPGStats;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 public class RpgStats implements ModInitializer {
+
     @Override
     public void onInitialize() {
-        RightClickHarvestCallbacks.AFTER_HARVEST.register((player, block) -> {
-            if (player instanceof ServerPlayerEntity serverPlayerEntity) {
-                RPGStats.addXpAndLevelUp(CustomComponents.FARMING, serverPlayerEntity, 1);
-            }
-        });
+//        RightClickHarvestCallbacks.AFTER_HARVEST.register((player, block) -> {
+//            if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+//                RPGStats.addXpAndLevelUp(CustomComponents.FARMING, serverPlayerEntity, 1);
+//            }
+//        });
     }
 }

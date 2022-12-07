@@ -37,16 +37,16 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.lang.reflect.Method;
@@ -62,15 +62,15 @@ public class RightClickHarvestModInit implements ModInitializer {
             "rpgstats", "RpgStats"
     );
     public static final TagKey<Block> HOE_REQUIRED =
-            TagKey.of(Registry.BLOCK_KEY, new Identifier(MOD_ID, "hoe_required"));
+            TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "hoe_required"));
     public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST =
-            TagKey.of(Registry.BLOCK_KEY, new Identifier(MOD_ID, "radius_harvest_blacklist"));
+            TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "radius_harvest_blacklist"));
     public static final TagKey<Item> LOW_TIER_HOES =
-            TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "low_tier_hoes"));
+            TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "low_tier_hoes"));
     public static final TagKey<Item> MID_TIER_HOES =
-            TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "mid_tier_hoes"));
+            TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "mid_tier_hoes"));
     public static final TagKey<Item> HIGH_TIER_HOES =
-            TagKey.of(Registry.ITEM_KEY, new Identifier(MOD_ID, "high_tier_hoes"));
+            TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "high_tier_hoes"));
 
     @Override
     public void onInitialize() {
