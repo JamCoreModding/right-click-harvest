@@ -32,4 +32,4 @@ The configuration file can be found in the `./config/rightclickharvest.json` fil
 
 ## Developers and Modpack Creators
 
-To see information on tags added by RightClickHarvest, visit [DEVELOPERS.md](https://github.com/JamCoreModding/RightClickHarvest/blob/1.19.x/DEVELOPERS.md).
+To see information on tags and the API added by RightClickHarvest, visit [DEVELOPERS.md](https://github.com/JamCoreModding/RightClickHarvest/blob/1.19.x/DEVELOPERS.md).
