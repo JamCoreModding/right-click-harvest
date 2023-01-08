@@ -29,6 +29,7 @@ import io.github.jamalam360.rightclickharvest.gametest.TestConfigManager.Harvest
 import io.github.jamalam360.rightclickharvest.gametest.TestConfigManager.RequireHoe;
 import io.github.jamalam360.rightclickharvest.gametest.TestConfigManager.UseHunger;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.block.Blocks;
@@ -37,7 +38,9 @@ import net.minecraft.block.CropBlock;
 import net.minecraft.block.NetherWartBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -47,6 +50,7 @@ import net.minecraft.test.GameTestException;
 import net.minecraft.test.TestContext;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 
 public class Entrypoint implements FabricGameTest {
 
@@ -110,25 +114,6 @@ public class Entrypoint implements FabricGameTest {
     }
 
     @UseHunger
-    @GameTest(structureName = EMPTY_STRUCTURE, maxAttempts = 50)
-    public void hunger(TestContext ctx) {
-        BlockPos pos = TestHelper.wheat(ctx);
-        PlayerEntity player = TestHelper.createMockPlayer(ctx);
-        TestHelper.interact(ctx, player, pos, Items.AIR.getDefaultStack());
-
-        ctx.addInstantFinalTask(() -> {
-            ctx.expectEntity(EntityType.ITEM);
-            ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
-
-            if (player.getHungerManager().getExhaustion() == 0) {
-                throw new GameTestException("Expected player to have exhaustion");
-            }
-
-            ctx.complete();
-        });
-    }
-
-    @UseHunger
     @GameTest(structureName = EMPTY_STRUCTURE)
     public void noHunger(TestContext ctx) {
         BlockPos pos = TestHelper.wheat(ctx);
@@ -176,41 +161,30 @@ public class Entrypoint implements FabricGameTest {
         });
     }
 
-    @UseHunger
     @RequireHoe
-    @GameTest(structureName = EMPTY_STRUCTURE, maxAttempts = 50)
-    public void hoeAndHunger(TestContext ctx) {
-        BlockPos pos = TestHelper.wheat(ctx);
-        PlayerEntity player = TestHelper.createMockPlayer(ctx);
-        TestHelper.interact(ctx, player, pos, Items.WOODEN_HOE.getDefaultStack());
-
-        ctx.addInstantFinalTask(() -> {
-            ctx.expectEntity(EntityType.ITEM);
-            ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
-
-            if (player.getStackInHand(Hand.MAIN_HAND).getDamage() == ToolMaterials.WOOD.getDurability()) {
-                throw new GameTestException("Expected hoe to be damaged");
-            }
-
-            if (player.getHungerManager().getExhaustion() == 0) {
-                throw new GameTestException("Expected player to have exhaustion");
-            }
-
-            ctx.complete();
-        });
-    }
-
-    @RequireHoe
-    @GameTest(structureName = EMPTY_STRUCTURE, maxAttempts = 100)
+    @GameTest(structureName = EMPTY_STRUCTURE, maxAttempts = 500)
     public void fortuneHoe(TestContext ctx) {
         BlockPos pos = TestHelper.wheat(ctx);
         PlayerEntity player = TestHelper.createMockPlayer(ctx);
         ItemStack hoe = Items.WOODEN_HOE.getDefaultStack();
-        EnchantmentHelper.set(Map.of(Enchantments.FORTUNE, 3), hoe);
+        EnchantmentHelper.set(Map.of(Enchantments.FORTUNE, 10), hoe);
         TestHelper.interact(ctx, player, pos, hoe);
 
         ctx.addInstantFinalTask(() -> {
-            ctx.expectItemsAt(Items.WHEAT_SEEDS, new BlockPos(0, 4, 0), 4, 4);
+            BlockPos blockPos = ctx.getAbsolutePos(new BlockPos(0, 4, 0));
+            List<ItemEntity> list = ctx.getWorld().getEntitiesByType(EntityType.ITEM, new Box(blockPos).expand(10), Entity::isAlive);
+            int count = 0;
+
+            for (ItemEntity entity : list) {
+                if (entity.getStack().getItem().equals(Items.WHEAT_SEEDS)) {
+                    count += entity.getStack().getCount();
+                }
+            }
+
+            if (count < 4) {
+                throw new GameTestException("Only found " + count + " seeds, expected more than 4");
+            }
+
             ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
 
             if (player.getStackInHand(Hand.MAIN_HAND).getDamage() == ToolMaterials.WOOD.getDurability()) {

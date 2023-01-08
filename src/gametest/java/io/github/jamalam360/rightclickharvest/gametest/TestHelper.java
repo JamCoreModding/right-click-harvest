@@ -113,4 +113,9 @@ public class TestHelper {
             }
         };
     }
+
+    public static boolean isExhausted(PlayerEntity player) {
+        return player.getHungerManager().isNotFull() ||
+               player.getHungerManager().getExhaustion() > 0;
+    }
 }
