@@ -32,7 +32,7 @@
   },
   "depends": {
     "fabric": "*",
-    "jamlib": ">=0.5.0"
+    "jamlib": ">=0.6.0"
   },
   "suggests": {
     "modmenu": "*"

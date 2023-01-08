@@ -24,14 +24,20 @@
 
 package io.github.jamalam360.rightclickharvest;
 
+import io.github.jamalam360.jamlib.compatibility.JamLibCompatibilityModuleHandler;
 import io.github.jamalam360.jamlib.config.JamLibConfig;
 import io.github.jamalam360.jamlib.log.JamLibLogger;
 import io.github.jamalam360.rightclickharvest.config.Config;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CocoaBlock;
+import net.minecraft.block.CropBlock;
+import net.minecraft.block.NetherWartBlock;
+import net.minecraft.block.SugarCaneBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -49,48 +55,30 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.lang.reflect.Method;
-import java.util.Map;
-
 /**
  * @author Jamalam360
  */
 public class RightClickHarvestModInit implements ModInitializer {
+
     public static final String MOD_ID = "rightclickharvest";
     public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-    public static final Map<String, String> COMPAT_CLASSES = Map.of(
-            "rpgstats", "RpgStats"
-    );
     public static final TagKey<Block> HOE_REQUIRED =
-            TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "hoe_required"));
+          TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "hoe_required"));
     public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST =
-            TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "radius_harvest_blacklist"));
+          TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "radius_harvest_blacklist"));
     public static final TagKey<Item> LOW_TIER_HOES =
-            TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "low_tier_hoes"));
+          TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "low_tier_hoes"));
     public static final TagKey<Item> MID_TIER_HOES =
-            TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "mid_tier_hoes"));
+          TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "mid_tier_hoes"));
     public static final TagKey<Item> HIGH_TIER_HOES =
-            TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "high_tier_hoes"));
+          TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "high_tier_hoes"));
 
     @Override
     public void onInitialize() {
         JamLibConfig.init(MOD_ID, Config.class);
         UseBlockCallback.EVENT.register(RightClickHarvestModInit::onBlockUse);
-
+        JamLibCompatibilityModuleHandler.initialize(MOD_ID);
         JamLibLogger logger = JamLibLogger.getLogger(MOD_ID);
-
-        for (var compatEntry : COMPAT_CLASSES.entrySet()) {
-            if (FabricLoader.getInstance().isModLoaded(compatEntry.getKey())) {
-                try {
-                    Class<?> clazz = Class.forName("io.github.jamalam360.rightclickharvest.compat." + compatEntry.getValue());
-                    Method m = clazz.getDeclaredMethod("onInitialize");
-                    m.invoke(clazz.getDeclaredConstructor().newInstance());
-                } catch (Exception e) {
-                    logger.warn("Failed to initialize mod compatibility with " + compatEntry.getKey() + ". " + e.getMessage());
-                }
-            }
-        }
-
         logger.logInitialize();
     }
 
@@ -148,7 +136,9 @@ public class RightClickHarvestModInit implements ModInitializer {
                             for (int x = -radius; x <= radius; x++) {
                                 for (int z = -radius; z <= radius; z++) {
                                     BlockPos pos = hitResult.getBlockPos().offset(Direction.Axis.X, x).offset(Direction.Axis.Z, z);
-                                    if (circle && pos.getManhattanDistance(hitResult.getBlockPos()) > radius) continue;
+                                    if (circle && pos.getManhattanDistance(hitResult.getBlockPos()) > radius) {
+                                        continue;
+                                    }
                                     onBlockUse(player, world, hand, hitResult.withBlockPos(pos), false);
                                 }
                             }
@@ -159,7 +149,7 @@ public class RightClickHarvestModInit implements ModInitializer {
                 if (!world.isClient) {
                     world.setBlockState(hitResult.getBlockPos(), getReplantState(state));
                     dropStacks(state, (ServerWorld) world, hitResult.getBlockPos(), player,
-                            player.getStackInHand(hand)
+                          player.getStackInHand(hand)
                     );
 
                     if (Config.requireHoe) {
@@ -171,9 +161,9 @@ public class RightClickHarvestModInit implements ModInitializer {
                     }
                 } else {
                     player.playSound(
-                            state.getBlock() instanceof NetherWartBlock ?
-                                    SoundEvents.ITEM_NETHER_WART_PLANT : SoundEvents.ITEM_CROP_PLANT,
-                            1.0f, 1.0f
+                          state.getBlock() instanceof NetherWartBlock ?
+                          SoundEvents.ITEM_NETHER_WART_PLANT : SoundEvents.ITEM_CROP_PLANT,
+                          1.0f, 1.0f
                     );
                 }
 
@@ -239,7 +229,7 @@ public class RightClickHarvestModInit implements ModInitializer {
     }
 
     private static void dropStacks(BlockState state, ServerWorld world, BlockPos pos, Entity entity,
-                                   ItemStack toolStack) {
+          ItemStack toolStack) {
         Item replant = state.getBlock().getPickStack(world, pos, state).getItem();
         final boolean[] removedReplant = {false};
 
