@@ -43,16 +43,16 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 /**
@@ -63,15 +63,15 @@ public class RightClickHarvestModInit implements ModInitializer {
     public static final String MOD_ID = "rightclickharvest";
     public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     public static final TagKey<Block> HOE_REQUIRED =
-          TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "hoe_required"));
+          TagKey.of(Registry.BLOCK.getKey(), new Identifier(MOD_ID, "hoe_required"));
     public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST =
-          TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "radius_harvest_blacklist"));
+          TagKey.of(Registry.BLOCK.getKey(), new Identifier(MOD_ID, "radius_harvest_blacklist"));
     public static final TagKey<Item> LOW_TIER_HOES =
-          TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "low_tier_hoes"));
+          TagKey.of(Registry.ITEM.getKey(), new Identifier(MOD_ID, "low_tier_hoes"));
     public static final TagKey<Item> MID_TIER_HOES =
-          TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "mid_tier_hoes"));
+          TagKey.of(Registry.ITEM.getKey(), new Identifier(MOD_ID, "mid_tier_hoes"));
     public static final TagKey<Item> HIGH_TIER_HOES =
-          TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "high_tier_hoes"));
+          TagKey.of(Registry.ITEM.getKey(), new Identifier(MOD_ID, "high_tier_hoes"));
 
     @Override
     public void onInitialize() {

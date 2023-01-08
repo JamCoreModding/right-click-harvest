@@ -99,7 +99,7 @@ public class TestHelper {
     }
 
     public static PlayerEntity createMockPlayer(TestContext ctx) {
-        return new PlayerEntity(ctx.getWorld(), BlockPos.ORIGIN, 0.0F, new GameProfile(UUID.randomUUID(), "test-mock-player")) {
+        return new PlayerEntity(ctx.getWorld(), BlockPos.ORIGIN, 0.0F, new GameProfile(UUID.randomUUID(), "test-mock-player"), null) {
             public boolean isSpectator() {
                 return false;
             }
@@ -112,10 +112,5 @@ public class TestHelper {
                 return true;
             }
         };
-    }
-
-    public static boolean isExhausted(PlayerEntity player) {
-        return player.getHungerManager().isNotFull() ||
-               player.getHungerManager().getExhaustion() > 0;
     }
 }
