@@ -28,13 +28,9 @@
     ],
     "modmenu": [
       "io.github.jamalam360.rightclickharvest.config.ModMenuScreen"
-    ],
-    "fabric-gametest": [
-      "io.github.jamalam360.rightclickharvest.RightClickHarvestGameTest"
     ]
   },
   "depends": {
-    "fabricloader": "*",
     "fabric": "*",
     "jamlib": ">=0.5.0"
   },

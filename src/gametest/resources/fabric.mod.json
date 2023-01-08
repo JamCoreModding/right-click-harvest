@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "id": "rightclickharvest-gametest",
+  "version": "UNVERSIONED",
+  "name": "Right Click Harvest Gametests",
+  "description": "Gametests for Right Click Harvest.",
+  "authors": [
+    "Jamalam"
+  ],
+  "license": "MIT",
+  "icon": "assets/rightclickharvest/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "io.github.jamalam360.rightclickharvest.gametest.Entrypoint"
+    ]
+  }
+}

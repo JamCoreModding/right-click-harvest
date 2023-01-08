@@ -46,22 +46,35 @@ dependencies {
     modRuntimeOnly(libs.bundles.runtime)
 }
 
+sourceSets {
+    val main = this.getByName("main")
+
+    create("gametest") {
+        this.compileClasspath += main.compileClasspath
+        this.compileClasspath += main.output
+        this.runtimeClasspath += main.runtimeClasspath
+        this.runtimeClasspath += main.output
+    }
+}
+
 loom {
     runs {
         create("gametest") {
             server()
             name("Game Test")
+            source(sourceSets.getByName("gametest"))
             vmArg("-Dfabric-api.gametest")
             vmArg("-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml")
-            runDir("build/gametest")
+            runDir("build/run-gametest")
         }
 
         create("gametestDebug") {
             client()
             name("Game Test")
+            source(sourceSets.getByName("gametest"))
             vmArg("-Dfabric-api.gametest")
             vmArg("-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml")
-            runDir("build/gametest")
+            runDir("build/run-gametest")
         }
     }
 }
