@@ -27,16 +27,33 @@ package io.github.jamalam360.rightclickharvest;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class RightClickHarvestCallbacks {
+
+    public static final Event<OnHarvestCallback> ON_HARVEST = EventFactory.createArrayBacked(OnHarvestCallback.class, (callbacks -> (player, pos, state) -> {
+        for (OnHarvestCallback callback : callbacks) {
+            callback.onHarvest(player, pos, state);
+        }
+    }));
     public static final Event<AfterHarvestCallback> AFTER_HARVEST = EventFactory.createArrayBacked(AfterHarvestCallback.class, (callbacks -> (player, block) -> {
         for (AfterHarvestCallback callback : callbacks) {
             callback.afterHarvest(player, block);
         }
     }));
 
+    public interface OnHarvestCallback {
+
+        /**
+         * Called just before right-click-harvesting.
+         */
+        void onHarvest(PlayerEntity entity, BlockPos pos, BlockState state);
+    }
+
     public interface AfterHarvestCallback {
+
         /**
          * Called after right-click-harvesting.
          *

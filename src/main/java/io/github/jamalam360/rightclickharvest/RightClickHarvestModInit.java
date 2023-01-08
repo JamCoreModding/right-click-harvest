@@ -146,6 +146,8 @@ public class RightClickHarvestModInit implements ModInitializer {
                     }
                 }
 
+                RightClickHarvestCallbacks.ON_HARVEST.invoker().onHarvest(player, hitResult.getBlockPos(), state);
+
                 if (!world.isClient) {
                     world.setBlockState(hitResult.getBlockPos(), getReplantState(state));
                     dropStacks(state, (ServerWorld) world, hitResult.getBlockPos(), player,

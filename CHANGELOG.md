@@ -1,8 +1,7 @@
 ## Changelog
 
-### Features
-
-### Fixes
+- Fix RPGStats compatibility for versions > `5.0.0`.
+- Update tests.
 
 Closed Issues: None
 
