@@ -36,5 +36,8 @@
   },
   "suggests": {
     "modmenu": "*"
+  },
+  "custom": {
+    "jamlib:compatibility_modules": {}
   }
 }
