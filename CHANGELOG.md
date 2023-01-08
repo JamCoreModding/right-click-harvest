@@ -1,9 +1,5 @@
 ## Changelog
 
-### Features
-
-### Fixes
-
-Closed Issues: None
+- Update testing system.
 
 [Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/...)
