@@ -69,11 +69,9 @@ public class Entrypoint implements FabricGameTest {
         BlockPos pos = TestHelper.wheat(ctx);
         TestHelper.interact(ctx, pos, Items.AIR.getDefaultStack());
 
-        ctx.addInstantFinalTask(() -> {
-            ctx.expectEntity(EntityType.ITEM);
-            ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
-            ctx.complete();
-        });
+        ctx.expectEntity(EntityType.ITEM);
+        ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
+        ctx.complete();
     }
 
     @GameTest(structureName = EMPTY_STRUCTURE)
@@ -81,12 +79,10 @@ public class Entrypoint implements FabricGameTest {
         BlockPos pos = TestHelper.sugarcane(ctx);
         TestHelper.interact(ctx, pos, Items.AIR.getDefaultStack());
 
-        ctx.addInstantFinalTask(() -> {
-            ctx.expectEntity(EntityType.ITEM);
-            ctx.expectBlock(Blocks.SUGAR_CANE, new BlockPos(0, 2, 0));
-            ctx.expectBlock(Blocks.AIR, new BlockPos(0, 3, 0));
-            ctx.complete();
-        });
+        ctx.expectEntity(EntityType.ITEM);
+        ctx.expectBlock(Blocks.SUGAR_CANE, new BlockPos(0, 2, 0));
+        ctx.expectBlock(Blocks.AIR, new BlockPos(0, 3, 0));
+        ctx.complete();
     }
 
     @GameTest(structureName = EMPTY_STRUCTURE)
@@ -94,11 +90,9 @@ public class Entrypoint implements FabricGameTest {
         BlockPos pos = TestHelper.cocoaBeans(ctx);
         TestHelper.interact(ctx, pos, Items.AIR.getDefaultStack());
 
-        ctx.addInstantFinalTask(() -> {
-            ctx.expectEntity(EntityType.ITEM);
-            ctx.expectBlockProperty(pos, CocoaBlock.AGE, 0);
-            ctx.complete();
-        });
+        ctx.expectEntity(EntityType.ITEM);
+        ctx.expectBlockProperty(pos, CocoaBlock.AGE, 0);
+        ctx.complete();
     }
 
     @GameTest(structureName = EMPTY_STRUCTURE)
@@ -106,11 +100,9 @@ public class Entrypoint implements FabricGameTest {
         BlockPos pos = TestHelper.netherWart(ctx);
         TestHelper.interact(ctx, pos, Items.AIR.getDefaultStack());
 
-        ctx.addInstantFinalTask(() -> {
-            ctx.expectEntity(EntityType.ITEM);
-            ctx.expectBlockProperty(pos, NetherWartBlock.AGE, 0);
-            ctx.complete();
-        });
+        ctx.expectEntity(EntityType.ITEM);
+        ctx.expectBlockProperty(pos, NetherWartBlock.AGE, 0);
+        ctx.complete();
     }
 
     @UseHunger
@@ -122,11 +114,9 @@ public class Entrypoint implements FabricGameTest {
         player.getHungerManager().setSaturationLevel(0);
         TestHelper.interact(ctx, player, pos, Items.AIR.getDefaultStack());
 
-        ctx.addInstantFinalTask(() -> {
-            ctx.dontExpectEntity(EntityType.ITEM);
-            ctx.expectBlockProperty(pos, CropBlock.AGE, CropBlock.MAX_AGE);
-            ctx.complete();
-        });
+        ctx.expectNoEntity(EntityType.ITEM);
+        ctx.expectBlockProperty(pos, CropBlock.AGE, CropBlock.MAX_AGE);
+        ctx.complete();
     }
 
     @RequireHoe
@@ -136,16 +126,14 @@ public class Entrypoint implements FabricGameTest {
         PlayerEntity player = TestHelper.createMockPlayer(ctx);
         TestHelper.interact(ctx, player, pos, Items.WOODEN_HOE.getDefaultStack());
 
-        ctx.addInstantFinalTask(() -> {
-            ctx.expectEntity(EntityType.ITEM);
-            ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
+        ctx.expectEntity(EntityType.ITEM);
+        ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
 
-            if (player.getStackInHand(Hand.MAIN_HAND).getDamage() == ToolMaterials.WOOD.getDurability()) {
-                throw new GameTestException("Expected hoe to be damaged");
-            }
+        if (player.getStackInHand(Hand.MAIN_HAND).getDamage() == ToolMaterials.WOOD.getDurability()) {
+            throw new GameTestException("Expected hoe to be damaged");
+        }
 
-            ctx.complete();
-        });
+        ctx.complete();
     }
 
     @RequireHoe
@@ -154,11 +142,9 @@ public class Entrypoint implements FabricGameTest {
         BlockPos pos = TestHelper.wheat(ctx);
         TestHelper.interact(ctx, pos, Items.AIR.getDefaultStack());
 
-        ctx.addInstantFinalTask(() -> {
-            ctx.dontExpectEntity(EntityType.ITEM);
-            ctx.expectBlockProperty(pos, CropBlock.AGE, CropBlock.MAX_AGE);
-            ctx.complete();
-        });
+        ctx.expectNoEntity(EntityType.ITEM);
+        ctx.expectBlockProperty(pos, CropBlock.AGE, CropBlock.MAX_AGE);
+        ctx.complete();
     }
 
     @RequireHoe
@@ -170,29 +156,27 @@ public class Entrypoint implements FabricGameTest {
         EnchantmentHelper.set(Map.of(Enchantments.FORTUNE, 10), hoe);
         TestHelper.interact(ctx, player, pos, hoe);
 
-        ctx.addInstantFinalTask(() -> {
-            BlockPos blockPos = ctx.getAbsolutePos(new BlockPos(0, 4, 0));
-            List<ItemEntity> list = ctx.getWorld().getEntitiesByType(EntityType.ITEM, new Box(blockPos).expand(10), Entity::isAlive);
-            int count = 0;
+        BlockPos blockPos = ctx.getAbsolutePos(new BlockPos(0, 4, 0));
+        List<ItemEntity> list = ctx.getWorld().getEntitiesByType(EntityType.ITEM, new Box(blockPos).expand(10), Entity::isAlive);
+        int count = 0;
 
-            for (ItemEntity entity : list) {
-                if (entity.getStack().getItem().equals(Items.WHEAT_SEEDS)) {
-                    count += entity.getStack().getCount();
-                }
+        for (ItemEntity entity : list) {
+            if (entity.getStack().getItem().equals(Items.WHEAT_SEEDS)) {
+                count += entity.getStack().getCount();
             }
+        }
 
-            if (count < 4) {
-                throw new GameTestException("Only found " + count + " seeds, expected more than 4");
-            }
+        if (count < 4) {
+            throw new GameTestException("Only found " + count + " seeds, expected more than 4");
+        }
 
-            ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
+        ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
 
-            if (player.getStackInHand(Hand.MAIN_HAND).getDamage() == ToolMaterials.WOOD.getDurability()) {
-                throw new GameTestException("Expected hoe to be damaged");
-            }
+        if (player.getStackInHand(Hand.MAIN_HAND).getDamage() == ToolMaterials.WOOD.getDurability()) {
+            throw new GameTestException("Expected hoe to be damaged");
+        }
 
-            ctx.complete();
-        });
+        ctx.complete();
     }
 
     @HarvestInRadius
@@ -203,19 +187,17 @@ public class Entrypoint implements FabricGameTest {
         ItemStack hoe = Items.NETHERITE_HOE.getDefaultStack();
         TestHelper.interact(ctx, player, new BlockPos(1, 3, 1), hoe);
 
-        ctx.addInstantFinalTask(() -> {
-            ctx.expectEntity(EntityType.ITEM);
+        ctx.expectEntity(EntityType.ITEM);
 
-            for (BlockPos pos : interactionPositions) {
-                ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
-            }
+        for (BlockPos pos : interactionPositions) {
+            ctx.expectBlockProperty(pos, CropBlock.AGE, 0);
+        }
 
-            if (player.getStackInHand(Hand.MAIN_HAND).getDamage() == ToolMaterials.NETHERITE.getDurability()) {
-                throw new GameTestException("Expected hoe to be damaged");
-            }
+        if (player.getStackInHand(Hand.MAIN_HAND).getDamage() == ToolMaterials.NETHERITE.getDurability()) {
+            throw new GameTestException("Expected hoe to be damaged");
+        }
 
-            ctx.complete();
-        });
+        ctx.complete();
     }
 
     @HarvestInRadius
@@ -229,19 +211,17 @@ public class Entrypoint implements FabricGameTest {
         ItemStack hoe = Items.NETHERITE_HOE.getDefaultStack();
         TestHelper.interact(ctx, player, new BlockPos(1, 3, 1), hoe);
 
-        ctx.addInstantFinalTask(() -> {
-            ctx.dontExpectEntity(EntityType.ITEM);
+        ctx.expectNoEntity(EntityType.ITEM);
 
-            for (BlockPos pos : interactionPositions) {
-                ctx.expectBlockProperty(pos, CropBlock.AGE, CropBlock.MAX_AGE);
-            }
+        for (BlockPos pos : interactionPositions) {
+            ctx.expectBlockProperty(pos, CropBlock.AGE, CropBlock.MAX_AGE);
+        }
 
-            if (player.getStackInHand(Hand.MAIN_HAND).isDamaged()) {
-                throw new GameTestException("Expected hoe to not be damaged");
-            }
+        if (player.getStackInHand(Hand.MAIN_HAND).isDamaged()) {
+            throw new GameTestException("Expected hoe to not be damaged");
+        }
 
-            ctx.complete();
-        });
+        ctx.complete();
     }
 
     @HarvestInRadius
