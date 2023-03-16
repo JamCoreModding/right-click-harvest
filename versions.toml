@@ -1,15 +1,15 @@
 [versions]
-minecraft = "1.19.3"
-loader = "0.14.11"
-quilt-mappings = "1.19.3+build.1"
-fabric-api = "0.68.1+1.19.3"
-mod-menu = "5.0.0-alpha.4"
+minecraft = "1.19.4"
+loader = "0.14.17"
+quilt-mappings = "1.19.4+build.3"
+fabric-api = "0.76.0+1.19.4"
+mod-menu = "6.1.0-rc.1"
 #rpg-stats = "4.4.1"
 #cardinal-components = "4.1.4"
 #auto-config = "1.18-SNAPSHOT"
 #lib-gui = "6.0.0+1.19"
 lazy-dfu = "0.1.3"
-jamlib = "0.6.0+1.19.3"
+jamlib = "0.6.0+1.19.4"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
