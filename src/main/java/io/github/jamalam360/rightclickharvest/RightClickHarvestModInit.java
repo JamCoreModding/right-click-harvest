@@ -192,8 +192,9 @@ public class RightClickHarvestModInit implements ModInitializer {
             if (!world.isClient) {
                 world.breakBlock(bottom.up(2), true);
 
-                if (Config.useHunger && player.world.random.nextBoolean()) {
-                    player.addExhaustion(1.5f);
+                if (Config.useHunger) {
+                    // Regular block breaking causes 0.005f exhaustion
+                    player.addExhaustion(0.005f * Config.hungerLevel.modifier);
                 }
             } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
