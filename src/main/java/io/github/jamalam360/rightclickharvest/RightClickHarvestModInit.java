@@ -30,7 +30,6 @@ import io.github.jamalam360.jamlib.log.JamLibLogger;
 import io.github.jamalam360.rightclickharvest.config.Config;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -44,6 +43,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -102,7 +102,7 @@ public class RightClickHarvestModInit implements ModInitializer {
         }
 
         if (state.isIn(HOE_REQUIRED) && Config.requireHoe) {
-            if (!stack.isIn(ConventionalItemTags.HOES)) {
+            if (!stack.isIn(ItemTags.HOES)) {
                 return ActionResult.PASS;
             }
         }
@@ -113,7 +113,7 @@ public class RightClickHarvestModInit implements ModInitializer {
 
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
             if (isMature(state)) {
-                if (initialCall && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(ConventionalItemTags.HOES)) {
+                if (initialCall && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(ItemTags.HOES)) {
                     int radius = 0;
                     boolean circle = false;
 
@@ -156,8 +156,9 @@ public class RightClickHarvestModInit implements ModInitializer {
                         stack.damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
                     }
 
-                    if (Config.useHunger && player.world.random.nextBoolean()) {
-                        player.addExhaustion(1.5f);
+                    if (Config.useHunger) {
+                        // Regular block breaking causes 0.005f exhaustion
+                        player.addExhaustion(0.005f * Config.hungerLevel.modifier);
                     }
                 } else {
                     player.playSound(
