@@ -25,6 +25,8 @@ The configuration file can be found in the `./config/rightclickharvest.json` fil
 - [Modrinth](https://modrinth.com/mod/rightclickharvest)
 - [GitHub](https://github.com/JamCoreModding/RightClickHarvest/releases/latest)
 
+[![Need a server? Use code JAMALAM at Bisect Hosting for 25% off, and support me as well!](https://www.bisecthosting.com/partners/custom-banners/bed9e0dd-9142-4d6e-8683-b593593c11ff.webp)](https://bisecthosting.com/jamalam)
+
 ## Discuss
 
 - [Discord](https://discord.jamalam.tech)
