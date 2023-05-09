@@ -6,4 +6,4 @@
 
 Closed Issues: None
 
-[Full Changelog](https://github.com/JamCoreModding/RightClickHarvest/compare/...)
+[Full Changelog](https://github.com/JamCoreModding/right-click-harvest/compare/...)

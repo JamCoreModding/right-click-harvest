@@ -38,4 +38,19 @@ public class Config extends JamLibConfig {
 
     @Entry
     public static boolean useHunger = true;
+
+    @Entry
+    public static HungerLevel hungerLevel = HungerLevel.NORMAL;
+
+    public enum HungerLevel {
+        LOW(0.5f),
+        NORMAL(1.0f),
+        HIGH(1.5f);
+
+        public final float modifier;
+
+        HungerLevel(float modifier) {
+            this.modifier = modifier;
+        }
+    }
 }
