@@ -20,12 +20,6 @@ fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fab
 jamlib = { module = "io.github.jamalam360:jamlib", version.ref = "jamlib" }
 
 mod-menu = { module = "com.terraformersmc:modmenu", version.ref = "mod-menu" }
-#rpg-stats = { module = "maven.modrinth:rpgstats", version.ref = "rpg-stats" }
-# CCA & Auto Config are dependencies of RPG Stats
-#cardinal-components-base = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-base", version.ref = "cardinal-components" }
-#cardinal-components-entity = { module = "dev.onyxstudios.cardinal-components-api:cardinal-components-entity", version.ref = "cardinal-components" }
-#auto-config = { module = "com.github.p03w-rehost:AutoConfig", version.ref = "auto-config" }
-#lib-gui = { module = "io.github.cottonmc:LibGui", version.ref = "lib-gui" }
 
 lazy-dfu = { module = "maven.modrinth:lazydfu", version.ref = "lazy-dfu" }
 

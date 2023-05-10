@@ -25,6 +25,7 @@
 package io.github.jamalam360.rightclickharvest;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.MappingResolver;
 import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.metadata.version.VersionPredicate;
 import net.minecraft.block.Block;
@@ -42,42 +43,73 @@ public class VersionUtils {
     public static RegistryKey<Registry<Block>> BLOCK_KEY;
     public static RegistryKey<Registry<Item>> ITEM_KEY;
 
+    private static final String CLASS_ITEM_TAGS = "net.minecraft.class_3489";
+    private static final String CLASS_REGISTRIES = "net.minecraft.class_7923";
+    private static final String CLASS_DEFAULTED_REGISTRY = "net.minecraft.class_7922";
+    private static final String CLASS_REGISTRY = "net.minecraft.class_2378";
+    private static final String CLASS_TAG_KEY = "net.minecraft.class_6862";
+    private static final String CLASS_REGISTRY_KEY = "net.minecraft.class_5321";
+    private static final String CLASS_CONVENTIONAL_ITEM_TAGS = "net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags";
+    private static final String FIELD_HOES = "field_42613";
+    private static final String FIELD_BLOCK = "field_41175";
+    private static final String FIELD_ITEM = "field_41178";
+    private static final String FIELD_BLOCK_KEY = "field_25105";
+    private static final String FIELD_ITEM_KEY = "field_25108";
+    private static final String METHOD_GET_KEY = "method_30517";
+
     private static void init() {
         try {
             RightClickHarvestModInit.LOGGER.info("Initializing VersionUtils");
+
+            MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
+
             Version version = FabricLoader.getInstance().getModContainer("minecraft").get().getMetadata().getVersion();
 
             VersionPredicate gte1194 = VersionPredicate.parse(">=1.19.4");
             VersionPredicate gte1193 = VersionPredicate.parse(">=1.19.3");
 
             if (gte1194.test(version)) {
-                Class<?> clazz = Class.forName("net.minecraft.registry.tag.ItemTags");
-                HOES = (TagKey<Item>) clazz.getDeclaredField("HOES").get(null);
+                Class<?> clazz = Class.forName(resolver.mapClassName("intermediary", CLASS_ITEM_TAGS));
+                HOES = (TagKey<Item>) clazz.getField(resolver.mapFieldName("intermediary", CLASS_ITEM_TAGS, FIELD_HOES, classToDesc(CLASS_TAG_KEY))).get(null);
             } else {
-                Class<?> clazz = Class.forName("net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags");
-                HOES = (TagKey<Item>) clazz.getDeclaredField("HOES").get(null);
+                Class<?> clazz = Class.forName(CLASS_CONVENTIONAL_ITEM_TAGS);
+                HOES = (TagKey<Item>) clazz.getField("HOES").get(null);
             }
 
             if (gte1193.test(version)) {
-                Class<?> clazz = Class.forName("net.minecraft.registry.Registries");
+                Class<?> clazz = Class.forName(resolver.mapClassName("intermediary", CLASS_REGISTRIES));
 
-                Object block = clazz.getDeclaredField("BLOCK").get(null);
-                Object item = clazz.getDeclaredField("ITEM").get(null);
+                Object block = clazz.getDeclaredField(resolver.mapFieldName("intermediary", CLASS_REGISTRIES,
+                        FIELD_BLOCK, classToDesc(CLASS_DEFAULTED_REGISTRY))).get(null);
+                Object item = clazz.getDeclaredField(resolver.mapFieldName("intermediary", CLASS_REGISTRIES, FIELD_ITEM,
+                        classToDesc(CLASS_DEFAULTED_REGISTRY))).get(null);
 
-                BLOCK_KEY = (RegistryKey<Registry<Block>>) block.getClass().getDeclaredMethod("getKey").invoke(block);
-                ITEM_KEY = (RegistryKey<Registry<Item>>) item.getClass().getDeclaredMethod("getKey").invoke(item);
+                String getKey = resolver.mapMethodName("intermediary", CLASS_REGISTRY, METHOD_GET_KEY,
+                        "()" + classToDesc(CLASS_REGISTRY_KEY));
+
+                BLOCK_KEY = (RegistryKey<Registry<Block>>) block.getClass().getMethod(getKey).invoke(block);
+                ITEM_KEY = (RegistryKey<Registry<Item>>) item.getClass().getMethod(getKey).invoke(item);
             } else {
-                Class<?> clazz = Class.forName("net.minecraft.util.registry.Registry");
+                Class<?> clazz = Class.forName(resolver.mapClassName("intermediary", CLASS_REGISTRY));
 
-                BLOCK_KEY = (RegistryKey<Registry<Block>>) clazz.getDeclaredField("BLOCK_KEY").get(null);
-                ITEM_KEY = (RegistryKey<Registry<Item>>) clazz.getDeclaredField("ITEM_KEY").get(null);
+                BLOCK_KEY = (RegistryKey<Registry<Block>>) clazz
+                        .getField(resolver.mapFieldName("intermediary", CLASS_REGISTRY, FIELD_BLOCK_KEY,
+                                classToDesc(CLASS_REGISTRY_KEY)))
+                        .get(null);
+                ITEM_KEY = (RegistryKey<Registry<Item>>) clazz
+                        .getField(resolver.mapFieldName("intermediary", CLASS_REGISTRY, FIELD_ITEM_KEY,
+                                classToDesc(CLASS_REGISTRY_KEY)))
+                        .get(null);
             }
 
+            RightClickHarvestModInit.LOGGER.info("VersionUtils initialized successfully");
         } catch (Exception e) {
             RightClickHarvestModInit.LOGGER.error("Failed to initialize VersionUtils. This will cause issues later");
             e.printStackTrace();
         }
-
-        RightClickHarvestModInit.LOGGER.info("VersionUtils initialized successfully");
+    }
+    
+    private static String classToDesc(String desc) {
+        return "L" + desc.replaceAll("\\.", "/") + ";";
     }
 }

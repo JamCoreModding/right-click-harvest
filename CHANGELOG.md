@@ -1,9 +1,5 @@
 ## Changelog
 
-### Features
-
-- (#31) Add a config option to modify the amount of hugner used when harvesting, and make the hunger used more balanced.
-
-Closed Issues: #31
-
-[Full Changelog](https://github.com/JamCoreModding/right-click-harvest/compare/3.1.0+1.19.4...3.1.1+1.19.4)
+This release brings support for all 1.19 versions in one jar, which will allow
+me to work on RightClickHarvest much more as it is more enjoyable (rather than
+spending all my time merging into different branches).

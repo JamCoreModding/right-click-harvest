@@ -24,16 +24,43 @@
 
 package io.github.jamalam360.rightclickharvest.compat;
 
+import java.lang.reflect.Method;
+
+import io.github.jamalam360.rightclickharvest.RightClickHarvestCallbacks;
+import io.github.jamalam360.rightclickharvest.RightClickHarvestModInit;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 
 public class RpgStats implements ModInitializer {
+    private static final Identifier FARMING = new Identifier("rpgstats:farming");
+    private Object levelUtils = null;
+    private Method addXpAndLevelUp = null;
 
     @Override
     public void onInitialize() {
-//        RightClickHarvestCallbacks.AFTER_HARVEST.register((player, block) -> {
-//            if (player instanceof ServerPlayerEntity serverPlayerEntity) {
-//                RPGStats.addXpAndLevelUp(CustomComponents.FARMING, serverPlayerEntity, 1);
-//            }
-//        });
+        RightClickHarvestCallbacks.AFTER_HARVEST.register((player, block) -> {
+            if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+                try {
+                    if (levelUtils == null || addXpAndLevelUp == null) {
+                        String identifierMapping = FabricLoader.getInstance().getMappingResolver()
+                                .mapClassName("intermediary", "net.minecraft.class_2960");
+                        Class<?> identifier = Class.forName(identifierMapping);
+
+                        Class<?> clazz = Class.forName("io.github.silverandro.rpgstats.LevelUtils");
+                        levelUtils = clazz.getField("INSTANCE").get(null);
+                        addXpAndLevelUp = clazz.getMethod("addXpAndLevelUp", identifier, ServerPlayerEntity.class,
+                                int.class);
+                    }
+                    
+                    addXpAndLevelUp.invoke(levelUtils, FARMING, serverPlayerEntity, 1);
+                } catch (Exception e) {
+                    RightClickHarvestModInit.LOGGER.error("Failed to enable RPGStats compatibility");
+                    e.printStackTrace();
+                }
+
+            }
+        });
     }
 }
