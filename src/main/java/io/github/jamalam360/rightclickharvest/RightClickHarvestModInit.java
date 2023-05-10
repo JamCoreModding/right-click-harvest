@@ -42,8 +42,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -61,25 +59,26 @@ import net.minecraft.world.World;
 public class RightClickHarvestModInit implements ModInitializer {
 
     public static final String MOD_ID = "rightclickharvest";
+    public static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
+
     public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     public static final TagKey<Block> HOE_REQUIRED =
-          TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "hoe_required"));
+          TagKey.of(VersionUtils.BLOCK_KEY, new Identifier(MOD_ID, "hoe_required"));
     public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST =
-          TagKey.of(Registries.BLOCK.getKey(), new Identifier(MOD_ID, "radius_harvest_blacklist"));
+          TagKey.of(VersionUtils.BLOCK_KEY, new Identifier(MOD_ID, "radius_harvest_blacklist"));
     public static final TagKey<Item> LOW_TIER_HOES =
-          TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "low_tier_hoes"));
+          TagKey.of(VersionUtils.ITEM_KEY, new Identifier(MOD_ID, "low_tier_hoes"));
     public static final TagKey<Item> MID_TIER_HOES =
-          TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "mid_tier_hoes"));
+          TagKey.of(VersionUtils.ITEM_KEY, new Identifier(MOD_ID, "mid_tier_hoes"));
     public static final TagKey<Item> HIGH_TIER_HOES =
-          TagKey.of(Registries.ITEM.getKey(), new Identifier(MOD_ID, "high_tier_hoes"));
+          TagKey.of(VersionUtils.ITEM_KEY, new Identifier(MOD_ID, "high_tier_hoes"));
 
     @Override
     public void onInitialize() {
         JamLibConfig.init(MOD_ID, Config.class);
         UseBlockCallback.EVENT.register(RightClickHarvestModInit::onBlockUse);
         JamLibCompatibilityModuleHandler.initialize(MOD_ID);
-        JamLibLogger logger = JamLibLogger.getLogger(MOD_ID);
-        logger.logInitialize();
+        LOGGER.logInitialize();
     }
 
     public static ActionResult onBlockUse(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult) {
@@ -102,7 +101,7 @@ public class RightClickHarvestModInit implements ModInitializer {
         }
 
         if (state.isIn(HOE_REQUIRED) && Config.requireHoe) {
-            if (!stack.isIn(ItemTags.HOES)) {
+            if (!stack.isIn(VersionUtils.HOES)) {
                 return ActionResult.PASS;
             }
         }
@@ -113,7 +112,7 @@ public class RightClickHarvestModInit implements ModInitializer {
 
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
             if (isMature(state)) {
-                if (initialCall && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(ItemTags.HOES)) {
+                if (initialCall && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(VersionUtils.HOES)) {
                     int radius = 0;
                     boolean circle = false;
 
