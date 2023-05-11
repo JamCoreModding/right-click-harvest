@@ -38,6 +38,8 @@
     "modmenu": "*"
   },
   "custom": {
-    "jamlib:compatibility_modules": {}
+    "jamlib:compatibility_modules": {
+      "rpgstats": "io.github.jamalam360.rightclickharvest.compat.RpgStats"
+    }
   }
 }

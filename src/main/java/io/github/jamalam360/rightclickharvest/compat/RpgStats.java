@@ -40,26 +40,28 @@ public class RpgStats implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        try {
+            String identifierMapping = FabricLoader.getInstance().getMappingResolver()
+                    .mapClassName("intermediary", "net.minecraft.class_2960");
+            Class<?> identifier = Class.forName(identifierMapping);
+
+            Class<?> clazz = Class.forName("io.github.silverandro.rpgstats.LevelUtils");
+            levelUtils = clazz.getField("INSTANCE").get(null);
+            addXpAndLevelUp = clazz.getMethod("addXpAndLevelUp", identifier, ServerPlayerEntity.class,
+                    int.class);
+        } catch (Exception e) {
+            RightClickHarvestModInit.LOGGER.error("Failed to enable RPGStats compatibility");
+            e.printStackTrace();
+        }
+
         RightClickHarvestCallbacks.AFTER_HARVEST.register((player, block) -> {
             if (player instanceof ServerPlayerEntity serverPlayerEntity) {
                 try {
-                    if (levelUtils == null || addXpAndLevelUp == null) {
-                        String identifierMapping = FabricLoader.getInstance().getMappingResolver()
-                                .mapClassName("intermediary", "net.minecraft.class_2960");
-                        Class<?> identifier = Class.forName(identifierMapping);
-
-                        Class<?> clazz = Class.forName("io.github.silverandro.rpgstats.LevelUtils");
-                        levelUtils = clazz.getField("INSTANCE").get(null);
-                        addXpAndLevelUp = clazz.getMethod("addXpAndLevelUp", identifier, ServerPlayerEntity.class,
-                                int.class);
-                    }
-                    
                     addXpAndLevelUp.invoke(levelUtils, FARMING, serverPlayerEntity, 1);
                 } catch (Exception e) {
-                    RightClickHarvestModInit.LOGGER.error("Failed to enable RPGStats compatibility");
+                    RightClickHarvestModInit.LOGGER.error("Failed to call RPGStats methods");
                     e.printStackTrace();
                 }
-
             }
         });
     }
