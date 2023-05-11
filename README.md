@@ -17,7 +17,7 @@ The configuration file can be found in the `./config/rightclickharvest.json` fil
 
 - `requireHoe`: whether to require a hoe to be held to use RightClickHarvest.
 - `harvestInRadius`: whether different tiers of hoe are able to harvest multiple blocks at once in a radius.
-- `useHunger`: whether using RightClickHarvest uses hunger.
+- `hungerLevel` (one of `NONE`, `LOW`, `NORMAL`, or `HIGH`): modifies the amount of hunger that using RightClickHarvest uses.
 
 ## Download
 

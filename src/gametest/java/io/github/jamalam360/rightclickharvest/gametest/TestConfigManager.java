@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
 public class TestConfigManager {
     public static void apply(Method method) {
         if (method.isAnnotationPresent(UseHunger.class)) {
-            Config.useHunger = true;
+            Config.hungerLevel = Config.HungerLevel.NORMAL;
         }
 
         if (method.isAnnotationPresent(RequireHoe.class)) {

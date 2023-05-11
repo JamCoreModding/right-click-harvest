@@ -61,17 +61,18 @@ public class RightClickHarvestModInit implements ModInitializer {
     public static final String MOD_ID = "rightclickharvest";
     public static final JamLibLogger LOGGER = JamLibLogger.getLogger(MOD_ID);
 
-    public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-    public static final TagKey<Block> HOE_REQUIRED =
-          TagKey.of(VersionUtils.BLOCK_KEY, new Identifier(MOD_ID, "hoe_required"));
-    public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST =
-          TagKey.of(VersionUtils.BLOCK_KEY, new Identifier(MOD_ID, "radius_harvest_blacklist"));
-    public static final TagKey<Item> LOW_TIER_HOES =
-          TagKey.of(VersionUtils.ITEM_KEY, new Identifier(MOD_ID, "low_tier_hoes"));
-    public static final TagKey<Item> MID_TIER_HOES =
-          TagKey.of(VersionUtils.ITEM_KEY, new Identifier(MOD_ID, "mid_tier_hoes"));
-    public static final TagKey<Item> HIGH_TIER_HOES =
-          TagKey.of(VersionUtils.ITEM_KEY, new Identifier(MOD_ID, "high_tier_hoes"));
+    public static final Direction[] CARDINAL_DIRECTIONS = new Direction[] { Direction.NORTH, Direction.EAST,
+            Direction.SOUTH, Direction.WEST };
+    public static final TagKey<Block> HOE_REQUIRED = TagKey.of(VersionUtils.BLOCK_KEY,
+            new Identifier(MOD_ID, "hoe_required"));
+    public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST = TagKey.of(VersionUtils.BLOCK_KEY,
+            new Identifier(MOD_ID, "radius_harvest_blacklist"));
+    public static final TagKey<Item> LOW_TIER_HOES = TagKey.of(VersionUtils.ITEM_KEY,
+            new Identifier(MOD_ID, "low_tier_hoes"));
+    public static final TagKey<Item> MID_TIER_HOES = TagKey.of(VersionUtils.ITEM_KEY,
+            new Identifier(MOD_ID, "mid_tier_hoes"));
+    public static final TagKey<Item> HIGH_TIER_HOES = TagKey.of(VersionUtils.ITEM_KEY,
+            new Identifier(MOD_ID, "high_tier_hoes"));
 
     @Override
     public void onInitialize() {
@@ -85,7 +86,8 @@ public class RightClickHarvestModInit implements ModInitializer {
         return onBlockUse(player, world, hand, hitResult, true);
     }
 
-    private static ActionResult onBlockUse(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult, boolean initialCall) {
+    private static ActionResult onBlockUse(PlayerEntity player, World world, Hand hand, BlockHitResult hitResult,
+            boolean initialCall) {
         if (player.isSpectator() || hand == Hand.OFF_HAND) {
             return ActionResult.PASS;
         }
@@ -94,7 +96,7 @@ public class RightClickHarvestModInit implements ModInitializer {
         Block originalBlock = state.getBlock();
         ItemStack stack = player.getStackInHand(hand);
 
-        if (Config.useHunger) {
+        if (Config.hungerLevel != Config.HungerLevel.NONE) {
             if (!player.getAbilities().creativeMode && player.getHungerManager().getFoodLevel() <= 0) {
                 return ActionResult.PASS;
             }
@@ -110,9 +112,11 @@ public class RightClickHarvestModInit implements ModInitializer {
             return ActionResult.PASS;
         }
 
-        if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
+        if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock
+                || state.getBlock() instanceof NetherWartBlock) {
             if (isMature(state)) {
-                if (initialCall && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST) && stack.isIn(VersionUtils.HOES)) {
+                if (initialCall && Config.harvestInRadius && !state.isIn(RADIUS_HARVEST_BLACKLIST)
+                        && stack.isIn(VersionUtils.HOES)) {
                     int radius = 0;
                     boolean circle = false;
 
@@ -129,12 +133,14 @@ public class RightClickHarvestModInit implements ModInitializer {
                     if (radius != 0) {
                         if (radius == 1 && circle) {
                             for (Direction dir : CARDINAL_DIRECTIONS) {
-                                onBlockUse(player, world, hand, hitResult.withBlockPos(hitResult.getBlockPos().offset(dir)), false);
+                                onBlockUse(player, world, hand,
+                                        hitResult.withBlockPos(hitResult.getBlockPos().offset(dir)), false);
                             }
                         } else {
                             for (int x = -radius; x <= radius; x++) {
                                 for (int z = -radius; z <= radius; z++) {
-                                    BlockPos pos = hitResult.getBlockPos().offset(Direction.Axis.X, x).offset(Direction.Axis.Z, z);
+                                    BlockPos pos = hitResult.getBlockPos().offset(Direction.Axis.X, x)
+                                            .offset(Direction.Axis.Z, z);
                                     if (circle && pos.getManhattanDistance(hitResult.getBlockPos()) > radius) {
                                         continue;
                                     }
@@ -148,23 +154,19 @@ public class RightClickHarvestModInit implements ModInitializer {
                 if (!world.isClient) {
                     world.setBlockState(hitResult.getBlockPos(), getReplantState(state));
                     dropStacks(state, (ServerWorld) world, hitResult.getBlockPos(), player,
-                          player.getStackInHand(hand)
-                    );
+                            player.getStackInHand(hand));
 
                     if (Config.requireHoe) {
                         stack.damage(1, player, (entity) -> entity.sendToolBreakStatus(hand));
                     }
 
-                    if (Config.useHunger) {
-                        // Regular block breaking causes 0.005f exhaustion
-                        player.addExhaustion(0.005f * Config.hungerLevel.modifier);
-                    }
+                    // Regular block breaking causes 0.005f exhaustion
+                    player.addExhaustion(0.008f * Config.hungerLevel.modifier);
                 } else {
                     player.playSound(
-                          state.getBlock() instanceof NetherWartBlock ?
-                          SoundEvents.ITEM_NETHER_WART_PLANT : SoundEvents.ITEM_CROP_PLANT,
-                          1.0f, 1.0f
-                    );
+                            state.getBlock() instanceof NetherWartBlock ? SoundEvents.ITEM_NETHER_WART_PLANT
+                                    : SoundEvents.ITEM_CROP_PLANT,
+                            1.0f, 1.0f);
                 }
 
                 RightClickHarvestCallbacks.AFTER_HARVEST.invoker().afterHarvest(player, originalBlock);
@@ -190,9 +192,8 @@ public class RightClickHarvestModInit implements ModInitializer {
             if (!world.isClient) {
                 world.breakBlock(bottom.up(2), true);
 
-                if (Config.useHunger && player.world.random.nextBoolean()) {
-                    player.addExhaustion(1.5f);
-                }
+                // Regular block breaking causes 0.005f exhaustion
+                player.addExhaustion(0.008f * Config.hungerLevel.modifier);
             } else {
                 player.playSound(SoundEvents.ITEM_CROP_PLANT, 1.0f, 1.0f);
             }
@@ -229,9 +230,9 @@ public class RightClickHarvestModInit implements ModInitializer {
     }
 
     private static void dropStacks(BlockState state, ServerWorld world, BlockPos pos, Entity entity,
-          ItemStack toolStack) {
+            ItemStack toolStack) {
         Item replant = state.getBlock().getPickStack(world, pos, state).getItem();
-        final boolean[] removedReplant = {false};
+        final boolean[] removedReplant = { false };
 
         Block.getDroppedStacks(state, world, pos, null, entity, toolStack).forEach(stack -> {
             if (!removedReplant[0] && stack.getItem() == replant) {

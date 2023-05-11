@@ -37,15 +37,13 @@ public class Config extends JamLibConfig {
     public static boolean harvestInRadius = true;
 
     @Entry
-    public static boolean useHunger = true;
-
-    @Entry
     public static HungerLevel hungerLevel = HungerLevel.NORMAL;
 
     public enum HungerLevel {
+        NONE(0.0f),
         LOW(0.5f),
         NORMAL(1.0f),
-        HIGH(1.5f);
+        HIGH(2.0f);
 
         public final float modifier;
 
