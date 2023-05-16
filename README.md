@@ -1,9 +1,9 @@
-![RCH Logo](https://github.com/Jamalam360/assets/blob/main/mods/icons/right_click_harvest.png?raw=true)
+![RCH Logo](https://github.com/JamCoreModding/right-click-harvest/blob/main/src/main/resources/assets/rightclickharvest/icon.png?raw=true)
 
 _RightClickHarvest_ is a mod for the Fabric & Quilt mod loaders that allows harvesting a variety of crops using right
 click.
 
-![Demo GIF](https://github.com/JamCoreModding/RightClickHarvest/blob/main/demo.gif?raw=true)
+![Demo GIF](https://github.com/JamCoreModding/right-click-harvest/blob/main/demo.gif?raw=true)
 
 ![Environment: Server, Client Optional](https://img.shields.io/badge/environment-server%2c%20opt%20client-c65135?style=flat-square)
 ![Mod Loader: Fabric](https://img.shields.io/badge/mod%20loader-fabric-d64541?style=flat-square)

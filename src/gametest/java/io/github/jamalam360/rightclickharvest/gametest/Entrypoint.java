@@ -56,7 +56,7 @@ public class Entrypoint implements FabricGameTest {
 
     @Override
     public void invokeTestMethod(TestContext context, Method method) {
-        Config.useHunger = false;
+        Config.hungerLevel = Config.HungerLevel.NORMAL;
         Config.requireHoe = false;
         Config.harvestInRadius = false;
         TestConfigManager.apply(method);
