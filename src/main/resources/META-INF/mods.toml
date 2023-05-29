@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[43,)"
+loaderVersion = "[40,)"
 license = "MIT"
 issueTrackerURL = "https://github.com/JamCoreModding/RightClickHarvest/issues"
 
@@ -14,17 +14,17 @@ description = '''
 Allows you to harvest crops with a single right click.
 '''
 
-[[dependencies.examplemod]]
+[[dependencies.rightclickharvest]]
 modId = "forge"
 mandatory = true
 # The version range of the dependency
-versionRange = "[43,)"
+versionRange = "[40,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.examplemod]]
+[[dependencies.rightclickharvest]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.2,1.19.3)"
+versionRange = "[1.18.2,)"
 ordering = "NONE"
 side = "BOTH"

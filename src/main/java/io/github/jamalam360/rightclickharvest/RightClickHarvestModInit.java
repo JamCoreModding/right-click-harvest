@@ -55,7 +55,7 @@ import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -104,7 +104,7 @@ public class RightClickHarvestModInit {
 
     @SubscribeEvent
     public void onBlockUse(PlayerInteractEvent.RightClickBlock event) {
-        InteractionResult res = onBlockUse(event.getEntity(), event.getLevel(), event.getHand(), event.getHitVec(),
+        InteractionResult res = onBlockUse((Player) event.getEntity(), event.getWorld(), event.getHand(), event.getHitVec(),
                 true);
 
         if (res != InteractionResult.PASS) {
@@ -131,7 +131,7 @@ public class RightClickHarvestModInit {
         }
 
         if (state.is(HOE_REQUIRED) && CONFIG.getLeft().requireHoe.get()) {
-            if (!stack.is(Tags.Items.TOOLS_HOES)) {
+            if (!stack.canPerformAction(ToolActions.HOE_TILL)) {
                 return InteractionResult.PASS;
             }
         }
@@ -144,7 +144,7 @@ public class RightClickHarvestModInit {
                 || state.getBlock() instanceof NetherWartBlock) {
             if (isMature(state)) {
                 if (initialCall && CONFIG.getLeft().harvestInRadius.get() && !state.is(RADIUS_HARVEST_BLACKLIST)
-                        && stack.is(Tags.Items.TOOLS_HOES)) {
+                        && stack.canPerformAction(ToolActions.HOE_TILL)) {
                     int radius = 0;
                     boolean circle = false;
 
@@ -271,6 +271,6 @@ public class RightClickHarvestModInit {
             Block.popResource(world, pos, stack);
         });
 
-        state.spawnAfterBreak(world, pos, toolStack, true);
+        state.spawnAfterBreak(world, pos, toolStack);
     }
 }
