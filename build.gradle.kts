@@ -165,14 +165,7 @@ tasks {
         doLast {
             val changelog = project.rootProject.file("CHANGELOG.md")
             val changelogTemplate = project.rootProject.file("CHANGELOG_TEMPLATE.md")
-            changelog.writeText(changelogTemplate.readText())
-    
-            val libs = project.file("build/libs").listFiles().filter { it.name.endsWith(".jar") }
-            libs.forEach { it.delete() }
-    
-            val devLibs =
-                project.file("build/devlibs").listFiles().filter { it.name.endsWith(".jar") }
-            devLibs.forEach { it.delete() }
+            changelog.writeText(changelogTemplate.readText())    
         }
     }
 }
