@@ -60,7 +60,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
 
-  build-and-test:
+  build:
     needs: update-license
     strategy:
       matrix:
