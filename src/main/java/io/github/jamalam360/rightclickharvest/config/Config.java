@@ -24,20 +24,22 @@
 
 package io.github.jamalam360.rightclickharvest.config;
 
-import io.github.jamalam360.jamlib.config.JamLibConfig;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
 /**
  * @author Jamalam360
  */
-public class Config extends JamLibConfig {
-    @Entry
-    public static boolean requireHoe = true;
+public class Config {
+    public final ConfigValue<Boolean> requireHoe;
+    public final ConfigValue<Boolean> harvestInRadius;
+    public final ConfigValue<HungerLevel> hungerLevel;
 
-    @Entry
-    public static boolean harvestInRadius = true;
-
-    @Entry
-    public static HungerLevel hungerLevel = HungerLevel.NORMAL;
+    public Config(ForgeConfigSpec.Builder builder) {
+        requireHoe = builder.define("requireHoe", true);
+        harvestInRadius = builder.define("harvestInRadius", true);
+        hungerLevel = builder.defineEnum("hungerLevel", HungerLevel.NORMAL);
+    }
 
     public enum HungerLevel {
         NONE(0.0f),

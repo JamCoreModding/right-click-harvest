@@ -1,8 +1,7 @@
 pluginManagement {
     repositories {
         val mavenUrls = listOf(
-            "https://maven.fabricmc.net/",
-            "https://maven.quiltmc.org/repository/release"
+            "https://maven.minecraftforge.net/"
         )
 
         for (url in mavenUrls) {
