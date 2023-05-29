@@ -103,8 +103,8 @@ public class RightClickHarvestModInit {
 
     @SubscribeEvent
     public void onBlockUse(PlayerInteractEvent.RightClickBlock event) {
-        InteractionResult res = 
-                onBlockUse(event.getEntity(), event.getLevel(), event.getHand(), event.getHitVec(), true);
+        InteractionResult res = onBlockUse(event.getEntity(), event.getLevel(), event.getHand(), event.getHitVec(),
+                true);
 
         if (res != InteractionResult.PASS) {
             event.setCanceled(true);
