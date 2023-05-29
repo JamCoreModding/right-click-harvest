@@ -55,6 +55,7 @@ import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -130,7 +131,7 @@ public class RightClickHarvestModInit {
         }
 
         if (state.is(HOE_REQUIRED) && CONFIG.getLeft().requireHoe.get()) {
-            if (!stack.is(ItemTags.HOES)) {
+            if (!stack.is(Tags.Items.TOOLS_HOES)) {
                 return InteractionResult.PASS;
             }
         }
@@ -143,7 +144,7 @@ public class RightClickHarvestModInit {
                 || state.getBlock() instanceof NetherWartBlock) {
             if (isMature(state)) {
                 if (initialCall && CONFIG.getLeft().harvestInRadius.get() && !state.is(RADIUS_HARVEST_BLACKLIST)
-                        && stack.is(ItemTags.HOES)) {
+                        && stack.is(Tags.Items.TOOLS_HOES)) {
                     int radius = 0;
                     boolean circle = false;
 
