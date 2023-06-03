@@ -6,13 +6,13 @@
 
 <img alt="About RightClickHarvest" src="https://www.bisecthosting.com/images/CF/RightClickHarvest/BH_RH_BANNER1.webp" />
 
-<p align="center"><img width="100%" src="https://github.com/JamCoreModding/right-click-harvest/blob/main/demo.gif?raw=true" /></p>
+<center><img width="100%" src="https://github.com/JamCoreModding/right-click-harvest/blob/main/demo.gif?raw=true" /></center>
 
-<p align="center">
+<center>
 <img alt="forge" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/forge_vector.svg">
 <img alt="fabric" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg">
 <img alt="quilt" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/quilt_vector.svg">
-</p>
+</center>
 
 <p align="center">
 <a href="https://curseforge.com/minecraft/mc-mods/rightclickharvest"><img alt="Download on Curseforge" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/curseforge_vector.svg"></a>
