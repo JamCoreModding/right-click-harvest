@@ -14,12 +14,11 @@
 <img alt="quilt" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/quilt_vector.svg">
 </center>
 
-<p align="center">
+<center>
 <a href="https://curseforge.com/minecraft/mc-mods/rightclickharvest"><img alt="Download on Curseforge" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/curseforge_vector.svg"></a>
 <a href="https://docs.jamalam.tech/right-click-harvest/about/"><img alt="Read the Documentation" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/ghpages_vector.svg"/> </a>
 <a href="https://modrinth.com/mod/rightclickharvest"><img alt="Download on Modrinth" height="56" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg"></a>
-
-</p>
+</center>
 
 <img alt="Features of RightClickHarvest" src="https://www.bisecthosting.com/images/CF/RightClickHarvest/BH_RH_BANNER2.webp" />
 
