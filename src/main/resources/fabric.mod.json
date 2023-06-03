@@ -40,7 +40,8 @@
   },
   "custom": {
     "jamlib:compatibility_modules": {
-      "rpgstats": "io.github.jamalam360.rightclickharvest.compat.RpgStats"
+      "rpgstats[>=5.0.0]": "io.github.jamalam360.rightclickharvest.compat.RpgStatsGte5",
+      "rpgstats[<5.0.0]": "io.github.jamalam360.rightclickharvest.compat.RpgStatsLt5"
     }
   }
 }

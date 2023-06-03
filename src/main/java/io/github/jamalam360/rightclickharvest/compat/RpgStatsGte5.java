@@ -33,7 +33,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
-public class RpgStats implements ModInitializer {
+public class RpgStatsGte5 implements ModInitializer {
     private static final Identifier FARMING = new Identifier("rpgstats:farming");
     private Object levelUtils = null;
     private Method addXpAndLevelUp = null;
@@ -41,28 +41,24 @@ public class RpgStats implements ModInitializer {
     @Override
     public void onInitialize() {
         try {
-            String identifierMapping = FabricLoader.getInstance().getMappingResolver()
-                    .mapClassName("intermediary", "net.minecraft.class_2960");
-            Class<?> identifier = Class.forName(identifierMapping);
-
             Class<?> clazz = Class.forName("io.github.silverandro.rpgstats.LevelUtils");
             levelUtils = clazz.getField("INSTANCE").get(null);
-            addXpAndLevelUp = clazz.getMethod("addXpAndLevelUp", identifier, ServerPlayerEntity.class,
+            addXpAndLevelUp = clazz.getMethod("addXpAndLevelUp", Identifier.class, ServerPlayerEntity.class,
                     int.class);
+
+            RightClickHarvestCallbacks.AFTER_HARVEST.register((player, block) -> {
+                if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+                    try {
+                        addXpAndLevelUp.invoke(levelUtils, FARMING, serverPlayerEntity, 1);
+                    } catch (Exception e) {
+                        RightClickHarvestModInit.LOGGER.error("Failed to call RPGStats methods");
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (Exception e) {
             RightClickHarvestModInit.LOGGER.error("Failed to enable RPGStats compatibility");
             e.printStackTrace();
         }
-
-        RightClickHarvestCallbacks.AFTER_HARVEST.register((player, block) -> {
-            if (player instanceof ServerPlayerEntity serverPlayerEntity) {
-                try {
-                    addXpAndLevelUp.invoke(levelUtils, FARMING, serverPlayerEntity, 1);
-                } catch (Exception e) {
-                    RightClickHarvestModInit.LOGGER.error("Failed to call RPGStats methods");
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 }
