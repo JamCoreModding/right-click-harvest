@@ -95,7 +95,7 @@ public class TestHelper {
         pos = ctx.getAbsolutePos(pos);
         player.setStackInHand(Hand.MAIN_HAND, stack);
         BlockHitResult hitResult = new BlockHitResult(Vec3d.ofCenter(pos), Direction.NORTH, pos, false);
-        RightClickHarvestModInit.onBlockUse(player, player.world, Hand.MAIN_HAND, hitResult);
+        RightClickHarvestModInit.onBlockUse(player, player.getWorld(), Hand.MAIN_HAND, hitResult);
     }
 
     public static PlayerEntity createMockPlayer(TestContext ctx) {
