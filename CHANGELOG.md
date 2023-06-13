@@ -1,3 +1,9 @@
 ## Changelog
 
-- 1.20.1 Support
+### Features
+
+### Fixes
+
+Closed Issues: None
+
+[Full Changelog](https://github.com/JamCoreModding/right-click-harvest/compare/...)
