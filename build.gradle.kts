@@ -29,7 +29,7 @@ println(
 )
 
 minecraft {
-    mappings("official", "1.20")
+    mappings("official", "1.20.1")
 
     runs {
         create("client") {
