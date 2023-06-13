@@ -1,3 +1,3 @@
 ## Changelog
 
-Update to Forge 1.20.
+- 1.20.1 Support
