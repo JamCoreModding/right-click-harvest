@@ -1,6 +1,6 @@
 plugins {
-    id("fabric-loom") version "1.1-SNAPSHOT"
-    id("io.github.juuxel.loom-quiltflower") version "1.+"
+    id("fabric-loom") version "1.3-SNAPSHOT"
+    id("io.github.juuxel.loom-vineflower") version "1.+"
     id("io.github.p03w.machete") version "1.+"
     id("org.cadixdev.licenser") version "0.6.+"
 }
@@ -40,10 +40,12 @@ dependencies {
     minecraft(libs.minecraft)
     mappings(variantOf(libs.quilt.mappings) { classifier("intermediary-v2") })
 
-    modImplementation(libs.bundles.fabric)
-    modApi(libs.bundles.required)
-    modImplementation(libs.bundles.optional)
-    modRuntimeOnly(libs.bundles.runtime)
+    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.api)
+    modApi(libs.jamlib) {
+        exclude(group = "net.fabricmc.fabric-api")
+    }
+    modImplementation(libs.mod.menu)
 }
 
 sourceSets {
