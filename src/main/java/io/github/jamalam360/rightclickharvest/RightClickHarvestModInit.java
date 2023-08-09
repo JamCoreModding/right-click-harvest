@@ -63,8 +63,11 @@ public class RightClickHarvestModInit implements ModInitializer {
 
     public static final Direction[] CARDINAL_DIRECTIONS = new Direction[] { Direction.NORTH, Direction.EAST,
             Direction.SOUTH, Direction.WEST };
+    @Deprecated(forRemoval = true)
     public static final TagKey<Block> HOE_REQUIRED = TagKey.of(VersionUtils.BLOCK_KEY,
             new Identifier(MOD_ID, "hoe_required"));
+    public static final TagKey<Block> HOE_NEVER_REQUIRED = TagKey.of(VersionUtils.BLOCK_KEY,
+            new Identifier(MOD_ID, "hoe_never_required"));
     public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST = TagKey.of(VersionUtils.BLOCK_KEY,
             new Identifier(MOD_ID, "radius_harvest_blacklist"));
     public static final TagKey<Item> LOW_TIER_HOES = TagKey.of(VersionUtils.ITEM_KEY,
@@ -102,7 +105,7 @@ public class RightClickHarvestModInit implements ModInitializer {
             }
         }
 
-        if (state.isIn(HOE_REQUIRED) && Config.requireHoe) {
+        if (!state.isIn(HOE_NEVER_REQUIRED) && Config.requireHoe) {
             if (!stack.isIn(VersionUtils.HOES)) {
                 return ActionResult.PASS;
             }
