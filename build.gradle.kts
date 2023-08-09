@@ -101,7 +101,7 @@ if (System.getenv()["CURSEFORGE_API_KEY"] != null) {
 
                     afterEvaluate { uploadTask.dependsOn("jar") }
 
-                    addGameVersion("Forge")
+                    addGameVersion("Forge", "NeoForge")
 
                     getGradleProperty("supported_versions")!!.split(",").forEach { addGameVersion(it) }
                 }
@@ -118,7 +118,7 @@ if (System.getenv()["MODRINTH_API_KEY"] != null) {
         projectId.set(getGradleProperty("modrinth_project_id")!!)
         uploadFile.set(tasks.get("jar"))
         gameVersions.addAll(getGradleProperty("supported_versions")!!.split(","))
-        loaders.addAll(listOf("forge"))
+        loaders.addAll(listOf("forge", "neoforge"))
         changelog.set(project.rootProject.file("CHANGELOG.md").readText())
     }
 }
