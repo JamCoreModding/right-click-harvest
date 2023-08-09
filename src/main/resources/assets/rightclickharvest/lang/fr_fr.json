@@ -1,0 +1,9 @@
+{
+  "rightclickharvest.jamlibconfig.title": "Configuration de Right Click Harvest",
+  "rightclickharvest.jamlibconfig.requireHoe": "Exiger une houe",
+  "rightclickharvest.jamlibconfig.requireHoe.tooltip": "Permet uniquement la récolte de certaines cultures (par exemple, le blé, les carottes) si le joueur tient une houe dans sa main.",
+  "rightclickharvest.jamlibconfig.harvestInRadius": "Récolter en rayon",
+  "rightclickharvest.jamlibconfig.harvestInRadius.tooltip": "Permet aux houes de différents niveaux de récolter plusieurs blocs dans un rayon. Nécessite que 'requireHoe' soit défini sur true.",
+  "rightclickharvest.jamlibconfig.useHunger": "Utiliser la faim",
+  "rightclickharvest.jamlibconfig.useHunger.tooltip": "Utilise la faim lors de la récolte des cultures."
+}

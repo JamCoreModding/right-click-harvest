@@ -5,5 +5,11 @@
   "rightclickharvest.jamlibconfig.harvestInRadius": "Harvest in Radius",
   "rightclickharvest.jamlibconfig.harvestInRadius.tooltip": "Make hoes of different tiers harvest multiple blocks in a radius. Requires `requireHoe` to be set to true.",
   "rightclickharvest.jamlibconfig.useHunger": "Use Hunger",
-  "rightclickharvest.jamlibconfig.useHunger.tooltip": "Use hunger when harvesting crops."
+  "rightclickharvest.jamlibconfig.useHunger.tooltip": "Use hunger when harvesting crops.",
+  "rightclickharvest.jamlibconfig.hungerLevel": "Hunger Level",
+    "rightclickharvest.jamlibconfig.hungerLevel.tooltip": "The food usage when harvesting crops.",
+  "rightclickharvest.jamlibconfig.enum.HungerLevel.NONE": "None",
+  "rightclickharvest.jamlibconfig.enum.HungerLevel.LOW": "Low",
+  "rightclickharvest.jamlibconfig.enum.HungerLevel.NORMAL": "Normal",
+  "rightclickharvest.jamlibconfig.enum.HungerLevel.HIGH": "High"
 }
