@@ -1,0 +1,15 @@
+{
+  "rightclickharvest.jamlibconfig.title": "右クリック収穫設定",
+  "rightclickharvest.jamlibconfig.requireHoe": "クワを必須にする",
+  "rightclickharvest.jamlibconfig.requireHoe.tooltip": "プレイヤーがクワを持っている場合のみ、小麦、ニンジンなど特定の作物の収穫を可能にします。",
+  "rightclickharvest.jamlibconfig.harvestInRadius": "収穫範囲",
+  "rightclickharvest.jamlibconfig.harvestInRadius.tooltip": "クワのランクに応じて、収穫範囲を広げます。「クワを必須にする」がtrueである必要があります。",
+  "rightclickharvest.jamlibconfig.useHunger": "満腹度を消費する",
+  "rightclickharvest.jamlibconfig.useHunger.tooltip": "収穫時に満腹度を消費します。",
+  "rightclickharvest.jamlibconfig.hungerLevel": "消費する満腹度",
+    "rightclickharvest.jamlibconfig.hungerLevel.tooltip": "収穫時に消費する満腹度レベル",
+  "rightclickharvest.jamlibconfig.enum.HungerLevel.NONE": "なし",
+  "rightclickharvest.jamlibconfig.enum.HungerLevel.LOW": "低い",
+  "rightclickharvest.jamlibconfig.enum.HungerLevel.NORMAL": "普通",
+  "rightclickharvest.jamlibconfig.enum.HungerLevel.HIGH": "高い"
+}
