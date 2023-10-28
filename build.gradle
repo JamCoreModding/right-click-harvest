@@ -60,11 +60,15 @@ allprojects {
 
     repositories {
         mavenCentral()
-        mavenLocal()
 
         maven {
             name = "Modrinth"
             url = "https://api.modrinth.com/maven"
+        }
+
+        maven {
+            name = "Jamalam's Maven"
+            url = "https://maven.jamalam.tech/releases"
         }
     }
 
