@@ -4,6 +4,7 @@ plugins {
     id "io.github.juuxel.loom-quiltflower" version "1.7.2" apply false
     id "me.shedaniel.unified-publishing" version "0.1.+" apply false
     id "com.github.breadmoirai.github-release" version "2.4.1"
+    id "maven-publish"
 }
 
 if (System.getenv("GITHUB_TOKEN") != null) {
@@ -80,6 +81,7 @@ allprojects {
     
     tasks.publish {
         dependsOn("githubRelease")
+        dependsOn("publishAllPublicationsToMavenRepository")
         dependsOn("fabric:publishUnified")
         dependsOn("quilt:publishUnified")
         dependsOn("forge:publishUnified")

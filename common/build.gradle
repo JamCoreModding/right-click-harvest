@@ -11,3 +11,24 @@ dependencies {
     modApi libs.architectury.common
     modImplementation libs.jamlib.common
 }
+
+publishing {
+    publications {
+        mavenCommon(MavenPublication) {
+            artifactId = rootProject.archivesBaseName
+            from components.java
+        }
+    }
+
+    repositories {
+        if (System.getenv("MAVEN_USERNAME") != null && System.getenv("MAVEN_PASSWORD") != null) {
+            maven {
+                url = "https://maven.jamalam.tech/releases"
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_PASSWORD")
+                }
+            }
+        }
+    }
+}

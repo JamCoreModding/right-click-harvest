@@ -48,28 +48,55 @@ dependencies {
 }
 
 if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_KEY") != null) {
-// Uncomment these lines and fill in the IDs when ready to publish :)
-//    unifiedPublishing {
-//        project {
-//            displayName = "V${project.version} (Quilt ${project.minecraft_version})"
-//            changelog = rootProject.file("CHANGELOG.md").text
-//            releaseType = project.version.contains("beta") ? "beta" : "release"
-//            gameVersions = [project.minecraft_version]
-//            gameLoaders = ["quilt"]
+    unifiedPublishing {
+        project {
+            displayName = "V${project.version} (Quilt ${project.minecraft_version})"
+            changelog = rootProject.file("CHANGELOG.md").text
+            releaseType = project.version.contains("beta") ? "beta" : "release"
+            gameVersions = [project.minecraft_version]
+            gameLoaders = ["quilt"]
 
-//            mainPublication tasks.remapJar
+            mainPublication tasks.remapJar
 
-//            curseforge {
-//                token = System.getenv("CURSEFORGE_API_KEY")
-//                id = ""
-//            }
+            relations {
+                depends {
+                    curseforge = "jamlib"
+                    modrinth = "jamlib"
+                }
+            }
 
-//            modrinth {
-//                token = System.getenv("MODRINTH_API_KEY")
-//                id = ""
-//            }
-//        }
-//    }
+            curseforge {
+                token = System.getenv("CURSEFORGE_API_KEY")
+                id = "452834"
+            }
+
+            modrinth {
+                token = System.getenv("MODRINTH_API_KEY")
+                id = "Cnejf5xM"
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenQuilt(MavenPublication) {
+            artifactId = rootProject.archivesBaseName + "-quilt"
+            from components.java
+        }
+    }
+
+    repositories {
+        if (System.getenv("MAVEN_USERNAME") != null && System.getenv("MAVEN_PASSWORD") != null) {
+            maven {
+                url = "https://maven.jamalam.tech/releases"
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_PASSWORD")
+                }
+            }
+        }
+    }
 }
 
 processResources {

@@ -1,7 +1,4 @@
 [versions]
-# https://github.com/LlamaLad7/MixinExtras/releases
-mixin-extras = "0.2.0"
-
 # https://modrinth.com/mod/architectury-api/versions
 architectury = "10.0.8"
 
