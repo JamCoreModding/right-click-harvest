@@ -60,6 +60,16 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
 
             relations {
                 depends {
+                    curseforge = "qsl"
+                    modrinth = "qsl"
+                }
+
+                depends {
+                    curseforge = "architectury-api"
+                    modrinth = "architectury-api"
+                }
+
+                depends {
                     curseforge = "jamlib"
                     modrinth = "jamlib"
                 }

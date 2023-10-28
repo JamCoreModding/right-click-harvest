@@ -14,7 +14,7 @@ quilt-loader = "0.21.1"
 quilted-fabric-api = "7.4.0+0.90.0-1.20.1"
 
 # https://maven.jamalam.tech/#/releases
-jamlib = "1.0.0-beta.3"
+jamlib = "1.0.0"
 
 # https://modrinth.com/mod/modmenu/versions
 modmenu = "8.0.0"

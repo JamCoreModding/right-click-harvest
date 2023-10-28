@@ -80,8 +80,7 @@ allprojects {
     }
     
     tasks.publish {
-        dependsOn("githubRelease")
-        dependsOn("publishAllPublicationsToMavenRepository")
+        dependsOn(":githubRelease")
         dependsOn("fabric:publishUnified")
         dependsOn("quilt:publishUnified")
         dependsOn("forge:publishUnified")
