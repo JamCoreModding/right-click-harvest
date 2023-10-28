@@ -1,0 +1,7 @@
+{
+  "config.rightclickharvest.title": "Configuração de colheita do botão direito",
+  "config.rightclickharvest.requireHoe": "Requer enxada",
+  "config.rightclickharvest.requireHoe.tooltip": "Apenas permita a colheita de certas culturas (por exemplo, trigo, cenoura) se o jogador estiver segurando uma enxada na mão.",
+  "config.rightclickharvest.harvestInRadius": "Colheita no raio",
+  "config.rightclickharvest.harvestInRadius.tooltip": "Faça enxadas de diferentes níveis colher vários blocos em um raio. Requer que `requireHoe` seja definido como true."
+}

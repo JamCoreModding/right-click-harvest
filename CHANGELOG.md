@@ -1,8 +1,5 @@
-## Changelog
+V4.0.0 brings a reimplementation of RightClickHarvest on the Architectury platform. 
 
-- Fix ModMenu icon error.
-- Add French translation.
-- Deprecate the `hoe_required` tag. Use `hoe_never_required` instead. This improves mod compatibility.
-- Manually post block place and break events for mod compatibility on Forge.
-
-[Full Changelog](https://github.com/JamCoreModding/right-click-harvest/compare/3.2.2+1.19.x-1.20.1-fabric...3.2.3+1.19.x-1.20.1-fabric)
+- The config file has been moved to `rightclickharvest.json5` as part of the new JamLib changes.
+- An issue with sugar cane was fixed.
+- A Japanese translation was added.

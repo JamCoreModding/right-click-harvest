@@ -1,0 +1,7 @@
+{
+  "config.rightclickharvest.title": "Configuration de Right Click Harvest",
+  "config.rightclickharvest.requireHoe": "Exiger une houe",
+  "config.rightclickharvest.requireHoe.tooltip": "Permet uniquement la récolte de certaines cultures (par exemple, le blé, les carottes) si le joueur tient une houe dans sa main.",
+  "config.rightclickharvest.harvestInRadius": "Récolter en rayon",
+  "config.rightclickharvest.harvestInRadius.tooltip": "Permet aux houes de différents niveaux de récolter plusieurs blocs dans un rayon. Nécessite que 'requireHoe' soit défini sur true."
+}

@@ -1,0 +1,15 @@
+architectury {
+    common(rootProject.enabled_platforms.split(","))
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+dependencies {
+    modImplementation libs.fabric.loader
+    modApi libs.fabric.api
+    modApi libs.architectury.fabric
+
+    compileOnly(project(path: ":common", configuration: "namedElements")) { transitive false }
+}

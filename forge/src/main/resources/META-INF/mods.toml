@@ -1,0 +1,36 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "MIT"
+issueTrackerURL="https://github.com/JamCoreModding/right-click-harvest/issues"
+
+[[mods]]
+modId = "rightclickharvest"
+version = "${file.jarVersion}"
+displayName = "Right Click Harvest"
+displayURL="https://github.com/JamCoreModding/right-click-harvest"
+logoFile = "icon.png"
+authors = "Jamalam"
+description = '''
+Right click crops to harvest them - with style.
+'''
+
+[[dependencies.rightclickharvest]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.rightclickharvest]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20,1.21)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.rightclickharvest]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.1.12,)"
+ordering = "AFTER"
+side = "BOTH"

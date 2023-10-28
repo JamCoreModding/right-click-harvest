@@ -1,0 +1,37 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+
+        maven {
+            name = "Forge"
+            url = "https://maven.minecraftforge.net/"
+        }
+
+        maven {
+            name = "Fabric"
+            url = "https://maven.fabricmc.net/"
+        }
+
+        maven {
+            name = "Architectury"
+            url = "https://maven.architectury.dev/"
+        }
+
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            from(files("libs.versions.toml"))
+        }
+    }
+}
+
+rootProject.name = "rightclickharvest"
+include("common")
+include("fabric-like")
+include("fabric")
+include("quilt")
+include("forge")

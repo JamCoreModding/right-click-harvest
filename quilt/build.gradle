@@ -1,0 +1,106 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "me.shedaniel.unified-publishing"
+}
+
+architectury {
+    platformSetupLoomIde()
+    loader("quilt")
+}
+
+base {
+    archivesName = "rightclickharvest-quilt-${minecraft_version}"
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+}
+
+configurations {
+    common
+    shadowCommon 
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+repositories {
+    maven { 
+        name = "Quilt"
+        url = "https://maven.quiltmc.org/repository/release/"
+    }
+}
+
+dependencies {
+    modImplementation libs.quilt.loader
+    modApi libs.quilted.fabric.api
+    modApi(libs.architectury.fabric) {
+        exclude group: "net.fabricmc"
+        exclude group: "net.fabricmc.fabric-api"
+    }
+    modRuntimeOnly libs.modmenu
+    modImplementation libs.jamlib.quilt
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionQuilt")) { transitive false }
+    common(project(path: ":fabric-like", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":fabric-like", configuration: "transformProductionQuilt")) { transitive false }
+}
+
+if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_KEY") != null) {
+// Uncomment these lines and fill in the IDs when ready to publish :)
+//    unifiedPublishing {
+//        project {
+//            displayName = "V${project.version} (Quilt ${project.minecraft_version})"
+//            changelog = rootProject.file("CHANGELOG.md").text
+//            releaseType = project.version.contains("beta") ? "beta" : "release"
+//            gameVersions = [project.minecraft_version]
+//            gameLoaders = ["quilt"]
+
+//            mainPublication tasks.remapJar
+
+//            curseforge {
+//                token = System.getenv("CURSEFORGE_API_KEY")
+//                id = ""
+//            }
+
+//            modrinth {
+//                token = System.getenv("MODRINTH_API_KEY")
+//                id = ""
+//            }
+//        }
+//    }
+}
+
+processResources {
+    filesMatching("quilt.mod.json") {
+        expand "version": project.version
+    }
+
+    inputs.property "version", project.version
+}
+
+shadowJar {
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+    injectAccessWidener = true
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}

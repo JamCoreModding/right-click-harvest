@@ -1,23 +1,26 @@
-#Gradle
-.gradle/
-build/
-out/
-classes/
-local.properties
-secrets.properties
-
-#IDEA
-.idea/
-*.iml
-*.ipr
-*.iws
-
-#vscode
-.settings/
-.vscode/
-bin/
+# eclipse
+bin
+*.launch
+.settings
+.metadata
 .classpath
 .project
 
-#fabric
-run/
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea/*
+!.idea/scopes
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+.architectury-transformer
+
+backup

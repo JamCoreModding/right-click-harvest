@@ -1,0 +1,7 @@
+{
+  "config.rightclickharvest.title": "Настройки Right Click Harvest",
+  "config.rightclickharvest.requireHoe": "Требовать мотыгу",
+  "config.rightclickharvest.requireHoe.tooltip": "Позволять собирать только определённые культуры (например, пшеницу, морковь), если игрок держит в руках мотыгу.",
+  "config.rightclickharvest.harvestInRadius": "Собирать в радиусе",
+  "config.rightclickharvest.harvestInRadius.tooltip": "Позволять мотыгам разных уровней собирать несколько блоков в радиусе. Требует `requireHoe`."
+}
