@@ -5,22 +5,15 @@ plugins {
 
 architectury {
     platformSetupLoomIde()
-    forge()
+    neoForge()
 }
 
 base {
-    archivesName = "rightclickharvest-forge-${minecraft_version}"
+    archivesName = "rightclickharvest-neoforge-${minecraft_version}"
 }
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-
-        mixinConfig "rightclickharvest.mixins.json"
-    }
 }
 
 configurations {
@@ -28,28 +21,35 @@ configurations {
     shadowCommon
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentForge.extendsFrom common
+    developmentNeoForge.extendsFrom common
+}
+
+repositories {
+    maven {
+        name = "NeoForge"
+        url = "https://maven.neoforged.net"
+    }
 }
 
 dependencies {
-    forge libs.forge
-    modApi libs.architectury.forge
-    modImplementation libs.jamlib.forge
+    neoForge libs.neoforge
+    modApi libs.architectury.neoforge
+    modImplementation libs.jamlib.neoforge
 
     forgeRuntimeLibrary "blue.endless:jankson:1.2.3"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
 }
 
 if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_KEY") != null) {
     unifiedPublishing {
         project {
-            displayName = "V${project.version} (Forge ${project.minecraft_version})"
+            displayName = "V${project.version} (NeoForge ${project.minecraft_version})"
             changelog = rootProject.file("CHANGELOG.md").text
             releaseType = project.version.contains("beta") ? "beta" : "release"
             gameVersions = [project.minecraft_version]
-            gameLoaders = ["forge"]
+            gameLoaders = ["neoforge"]
 
             mainPublication tasks.jar
 
@@ -81,7 +81,7 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
 publishing {
     publications {
         mavenForge(MavenPublication) {
-            artifactId = rootProject.archivesBaseName + "-forge"
+            artifactId = rootProject.archivesBaseName + "-neoforge"
             from components.java
         }
     }
