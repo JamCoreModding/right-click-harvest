@@ -1,33 +1,33 @@
 {
-    "schemaVersion": 1,
-    "id": "rightclickharvest",
-    "version": "${version}",
-    "name": "Right Click Harvest",
-    "description": "Right click crops to harvest them - with style.",
-    "authors": [
-        "Jamalam"
-    ],
-    "contact": {
-        "homepage": "https://github.com/JamCoreModding/right-click-harvest",
-        "sources": "https://github.com/JamCoreModding/right-click-harvest",
-        "issues": "https://github.com/JamCoreModding/right-click-harvest/issues"
-    },
-    "license": "MIT",
-    "icon": "assets/rightclickharvest/icon.png",
-    "environment": "*",
-    "entrypoints": {
-        "main": [
-            "io.github.jamalam360.rightclickharvest.fabric.RightClickHarvestFabric"
-        ]
-    },
-    "mixins": [
-        "rightclickharvest.mixins.json"
-    ],
-    "depends": {
-        "fabricloader": ">=0.14",
-        "fabric": "*",
-        "minecraft": ">=1.20",
-        "java": ">=17",
-        "architectury": ">=9.1.12"
-    }
+  "schemaVersion": 1,
+  "id": "rightclickharvest",
+  "version": "${version}",
+  "name": "Right Click Harvest",
+  "description": "Right click crops to harvest them - with style.",
+  "authors": [
+    "Jamalam"
+  ],
+  "contact": {
+    "homepage": "https://github.com/JamCoreModding/right-click-harvest",
+    "sources": "https://github.com/JamCoreModding/right-click-harvest",
+    "issues": "https://github.com/JamCoreModding/right-click-harvest/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/rightclickharvest/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.jamalam360.rightclickharvest.fabric.RightClickHarvestFabric"
+    ]
+  },
+  "mixins": [
+    "rightclickharvest.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14",
+    "fabric": "*",
+    "minecraft": ">=1.20",
+    "java": ">=17",
+    "architectury": ">=9.1.12"
+  }
 }

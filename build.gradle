@@ -34,12 +34,12 @@ subprojects {
     jar {
         manifest {
             attributes([
-                    'Specification-Title'     : mod_name,
-                    'Specification-Version'   : project.jar.archiveVersion,
-                    'Implementation-Title'    : project.name,
-                    'Implementation-Version'  : project.jar.archiveVersion,
-                    'Built-On-Java'           : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
-                    'Built-On-Minecraft'      : minecraft_version
+                    'Specification-Title'   : mod_name,
+                    'Specification-Version' : project.jar.archiveVersion,
+                    'Implementation-Title'  : project.name,
+                    'Implementation-Version': project.jar.archiveVersion,
+                    'Built-On-Java'         : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
+                    'Built-On-Minecraft'    : minecraft_version
             ])
         }
     }
@@ -82,7 +82,7 @@ allprojects {
     java {
         withSourcesJar()
     }
-    
+
     tasks.publish {
         dependsOn(":githubRelease")
         dependsOn("fabric:publishUnified")

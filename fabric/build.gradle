@@ -18,7 +18,7 @@ loom {
 
 configurations {
     common
-    shadowCommon 
+    shadowCommon
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentFabric.extendsFrom common

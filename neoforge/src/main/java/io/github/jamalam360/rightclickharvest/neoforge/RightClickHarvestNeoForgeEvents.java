@@ -2,7 +2,6 @@ package io.github.jamalam360.rightclickharvest.neoforge;
 
 import io.github.jamalam360.rightclickharvest.HarvestContext;
 import net.neoforged.bus.api.Event;
-import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 public class RightClickHarvestNeoForgeEvents {

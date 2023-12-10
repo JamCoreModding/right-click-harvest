@@ -20,7 +20,9 @@
     },
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
-      "init": ["io.github.jamalam360.rightclickharvest.quilt.RightClickHarvestQuilt"]
+      "init": [
+        "io.github.jamalam360.rightclickharvest.quilt.RightClickHarvestQuilt"
+      ]
     },
     "depends": [
       {
