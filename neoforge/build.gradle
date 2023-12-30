@@ -9,7 +9,7 @@ architectury {
 }
 
 base {
-    archivesName = "rightclickharvest-neoforge-${minecraft_version}"
+    archivesName = "rightclickharvest-neoforge"
 }
 
 loom {

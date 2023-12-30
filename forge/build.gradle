@@ -9,7 +9,7 @@ architectury {
 }
 
 base {
-    archivesName = "rightclickharvest-forge-${minecraft_version}"
+    archivesName = "rightclickharvest-forge"
 }
 
 loom {

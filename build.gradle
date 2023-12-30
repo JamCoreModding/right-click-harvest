@@ -12,8 +12,8 @@ if (System.getenv("GITHUB_TOKEN") != null) {
         token(System.getenv("GITHUB_TOKEN"))
         owner("JamCoreModding")
         repo("right-click-harvest")
-        tagName("${project.version}+${minecraft_version}")
-        releaseName("V${project.version} [${minecraft_version}]")
+        tagName("${project.version}")
+        releaseName("V${project.version}")
         body(project.rootProject.file("CHANGELOG.md").text)
         draft(false)
 
