@@ -51,7 +51,7 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
             gameVersions = [project.minecraft_version]
             gameLoaders = ["neoforge"]
 
-            mainPublication tasks.jar
+            mainPublication tasks.remapJar
 
             relations {
                 depends {
