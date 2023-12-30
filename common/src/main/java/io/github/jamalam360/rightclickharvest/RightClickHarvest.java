@@ -161,11 +161,9 @@ public class RightClickHarvest {
 			BlockPos bottom = hitResult.getBlockPos().below();
 			while (world.getBlockState(bottom).is(lookingFor)) {
 				bottom = bottom.below();
-				System.out.println("below is " + world.getBlockState(bottom).getBlock());
 			}
 
 			if (bottom.equals(hitResult.getBlockPos().below())) {
-				System.out.println("early return");
 				return InteractionResult.PASS;
 			}
 
