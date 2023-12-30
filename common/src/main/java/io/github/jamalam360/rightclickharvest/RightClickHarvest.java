@@ -159,19 +159,11 @@ public class RightClickHarvest {
 
 			Block lookingFor = state.getBlock() instanceof SugarCaneBlock ? Blocks.SUGAR_CANE : Blocks.CACTUS;
 			BlockPos bottom = hitResult.getBlockPos().below();
-			System.out.println("below is " + world.getBlockState(bottom).getBlock());
-			System.out.println("looking for " + lookingFor);
 			while (world.getBlockState(bottom).is(lookingFor)) {
 				bottom = bottom.below();
-				System.out.println("below is " + world.getBlockState(bottom).getBlock());
 			}
 
-			System.out.println("exited loop");
-			System.out.println("bottom is " + bottom);
-			System.out.println("below hitResult is " + hitResult.getBlockPos().below());
-
 			if (bottom.equals(hitResult.getBlockPos().below())) {
-				System.out.println("early return");
 				return InteractionResult.PASS;
 			}
 
