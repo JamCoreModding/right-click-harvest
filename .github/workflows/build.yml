@@ -34,7 +34,7 @@ jobs:
           java-version: 17
 
       - name: Build
-        run: ./gradlew clean forge:build fabric:build quilt:build
+        run: ./gradlew clean neoforge:build forge:build fabric:build quilt:build
 
       - name: Capture Fabric Build Artifacts
         uses: actions/upload-artifact@v2
@@ -53,3 +53,9 @@ jobs:
         with:
           name: Forge Artifacts
           path: forge/build/libs/
+
+      - name: Capture NeoForge Build Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: NeoForge Artifacts
+          path: neoforge/build/libs/

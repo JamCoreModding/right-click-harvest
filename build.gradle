@@ -85,9 +85,14 @@ allprojects {
 
     tasks.publish {
         dependsOn(":githubRelease")
+        dependsOn("common:publishAllPublicationsToMavenRepository")
         dependsOn("fabric:publishUnified")
+        dependsOn("fabric:publishAllPublicationsToMavenRepository")
         dependsOn("quilt:publishUnified")
+        dependsOn("quilt:publishAllPublicationsToMavenRepository")
         dependsOn("forge:publishUnified")
+        dependsOn("forge:publishAllPublicationsToMavenRepository")
         dependsOn("neoforge:publishUnified")
+        dependsOn("neoforge:publishAllPublicationsToMavenRepository")
     }
 }
