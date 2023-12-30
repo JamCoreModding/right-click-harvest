@@ -26,20 +26,20 @@
     },
     "depends": [
       {
-        "id": "quilt_loader",
-        "version": "*"
-      },
-      {
         "id": "quilt_base",
         "version": "*"
       },
       {
         "id": "minecraft",
-        "version": ">=1.20.1"
+        "version": ">=1.20.4"
       },
       {
         "id": "architectury",
-        "version": ">=9.1.12"
+        "version": ">=11.0.9"
+      },
+      {
+        "id": "jamlib",
+        "version": ">=1.0.3+1.20.4"
       }
     ]
   },

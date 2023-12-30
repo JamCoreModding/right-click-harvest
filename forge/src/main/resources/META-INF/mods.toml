@@ -17,20 +17,27 @@ Right click crops to harvest them - with style.
 [[dependencies.rightclickharvest]]
 modId = "forge"
 mandatory = true
-versionRange = "[47,)"
+versionRange = "[49,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.rightclickharvest]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20,1.21)"
+versionRange = "[1.20.4,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.rightclickharvest]]
 modId = "architectury"
 mandatory = true
-versionRange = "[9.1.12,)"
+versionRange = "[11.0.9,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.rightclickharvest]]
+modId = "jamlib"
+mandatory = true
+versionRange = "[1.0.3+1.20.4,)"
 ordering = "AFTER"
 side = "BOTH"

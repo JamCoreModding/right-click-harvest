@@ -20,9 +20,8 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/loom-cache
-            ~/.gradle/machete-build
             ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
+          key: gradle-${{ hashFiles('**/gradle-wrapper.properties') }}-${{ hashFiles('./gradle.properties') }}
           restore-keys: gradle
 
       - name: Validate Gradle Wrapper
