@@ -108,6 +108,10 @@ public class RightClickHarvest {
 						} else {
 							for (int x = -radius; x <= radius; x++) {
 								for (int z = -radius; z <= radius; z++) {
+									if (x == 0 && z == 0) {
+										continue;
+									}
+
 									BlockPos pos = hitResult.getBlockPos().relative(Direction.Axis.X, x)
 											.relative(Direction.Axis.Z, z);
 									if (circle && pos.distManhattan(hitResult.getBlockPos()) > radius) {

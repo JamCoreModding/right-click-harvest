@@ -1,1 +1,1 @@
-Update to 1.20.4.
+- Fix duplicating crop when using harvest with radius (#60)
