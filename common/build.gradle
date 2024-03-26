@@ -2,10 +2,6 @@ architectury {
     common(rootProject.enabled_platforms.split(","))
 }
 
-loom {
-    accessWidenerPath = file("src/main/resources/rightclickharvest.accesswidener")
-}
-
 dependencies {
     modImplementation libs.fabric.loader
     modApi libs.architectury.common

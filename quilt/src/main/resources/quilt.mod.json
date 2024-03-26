@@ -1,7 +1,6 @@
 {
   "schema_version": 1,
   "mixin": [
-    "rightclickharvest.mixins.json"
   ],
   "quilt_loader": {
     "group": "io.github.jamalam360",

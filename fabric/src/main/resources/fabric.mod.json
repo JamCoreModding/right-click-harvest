@@ -21,7 +21,6 @@
     ]
   },
   "mixins": [
-    "rightclickharvest.mixins.json"
   ],
   "depends": {
     "fabric": "*",

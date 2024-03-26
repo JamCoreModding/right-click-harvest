@@ -41,6 +41,3 @@ type = "required"
 versionRange = "[1.0.3+1.20.4,)"
 ordering = "AFTER"
 side = "BOTH"
-
-[[mixins]]
-config = "rightclickharvest.mixins.json"

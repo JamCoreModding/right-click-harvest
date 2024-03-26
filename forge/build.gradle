@@ -12,17 +12,6 @@ base {
     archivesName = "rightclickharvest-forge"
 }
 
-loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    forge {
-        convertAccessWideners = true
-        extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
-
-        mixinConfig "rightclickharvest.mixins.json"
-    }
-}
-
 configurations {
     common
     shadowCommon
