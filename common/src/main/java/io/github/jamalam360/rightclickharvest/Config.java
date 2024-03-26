@@ -13,9 +13,9 @@ public class Config implements ConfigExtensions<Config> {
 	@Override
 	public List<Link> getLinks() {
 		return List.of(
-				new Link(Link.DISCORD, "https://jamalam.tech/Discord", Component.translatable("config.rightclickharvest.discord")),
-				new Link(Link.GITHUB, "https://github.com/JamCoreModding/quicker-connect-button", Component.translatable("config.rightclickharvest.github")),
-				new Link(Link.GENERIC_LINK, "https://modrinth.com/mod/quicker-connect-button", Component.translatable("config.rightclickharvest.modrinth"))
+				new Link(Link.DISCORD, "https://jamalam.tech/discord", Component.translatable("config.rightclickharvest.discord")),
+				new Link(Link.GITHUB, "https://github.com/JamCoreModding/right-click-harvest", Component.translatable("config.rightclickharvest.github")),
+				new Link(Link.GENERIC_LINK, "https://modrinth.com/mod/rightclickharvest", Component.translatable("config.rightclickharvest.modrinth"))
 		);
 	}
 
