@@ -95,6 +95,18 @@ publishing {
     }
 }
 
+processResources {
+    filesMatching("mods.toml") {
+        expand "minecraft_version": project.minecraft_version,
+                "architectury_version": libs.versions.architectury.get(),
+                "jamlib_version": libs.versions.jamlib.get()
+    }
+
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "architectury_version", libs.versions.architectury.get()
+    inputs.property "jamlib_version", libs.versions.jamlib.get()
+}
+
 shadowJar {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"

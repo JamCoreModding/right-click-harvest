@@ -30,15 +30,15 @@
       },
       {
         "id": "minecraft",
-        "version": ">=1.20.4"
+        "version": ">=${minecraft_version}"
       },
       {
         "id": "architectury",
-        "version": ">=11.0.9"
+        "version": ">=${architectury_version}"
       },
       {
         "id": "jamlib",
-        "version": ">=1.0.3+1.20.4"
+        "version": ">=${jamlib_version}"
       }
     ]
   },

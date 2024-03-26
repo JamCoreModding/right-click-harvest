@@ -2,6 +2,7 @@ package io.github.jamalam360.rightclickharvest;
 
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.InteractionEvent;
+import io.github.jamalam360.jamlib.JamLib;
 import io.github.jamalam360.jamlib.JamLibPlatform;
 import io.github.jamalam360.jamlib.config.ConfigManager;
 import net.minecraft.core.BlockPos;
@@ -42,6 +43,7 @@ public class RightClickHarvest {
 
 	public static void init() {
 		LOGGER.info("Initializing Right Click Harvest on " + JamLibPlatform.getPlatform().name());
+		JamLib.checkForJarRenaming(RightClickHarvest.class);
 
 		InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> {
 			InteractionResult res = RightClickHarvest.onBlockUse(player, player.level(), hand, new BlockHitResult(player.position(), face, pos, false), true);

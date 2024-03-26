@@ -23,9 +23,9 @@
   "mixins": [
   ],
   "depends": {
-    "fabric": "*",
-    "minecraft": ">=1.20.4",
-    "architectury": ">=11.0.9",
-    "jamlib": ">=1.0.3+1.20.4"
+    "fabric": ">=${fabric_api_version}",
+    "minecraft": ">=${minecraft_version}",
+    "architectury": ">=${architectury_version}",
+    "jamlib": ">=${jamlib_version}"
   }
 }

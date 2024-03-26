@@ -24,20 +24,20 @@ side = "BOTH"
 [[dependencies.rightclickharvest]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.4,)"
+versionRange = "[${minecraft_version},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.rightclickharvest]]
 modId = "architectury"
 mandatory = true
-versionRange = "[11.0.9,)"
+versionRange = "[${architectury_version},)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.rightclickharvest]]
 modId = "jamlib"
 mandatory = true
-versionRange = "[1.0.3+1.20.4,)"
+versionRange = "[${jamlib_version},)"
 ordering = "AFTER"
 side = "BOTH"
