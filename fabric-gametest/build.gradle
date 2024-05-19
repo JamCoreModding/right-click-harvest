@@ -1,0 +1,38 @@
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    runs {
+        gametest {
+            server()
+            name "Game Test"
+            vmArg "-Dfabric-api.gametest"
+        }
+
+        gametestClient {
+            client()
+            name "Game Test Client"
+            vmArg "-Dfabric-api.gametest"
+        }
+    }
+}
+
+configurations {
+    common
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+dependencies {
+    modImplementation libs.fabric.loader
+    modImplementation libs.fabric.api
+    modImplementation libs.jamlib.fabric
+
+    implementation project(path: ":fabric", configuration: "namedElements")
+    implementation project(path: ":fabric-like", configuration: "namedElements")
+    implementation project(path: ":common", configuration: "namedElements")
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+}

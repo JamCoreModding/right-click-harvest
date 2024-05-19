@@ -1,4 +1,4 @@
-name: build
+name: build and test
 
 on:
   - push
@@ -31,6 +31,9 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 17
+
+      - name: Run Game Tests
+        run: ./gradlew fabric-gametest:runGametest
 
       - name: Build
         run: ./gradlew clean neoforge:build forge:build fabric:build quilt:build

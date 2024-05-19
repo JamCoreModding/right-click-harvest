@@ -9,16 +9,15 @@ import net.minecraft.world.level.block.state.BlockState;
 public class RightClickHarvestPlatform {
 	@ExpectPlatform
 	public static void postAfterHarvestEvent(HarvestContext context) {
-		throw new AssertionError();
 	}
 
 	@ExpectPlatform
 	public static boolean postBreakEvent(Level level, BlockPos pos, BlockState state, Player player) {
-		throw new AssertionError();
+		return false;
 	}
 
 	@ExpectPlatform
 	public static boolean postPlaceEvent(Level level, BlockPos pos, Player player) {
-		throw new AssertionError();
+		return false;
 	}
 }
