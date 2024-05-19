@@ -9,12 +9,6 @@
 <center><img width="100%" src="https://github.com/JamCoreModding/right-click-harvest/blob/1.20.2-multiloader/demo.gif?raw=true" /></center>
 
 <center>
-<img alt="forge" height="20" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/forge_vector.svg">
-<img alt="fabric" height="20" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/fabric_vector.svg">
-<img alt="quilt" height="20" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/supported/quilt_vector.svg">
-</center>
-
-<center>
 <a href="https://curseforge.com/minecraft/mc-mods/rightclickharvest"><img alt="Download on Curseforge" height="20" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/curseforge_vector.svg"></a>
 <a href="https://docs.jamalam.tech/right-click-harvest/about/"><img alt="Read the Documentation" height="20" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/documentation/ghpages_vector.svg"/> </a>
 <a href="https://modrinth.com/mod/rightclickharvest"><img alt="Download on Modrinth" height="20" src="https://cdn.jsdelivr.net/npm/@intergrav/devins-badges@3/assets/cozy/available/modrinth_vector.svg"></a>
