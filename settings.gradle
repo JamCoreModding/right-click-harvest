@@ -31,7 +31,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "rightclickharvest"
 include("common")
-include("fabric-like")
 include("fabric")
 include("neoforge")
 include("fabric-gametest")
