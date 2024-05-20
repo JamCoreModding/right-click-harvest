@@ -16,6 +16,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -183,7 +184,7 @@ public class RightClickHarvest {
             setBlockAction.run();
 
             if (hoeInUse) {
-                stackInHand.hurtAndBreak(1, player, (entity) -> entity.broadcastBreakEvent(hand));
+                stackInHand.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
             }
 
             // Regular block breaking causes 0.005f exhaustion

@@ -33,7 +33,5 @@ rootProject.name = "rightclickharvest"
 include("common")
 include("fabric-like")
 include("fabric")
-include("quilt")
-include("forge")
 include("neoforge")
 include("fabric-gametest")

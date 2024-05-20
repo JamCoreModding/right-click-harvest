@@ -1,47 +1,32 @@
 [versions]
 # https://modrinth.com/mod/architectury-api/versions
-architectury = "11.0.9"
-
-# https://files.minecraftforge.net/net/minecraftforge/forge/
-forge = "1.20.4-49.0.12"
+architectury = "12.0.1"
 
 # https://projects.neoforged.net/neoforged/neoforge
-neoforge = "20.4.69-beta"
+neoforge = "20.6.72-beta"
 
 # https://fabricmc.net/develop
-fabric-loader = "0.15.3"
-fabric-api = "0.92.0+1.20.4"
-
-# https://lambdaurora.dev/tools/import_quilt.html
-quilt-loader = "0.21.1"
-quilted-fabric-api = "7.4.0+0.90.0-1.20.1"
+fabric-loader = "0.15.11"
+fabric-api = "0.99.0+1.20.6"
 
 # https://maven.jamalam.tech/#/releases
-jamlib = "1.0.9+1.20.4"
+jamlib = "1.0.9+1.20.6"
 
 # https://modrinth.com/mod/modmenu/versions
-modmenu = "9.0.0"
+modmenu = "10.0.0-beta.1"
 
 [libraries]
 architectury-common = { module = "dev.architectury:architectury", version.ref = "architectury" }
 architectury-fabric = { module = "dev.architectury:architectury-fabric", version.ref = "architectury" }
-architectury-forge = { module = "dev.architectury:architectury-forge", version.ref = "architectury" }
 architectury-neoforge = { module = "dev.architectury:architectury-neoforge", version.ref = "architectury" }
-
-forge = { module = "net.minecraftforge:forge", version.ref = "forge" }
 
 neoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }
 
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
-quilt-loader = { module = "org.quiltmc:quilt-loader", version.ref = "quilt-loader" }
-quilted-fabric-api = { module = "org.quiltmc.quilted-fabric-api:quilted-fabric-api", version.ref = "quilted-fabric-api" }
-
 jamlib-common = { module = "io.github.jamalam360:jamlib", version.ref = "jamlib" }
 jamlib-fabric = { module = "io.github.jamalam360:jamlib-fabric", version.ref = "jamlib" }
-jamlib-quilt = { module = "io.github.jamalam360:jamlib-quilt", version.ref = "jamlib" }
-jamlib-forge = { module = "io.github.jamalam360:jamlib-forge", version.ref = "jamlib" }
 jamlib-neoforge = { module = "io.github.jamalam360:jamlib-neoforge", version.ref = "jamlib" }
 
 modmenu = { module = "maven.modrinth:modmenu", version.ref = "modmenu" }

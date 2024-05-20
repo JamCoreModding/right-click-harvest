@@ -12,5 +12,11 @@
   "config.rightclickharvest.hungerLevel.high": "High",
   "config.rightclickharvest.discord": "Chat on Discord",
   "config.rightclickharvest.github": "Report bugs and request new features on GitHub",
-  "config.rightclickharvest.modrinth": "Check for updates on Modrinth"
+  "config.rightclickharvest.modrinth": "Check for updates on Modrinth",
+  "tag.block.rightclickharvest.blacklist": "Harvest Blacklist",
+  "tag.block.rightclickharvest.hoe_never_required": "Hoe Not Required",
+  "tag.block.rightclickharvest.radius_harvest_blacklist": "Radius Harvest Blacklist",
+  "tag.item.rightclickharvest.low_tier_hoes": "Low Tier Hoes",
+  "tag.item.rightclickharvest.mid_tier_hoes": "Mid Tier Hoes",
+  "tag.item.rightclickharvest.high_tier_hoes": "High Tier Hoes"
 }

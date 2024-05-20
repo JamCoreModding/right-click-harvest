@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.5-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
     id "me.shedaniel.unified-publishing" version "0.1.+" apply false
     id "com.github.breadmoirai.github-release" version "2.4.1"
     id "maven-publish"
@@ -57,6 +57,10 @@ allprojects {
     version = rootProject.version
     group = rootProject.group
 
+    base {
+        archivesName = "rightclickharvest"
+    }
+
     repositories {
         mavenCentral()
 
@@ -73,7 +77,7 @@ allprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.release = 17
+        options.release = 21
     }
 
     tasks.create("prepareWorkspace") {}

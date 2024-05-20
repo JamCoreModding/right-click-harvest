@@ -1,4 +1,3 @@
-- Add automated testing.
-- Add `rightclickharvest:blacklist` block tag.
-
-1.20.6 update coming soon :)
+- Port 4.2.0 to 1.20.6.
+- Forge and Quilt support has been removed (see Discord announcements channel for reasoning).
+- `RightClickHarvestFabricLikeCallbacks` has been renamed to `RightClickHarvestFabricCallbacks` (API).

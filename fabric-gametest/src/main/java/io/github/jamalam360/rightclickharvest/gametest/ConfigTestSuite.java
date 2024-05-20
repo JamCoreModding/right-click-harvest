@@ -8,6 +8,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.CropBlock;
 
 public class ConfigTestSuite {
@@ -72,7 +73,7 @@ public class ConfigTestSuite {
 
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testHungerLevelNormal(GameTestHelper helper) {
-        Player player = helper.makeMockSurvivalPlayer();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         float exhaustion = player.getFoodData().getExhaustionLevel();
         TestHelper.interact(helper, player, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
 
@@ -89,7 +90,7 @@ public class ConfigTestSuite {
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testHungerLevelNone(GameTestHelper helper) {
         RightClickHarvest.CONFIG.get().hungerLevel = HungerLevel.NONE;
-        Player player = helper.makeMockSurvivalPlayer();
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         float exhaustion = player.getFoodData().getExhaustionLevel();
         TestHelper.interact(helper, player, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
 
