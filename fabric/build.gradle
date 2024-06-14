@@ -22,8 +22,8 @@ configurations {
 
 dependencies {
     modImplementation libs.fabric.loader
-    modApi libs.fabric.api
-    modApi libs.architectury.fabric
+    modImplementation libs.fabric.api
+    modImplementation libs.architectury.fabric
     modRuntimeOnly libs.modmenu
     modImplementation libs.jamlib.fabric
 

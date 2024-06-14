@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     neoForge libs.neoforge
-    modApi libs.architectury.neoforge
+    modImplementation libs.architectury.neoforge
     modImplementation libs.jamlib.neoforge
 
     forgeRuntimeLibrary "blue.endless:jankson:1.2.3"
