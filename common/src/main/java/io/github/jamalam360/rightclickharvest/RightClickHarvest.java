@@ -5,9 +5,12 @@ import dev.architectury.event.events.common.InteractionEvent;
 import io.github.jamalam360.jamlib.JamLib;
 import io.github.jamalam360.jamlib.JamLibPlatform;
 import io.github.jamalam360.jamlib.config.ConfigManager;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -91,6 +94,19 @@ public class RightClickHarvest {
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
         if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe) {
             if (!stackInHand.is(ItemTags.HOES)) {
+                if (isHarvestable(state) && player.level().isClientSide && !CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
+                    player.displayClientMessage(
+                          Component.translatable(
+                                "text.rightclickharvest.use_a_hoe_warning",
+                                Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
+                                Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
+                          )),
+                          false
+                    );
+                    CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
+                    CONFIG.save();
+                }
+
                 return InteractionResult.PASS;
             } else {
                 hoeInUse = true;
@@ -195,6 +211,16 @@ public class RightClickHarvest {
         }
 
         return InteractionResult.SUCCESS;
+    }
+
+    private static boolean isHarvestable(BlockState state) {
+        if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
+            return isMature(state);
+        } else if (state.getBlock() instanceof SugarCaneBlock || state.getBlock() instanceof CactusBlock) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private static boolean isMature(BlockState state) {
