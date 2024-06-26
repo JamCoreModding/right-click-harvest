@@ -1,3 +1,1 @@
-- Port 4.2.0 to 1.20.6.
-- Forge and Quilt support has been removed (see Discord announcements channel for reasoning).
-- `RightClickHarvestFabricLikeCallbacks` has been renamed to `RightClickHarvestFabricCallbacks` (API).
+- Port 4.2.0 to Minecraft 1.21.
