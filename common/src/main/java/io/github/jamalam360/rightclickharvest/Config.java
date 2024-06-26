@@ -1,34 +1,39 @@
 package io.github.jamalam360.rightclickharvest;
 
+import blue.endless.jankson.Comment;
 import io.github.jamalam360.jamlib.config.ConfigExtensions;
+import io.github.jamalam360.jamlib.config.HiddenInGui;
+import java.util.List;
 import net.minecraft.network.chat.Component;
 
-import java.util.List;
-
 public class Config implements ConfigExtensions<Config> {
-	public boolean requireHoe = true;
-	public boolean harvestInRadius = true;
-	public HungerLevel hungerLevel = HungerLevel.NORMAL;
 
-	@Override
-	public List<Link> getLinks() {
-		return List.of(
-				new Link(Link.DISCORD, "https://jamalam.tech/discord", Component.translatable("config.rightclickharvest.discord")),
-				new Link(Link.GITHUB, "https://github.com/JamCoreModding/right-click-harvest", Component.translatable("config.rightclickharvest.github")),
-				new Link(Link.GENERIC_LINK, "https://modrinth.com/mod/rightclickharvest", Component.translatable("config.rightclickharvest.modrinth"))
-		);
-	}
+    public boolean requireHoe = true;
+    public boolean harvestInRadius = true;
+    public HungerLevel hungerLevel = HungerLevel.NORMAL;
+    @Comment("Modpack developers, set this to true to stop RCH telling users that they probably need to equip a hoe to harvest crops (if requireHoe is set to true). This message will only be displayed once.")
+    @HiddenInGui
+    public boolean hasUserBeenWarnedForNotUsingHoe = false;
 
-	public enum HungerLevel {
-		NONE(0.0f),
-		LOW(0.5f),
-		NORMAL(1.0f),
-		HIGH(2.0f);
+    @Override
+    public List<Link> getLinks() {
+        return List.of(
+              new Link(Link.DISCORD, "https://jamalam.tech/discord", Component.translatable("config.rightclickharvest.discord")),
+              new Link(Link.GITHUB, "https://github.com/JamCoreModding/right-click-harvest", Component.translatable("config.rightclickharvest.github")),
+              new Link(Link.GENERIC_LINK, "https://modrinth.com/mod/rightclickharvest", Component.translatable("config.rightclickharvest.modrinth"))
+        );
+    }
 
-		public final float modifier;
+    public enum HungerLevel {
+        NONE(0.0f),
+        LOW(0.5f),
+        NORMAL(1.0f),
+        HIGH(2.0f);
 
-		HungerLevel(float modifier) {
-			this.modifier = modifier;
-		}
-	}
+        public final float modifier;
+
+        HungerLevel(float modifier) {
+            this.modifier = modifier;
+        }
+    }
 }

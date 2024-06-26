@@ -13,6 +13,7 @@
   "config.rightclickharvest.discord": "Chat on Discord",
   "config.rightclickharvest.github": "Report bugs and request new features on GitHub",
   "config.rightclickharvest.modrinth": "Check for updates on Modrinth",
+  "text.rightclickharvest.use_a_hoe_warning": "RightClickHarvest is configured to require a hoe - hold a hoe or set %s to %s in the config to disable this requirement. This message will only be shown once.",
   "tag.block.rightclickharvest.blacklist": "Harvest Blacklist",
   "tag.block.rightclickharvest.hoe_never_required": "Hoe Not Required",
   "tag.block.rightclickharvest.radius_harvest_blacklist": "Radius Harvest Blacklist",
