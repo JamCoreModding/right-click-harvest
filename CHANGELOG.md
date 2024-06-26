@@ -1,1 +1,1 @@
-- Port 4.2.0 to Minecraft 1.21.
+- Update Russian translations.
