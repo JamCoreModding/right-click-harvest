@@ -10,7 +10,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -93,14 +92,14 @@ public class RightClickHarvest {
 
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
         if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe) {
-            if (!stackInHand.is(ItemTags.HOES)) {
+            if (!isHoe(stackInHand)) {
                 if (isHarvestable(state) && player.level().isClientSide && !CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
                     player.displayClientMessage(
                           Component.translatable(
                                 "text.rightclickharvest.use_a_hoe_warning",
                                 Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
                                 Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
-                          )),
+                                )),
                           false
                     );
                     CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
@@ -121,7 +120,7 @@ public class RightClickHarvest {
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
             if (isMature(state)) {
                 // Start radius harvesting
-                if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && stackInHand.is(ItemTags.HOES)) {
+                if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoe(stackInHand)) {
                     int radius = 0;
                     boolean circle = false;
                     hoeInUse = true;
@@ -184,7 +183,7 @@ public class RightClickHarvest {
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult completeHarvest(Level level, BlockState state, BlockPos pos, Player player, InteractionHand hand, ItemStack stackInHand, boolean hoeInUse , boolean removeReplant, Runnable setBlockAction) {
+    private static InteractionResult completeHarvest(Level level, BlockState state, BlockPos pos, Player player, InteractionHand hand, ItemStack stackInHand, boolean hoeInUse, boolean removeReplant, Runnable setBlockAction) {
         if (!level.isClientSide) {
             Block originalBlock = state.getBlock();
             // Event posts are for things like claim mods
@@ -221,6 +220,14 @@ public class RightClickHarvest {
         } else {
             return false;
         }
+    }
+
+    private static boolean isHoe(ItemStack stack) {
+        return stack.is(ItemTags.HOES)
+               || stack.is(LOW_TIER_HOES)
+               || stack.is(MID_TIER_HOES)
+               || stack.is(HIGH_TIER_HOES)
+               || RightClickHarvestPlatform.isHoeAccordingToPlatform(stack);
     }
 
     private static boolean isMature(BlockState state) {
