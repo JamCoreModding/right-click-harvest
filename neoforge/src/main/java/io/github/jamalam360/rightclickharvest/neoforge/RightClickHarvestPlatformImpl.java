@@ -6,8 +6,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.ToolActions;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
@@ -31,6 +31,6 @@ public class RightClickHarvestPlatformImpl {
 	}
 
 	public static boolean isHoeAccordingToPlatform(ItemStack stack) {
-		return stack.canPerformAction(ToolActions.HOE_TILL);
+		return stack.canPerformAction(ItemAbilities.HOE_TILL);
 	}
 }
