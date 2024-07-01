@@ -21,7 +21,7 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/loom-cache
             ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/gradle-wrapper.properties') }}-${{ hashFiles('./gradle.properties') }}
+          key: gradle-${{ hashFiles('**/gradle-wrapper.properties') }}-${{ hashFiles('./gradle.properties') }}-${{ hashFiles('./libs.versions.toml') }}
           restore-keys: gradle
 
       - name: Validate Gradle Wrapper
