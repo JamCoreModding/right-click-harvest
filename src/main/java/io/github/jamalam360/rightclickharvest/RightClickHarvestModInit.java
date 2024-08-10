@@ -95,7 +95,7 @@ public class RightClickHarvestModInit {
 	}
 
 	public void onCommonSetup(final FMLCommonSetupEvent event) {
-		MinecraftForge.EVENT_BUS.<PlayerInteractEvent.RightClickBlock>addListener(this::onBlockUse);
+		// MinecraftForge.EVENT_BUS.<PlayerInteractEvent.RightClickBlock>addListener(this::onBlockUse);
 		LOGGER.info("Initialized");
 	}
 
