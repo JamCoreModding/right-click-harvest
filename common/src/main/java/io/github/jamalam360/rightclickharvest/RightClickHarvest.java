@@ -37,6 +37,8 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class RightClickHarvest {
 
     public static final String MOD_ID = "rightclickharvest";
@@ -256,16 +258,17 @@ public class RightClickHarvest {
 
     private static void dropStacks(BlockState state, ServerLevel world, BlockPos pos, Entity entity, ItemStack toolStack, boolean removeReplant) {
         Item replant = state.getBlock().getCloneItemStack(world, pos, state).getItem();
-        final boolean[] removedReplant = {!removeReplant};
+        boolean removedReplant = !removeReplant;
 
-        Block.getDrops(state, world, pos, null, entity, toolStack).forEach(stack -> {
-            if (!removedReplant[0] && stack.getItem() == replant) {
-                stack.setCount(stack.getCount() - 1);
-                removedReplant[0] = true;
+        List<ItemStack> stacks = Block.getDrops(state, world, pos, null, entity, toolStack);
+        for (ItemStack stack : stacks) {
+            if (!removedReplant && stack.getItem() == replant) {
+                stack.shrink(1);
+                removedReplant = true;
             }
 
             Block.popResource(world, pos, stack);
-        });
+        };
 
         state.spawnAfterBreak(world, pos, toolStack, true);
     }
