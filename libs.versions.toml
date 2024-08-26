@@ -1,6 +1,6 @@
 [versions]
 # https://modrinth.com/mod/architectury-api/versions
-architectury = "13.0.3"
+architectury = "13.0.1"
 
 # https://projects.neoforged.net/neoforged/neoforge
 neoforge = "21.0.43-beta"
