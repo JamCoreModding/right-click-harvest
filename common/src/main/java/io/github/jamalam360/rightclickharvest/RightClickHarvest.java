@@ -196,7 +196,7 @@ public class RightClickHarvest {
             level.removeBlock(pos, false);
         }
 
-        maybeWearHoeInHand(player);
+        wearHoeInHand(player);
 
         // Regular block breaking causes 0.005f exhaustion
         player.causeFoodExhaustion(0.008f * CONFIG.get().hungerLevel.modifier);
@@ -279,7 +279,7 @@ public class RightClickHarvest {
         };
     }
 
-    private static void maybeWearHoeInHand(Player player) {
+    private static void wearHoeInHand(Player player) {
         ItemStack hoeInHand = player.getMainHandItem();
         if (!isHoe(hoeInHand)) return;
         hoeInHand.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
