@@ -187,15 +187,12 @@ public class RightClickHarvest {
         }
 
         ServerLevel world = (ServerLevel) level;
-        ItemStack stackInHand = player.getItemInHand(hand);
-        List<ItemStack> drops = Block.getDrops(state, world, pos, null, player, stackInHand);
+        List<ItemStack> drops = Block.getDrops(state, world, pos, null, player, player.getItemInHand(hand));
         Block originalBlock = state.getBlock();
         dropStacks(drops, originalBlock, world, pos);
         setBlockAction.run();
 
-        if (isHoeInHand(player)) {
-            stackInHand.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
-        }
+        maybeWearHoeInHand(player);
 
         // Regular block breaking causes 0.005f exhaustion
         player.causeFoodExhaustion(0.008f * CONFIG.get().hungerLevel.modifier);
@@ -244,6 +241,12 @@ public class RightClickHarvest {
         } else {
             return false;
         }
+    }
+
+    private static void maybeWearHoeInHand(Player player) {
+        ItemStack hoeInHand = player.getMainHandItem();
+        if (!isHoe(hoeInHand)) return;
+        hoeInHand.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
     }
 
     private static boolean isHoeInHand(Player player) {
