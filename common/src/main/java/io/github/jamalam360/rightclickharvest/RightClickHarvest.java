@@ -88,20 +88,20 @@ public class RightClickHarvest {
             return InteractionResult.PASS;
         }
 
-        // Check for hunger, if config requires it
-        if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE) {
-            if (!player.getAbilities().instabuild && player.getFoodData().getFoodLevel() <= 0) {
-                return InteractionResult.PASS;
-            }
+        // If we are radius harvesting and the block cannot not be, return
+        if (!initialCall && state.is(RADIUS_HARVEST_BLACKLIST)) {
+            return InteractionResult.PASS;
         }
 
         if (isHoeRequiredWithWarning(player, state)) {
             return InteractionResult.PASS;
         }
 
-        // If we are radius harvesting and the block cannot not be, return
-        if (!initialCall && state.is(RADIUS_HARVEST_BLACKLIST)) {
-            return InteractionResult.PASS;
+        // Check for hunger, if config requires it
+        if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE) {
+            if (!player.getAbilities().instabuild && player.getFoodData().getFoodLevel() <= 0) {
+                return InteractionResult.PASS;
+            }
         }
 
         if (isReplantableAndMature(state)) {
