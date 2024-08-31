@@ -256,13 +256,7 @@ public class RightClickHarvest {
     }
 
     private static boolean isHarvestable(BlockState state) {
-        if (isReplantableAndMature(state)) {
-            return true;
-        } else if (isSugarCaneOrCactus(state)) {
-            return true;
-        } else {
-            return false;
-        }
+        return isReplantableAndMature(state) || isSugarCaneOrCactus(state);
     }
 
     private static boolean isReplantableAndMature(BlockState state) {
