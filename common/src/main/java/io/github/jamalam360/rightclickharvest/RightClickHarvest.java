@@ -194,7 +194,7 @@ public class RightClickHarvest {
         setBlockAction.run();
 
         if (isHoeInHand(player)) {
-            stackInHand.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+            stackInHand.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
         }
 
         // Regular block breaking causes 0.005f exhaustion
