@@ -102,7 +102,9 @@ public class RightClickHarvest {
         }
 
         if (isReplantableAndMature(state)) {
-            if (!radiusHarvesting) maybeStartRadiusHarvesting(player, hitResult, state);
+            if (!radiusHarvesting && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
+                startRadiusHarvesting(player, hitResult);
+            }
 
             if (level.isClientSide) {
                 return playSoundClientSide(state, player);
@@ -137,10 +139,7 @@ public class RightClickHarvest {
         return InteractionResult.PASS;
     }
 
-    private static void maybeStartRadiusHarvesting(Player player, BlockHitResult hitResult, BlockState state) {
-        if (!CONFIG.get().harvestInRadius || state.is(RADIUS_HARVEST_BLACKLIST) || !isHoeInHand(player)) return;
-
-        // Start radius harvesting
+    private static void startRadiusHarvesting(Player player, BlockHitResult hitResult) {
         int radius = 0;
         boolean circle = false;
 
