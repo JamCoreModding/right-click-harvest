@@ -104,52 +104,50 @@ public class RightClickHarvest {
             return InteractionResult.PASS;
         }
 
-        if (isReplantable(state)) {
-            if (isMature(state)) {
-                // Start radius harvesting
-                if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
-                    int radius = 0;
-                    boolean circle = false;
+        if (isReplantableAndMature(state)) {
+            // Start radius harvesting
+            if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
+                int radius = 0;
+                boolean circle = false;
 
-                    var hoeInHand = player.getMainHandItem();
-                    if (hoeInHand.is(HIGH_TIER_HOES)) {
-                        radius = 2;
-                        circle = true;
-                    } else if (hoeInHand.is(MID_TIER_HOES)) {
-                        radius = 1;
-                        circle = false;
-                    } else if (hoeInHand.is(LOW_TIER_HOES)) {
-                        radius = 1;
-                        circle = true;
+                var hoeInHand = player.getMainHandItem();
+                if (hoeInHand.is(HIGH_TIER_HOES)) {
+                    radius = 2;
+                    circle = true;
+                } else if (hoeInHand.is(MID_TIER_HOES)) {
+                    radius = 1;
+                    circle = false;
+                } else if (hoeInHand.is(LOW_TIER_HOES)) {
+                    radius = 1;
+                    circle = true;
+                }
+
+                if (radius == 1 && circle) {
+                    for (Direction dir : CARDINAL_DIRECTIONS) {
+                        maybeHarvest(player, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), false);
                     }
-
-                    if (radius == 1 && circle) {
-                        for (Direction dir : CARDINAL_DIRECTIONS) {
-                            maybeHarvest(player, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), false);
-                        }
-                    } else if (radius > 0) {
-                        for (int x = -radius; x <= radius; x++) {
-                            for (int z = -radius; z <= radius; z++) {
-                                if (x == 0 && z == 0) {
-                                    continue;
-                                }
-
-                                BlockPos pos = hitResult.getBlockPos().relative(Direction.Axis.X, x).relative(Direction.Axis.Z, z);
-                                if (circle && pos.distManhattan(hitResult.getBlockPos()) > radius) {
-                                    continue;
-                                }
-
-                                maybeHarvest(player, hitResult.withPosition(pos), false);
+                } else if (radius > 0) {
+                    for (int x = -radius; x <= radius; x++) {
+                        for (int z = -radius; z <= radius; z++) {
+                            if (x == 0 && z == 0) {
+                                continue;
                             }
+
+                            BlockPos pos = hitResult.getBlockPos().relative(Direction.Axis.X, x).relative(Direction.Axis.Z, z);
+                            if (circle && pos.distManhattan(hitResult.getBlockPos()) > radius) {
+                                continue;
+                            }
+
+                            maybeHarvest(player, hitResult.withPosition(pos), false);
                         }
                     }
                 }
+            }
 
-                if (level.isClientSide) {
-                    return playSoundClientSide(state, player);
-                } else {
-                    return completeHarvestServerSide(state, player, hitResult.getBlockPos(), () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
-                }
+            if (level.isClientSide) {
+                return playSoundClientSide(state, player);
+            } else {
+                return completeHarvestServerSide(state, player, hitResult.getBlockPos(), () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
             }
         } else if (isSugarCaneOrCactus(state)) {
             ItemStack stackInHand = player.getMainHandItem();
@@ -245,13 +243,27 @@ public class RightClickHarvest {
     }
 
     private static boolean isHarvestable(BlockState state) {
-        if (isReplantable(state)) {
-            return isMature(state);
+        if (isReplantableAndMature(state)) {
+            return true;
         } else if (isSugarCaneOrCactus(state)) {
             return true;
         } else {
             return false;
         }
+    }
+
+    private static boolean isReplantableAndMature(BlockState state) {
+        return isReplantable(state) && isMature(state);
+    }
+
+    private static boolean isMature(BlockState state) {
+        Block block = state.getBlock();
+        return switch (block) {
+            case CocoaBlock cocoaBlock -> state.getValue(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE;
+            case CropBlock cropBlock -> cropBlock.isMaxAge(state);
+            case NetherWartBlock netherWartBlock -> state.getValue(NetherWartBlock.AGE) >= NetherWartBlock.MAX_AGE;
+            default -> false;
+        };
     }
 
     private static void maybeWearHoeInHand(Player player) {
@@ -270,16 +282,6 @@ public class RightClickHarvest {
                || stack.is(MID_TIER_HOES)
                || stack.is(HIGH_TIER_HOES)
                || RightClickHarvestPlatform.isHoeAccordingToPlatform(stack);
-    }
-
-    private static boolean isMature(BlockState state) {
-        Block block = state.getBlock();
-        return switch (block) {
-            case CocoaBlock cocoaBlock -> state.getValue(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE;
-            case CropBlock cropBlock -> cropBlock.isMaxAge(state);
-            case NetherWartBlock netherWartBlock -> state.getValue(NetherWartBlock.AGE) >= NetherWartBlock.MAX_AGE;
-            default -> false;
-        };
     }
 
     private static BlockState getReplantState(BlockState state) {
