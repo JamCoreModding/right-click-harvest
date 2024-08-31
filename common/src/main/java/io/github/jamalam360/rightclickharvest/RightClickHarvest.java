@@ -78,7 +78,6 @@ public class RightClickHarvest {
 
         Level level = player.level();
         BlockState state = level.getBlockState(hitResult.getBlockPos());
-        ItemStack stackInHand = player.getItemInHand(hand);
 
         // Check if the block is in the blacklist
         if (state.is(BLACKLIST)) {
@@ -110,13 +109,14 @@ public class RightClickHarvest {
                     int radius = 0;
                     boolean circle = false;
 
-                    if (stackInHand.is(HIGH_TIER_HOES)) {
+                    var hoeInHand = player.getMainHandItem();
+                    if (hoeInHand.is(HIGH_TIER_HOES)) {
                         radius = 2;
                         circle = true;
-                    } else if (stackInHand.is(MID_TIER_HOES)) {
+                    } else if (hoeInHand.is(MID_TIER_HOES)) {
                         radius = 1;
                         circle = false;
-                    } else if (stackInHand.is(LOW_TIER_HOES)) {
+                    } else if (hoeInHand.is(LOW_TIER_HOES)) {
                         radius = 1;
                         circle = true;
                     }
@@ -150,6 +150,7 @@ public class RightClickHarvest {
                 }
             }
         } else if (isSugarCaneOrCactus(state)) {
+            ItemStack stackInHand = player.getMainHandItem();
             if (hitResult.getDirection() == Direction.UP && ((stackInHand.getItem() == Items.SUGAR_CANE && state.getBlock() instanceof SugarCaneBlock) || (stackInHand.getItem() == Items.CACTUS && state.getBlock() instanceof CactusBlock))) {
                 return InteractionResult.PASS;
             }
