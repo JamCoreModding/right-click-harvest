@@ -164,7 +164,7 @@ public class RightClickHarvest {
                 if (level.isClientSide) {
                     return completeHarvestClientSide(state, player);
                 } else {
-                    return completeHarvestServerSide(level, state, hitResult.getBlockPos(), player, hand, stackInHand, hoeInUse, () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
+                    return completeHarvestServerSide(state, player, level, hand, hitResult.getBlockPos(), hoeInUse, () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
                 }
             }
         } else if (isSugarCaneOrCactus(state)) {
@@ -183,19 +183,18 @@ public class RightClickHarvest {
                 return InteractionResult.PASS;
             }
 
-            final BlockPos breakPos = bottom.above(1);
             if (level.isClientSide) {
                 return completeHarvestClientSide(state, player);
             } else {
-                return completeHarvestServerSide(level, state, breakPos, player, hand, stackInHand, hoeInUse, () -> level.removeBlock(breakPos, false));
+                final BlockPos breakPos = bottom.above(1);
+                return completeHarvestServerSide(state, player, level, hand, breakPos, hoeInUse, () -> level.removeBlock(breakPos, false));
             }
         }
 
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult completeHarvestServerSide(Level level, BlockState state, BlockPos pos, Player player, InteractionHand hand, ItemStack stackInHand, boolean hoeInUse, Runnable setBlockAction) {
-        Block originalBlock = state.getBlock();
+    private static InteractionResult completeHarvestServerSide(BlockState state, Player player, Level level, InteractionHand hand, BlockPos pos, boolean hoeInUse, Runnable setBlockAction) {
         // Event posts are for things like claim mods
         if (RightClickHarvestPlatform.postBreakEvent(level, pos, state, player)) {
             return InteractionResult.FAIL;
@@ -206,7 +205,9 @@ public class RightClickHarvest {
         }
 
         ServerLevel world = (ServerLevel) level;
-        List<ItemStack> drops = Block.getDrops(state, world, pos, null, player, player.getItemInHand(hand));
+        ItemStack stackInHand = player.getItemInHand(hand);
+        List<ItemStack> drops = Block.getDrops(state, world, pos, null, player, stackInHand);
+        Block originalBlock = state.getBlock();
         dropStacks(drops, originalBlock, world, pos);
         setBlockAction.run();
 
