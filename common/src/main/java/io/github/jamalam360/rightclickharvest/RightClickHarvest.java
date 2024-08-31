@@ -79,7 +79,6 @@ public class RightClickHarvest {
         Level level = player.level();
         BlockState state = level.getBlockState(hitResult.getBlockPos());
         ItemStack stackInHand = player.getItemInHand(hand);
-        boolean hoeInUse = false;
 
         // Check if the block is in the blacklist
         if (state.is(BLACKLIST)) {
@@ -94,25 +93,21 @@ public class RightClickHarvest {
         }
 
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
-        if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe) {
-            if (isHoe(stackInHand)) {
-                hoeInUse = true;
-            } else {
-                if (isHarvestable(state) && player.level().isClientSide && !CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
-                    player.displayClientMessage(
-                            Component.translatable(
-                                    "text.rightclickharvest.use_a_hoe_warning",
-                                    Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
-                                    Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
-                                    )),
-                            false
-                    );
-                    CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
-                    CONFIG.save();
-                }
-
-                return InteractionResult.PASS;
+        if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoe(stackInHand)) {
+            if (isHarvestable(state) && player.level().isClientSide && !CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
+                player.displayClientMessage(
+                        Component.translatable(
+                                "text.rightclickharvest.use_a_hoe_warning",
+                                Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
+                                Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
+                                )),
+                        false
+                );
+                CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
+                CONFIG.save();
             }
+
+            return InteractionResult.PASS;
         }
 
         // If we are radius harvesting and the block cannot not be, return
@@ -126,7 +121,6 @@ public class RightClickHarvest {
                 if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoe(stackInHand)) {
                     int radius = 0;
                     boolean circle = false;
-                    hoeInUse = true;
 
                     if (stackInHand.is(HIGH_TIER_HOES)) {
                         radius = 2;
@@ -162,9 +156,9 @@ public class RightClickHarvest {
                 }
 
                 if (level.isClientSide) {
-                    return completeHarvestClientSide(state, player);
+                    return playSoundClientSide(state, player);
                 } else {
-                    return completeHarvestServerSide(state, player, level, hand, hitResult.getBlockPos(), hoeInUse, () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
+                    return completeHarvestServerSide(state, player, level, hand, hitResult.getBlockPos(), () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
                 }
             }
         } else if (isSugarCaneOrCactus(state)) {
@@ -184,17 +178,17 @@ public class RightClickHarvest {
             }
 
             if (level.isClientSide) {
-                return completeHarvestClientSide(state, player);
+                return playSoundClientSide(state, player);
             } else {
                 final BlockPos breakPos = bottom.above(1);
-                return completeHarvestServerSide(state, player, level, hand, breakPos, hoeInUse, () -> level.removeBlock(breakPos, false));
+                return completeHarvestServerSide(state, player, level, hand, breakPos, () -> level.removeBlock(breakPos, false));
             }
         }
 
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult completeHarvestServerSide(BlockState state, Player player, Level level, InteractionHand hand, BlockPos pos, boolean hoeInUse, Runnable setBlockAction) {
+    private static InteractionResult completeHarvestServerSide(BlockState state, Player player, Level level, InteractionHand hand, BlockPos pos, Runnable setBlockAction) {
         // Event posts are for things like claim mods
         if (RightClickHarvestPlatform.postBreakEvent(level, pos, state, player)) {
             return InteractionResult.FAIL;
@@ -211,7 +205,7 @@ public class RightClickHarvest {
         dropStacks(drops, originalBlock, world, pos);
         setBlockAction.run();
 
-        if (hoeInUse) {
+        if (isHoe(stackInHand)) {
             stackInHand.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         }
 
@@ -222,9 +216,8 @@ public class RightClickHarvest {
         return InteractionResult.SUCCESS;
     }
 
-    private static InteractionResult completeHarvestClientSide(BlockState state, Player player) {
-        SoundEvent soundEvent = state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED;
-        player.playSound(soundEvent, 1.0f, 1.0f);
+    private static InteractionResult playSoundClientSide(BlockState state, Player player) {
+        player.playSound(getSoundEvent(state), 1.0f, 1.0f);
         return InteractionResult.SUCCESS;
     }
 
@@ -277,7 +270,10 @@ public class RightClickHarvest {
             case NetherWartBlock netherWartBlock -> state.setValue(NetherWartBlock.AGE, 0);
             default -> state;
         };
+    }
 
+    private static SoundEvent getSoundEvent(BlockState state) {
+        return state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED;
     }
 
     private static void dropStacks(List<ItemStack> drops, Block block, ServerLevel world, BlockPos pos) {
