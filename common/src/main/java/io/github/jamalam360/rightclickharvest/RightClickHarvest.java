@@ -76,20 +76,15 @@ public class RightClickHarvest {
             return InteractionResult.PASS;
         }
 
-        return maybeHarvest(player, hitResult, false);
+        return maybeHarvest(player, hitResult);
     }
 
-    private static InteractionResult maybeHarvest(Player player, BlockHitResult hitResult, boolean radiusHarvesting) {
+    private static InteractionResult maybeHarvest(Player player, BlockHitResult hitResult) {
         Level level = player.level();
         BlockState state = level.getBlockState(hitResult.getBlockPos());
 
         // Check if the block is in the blacklist
         if (state.is(BLACKLIST)) {
-            return InteractionResult.PASS;
-        }
-
-        // If we are radius harvesting and the block cannot not be, return
-        if (radiusHarvesting && state.is(RADIUS_HARVEST_BLACKLIST)) {
             return InteractionResult.PASS;
         }
 
@@ -102,8 +97,8 @@ public class RightClickHarvest {
         }
 
         if (isReplantableAndMature(state)) {
-            if (!radiusHarvesting && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
-                startRadiusHarvesting(player, hitResult);
+            if (CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
+                doRadiusHarvesting(player, hitResult);
             }
 
             return completeHarvest(state, player, hitResult.getBlockPos());
@@ -116,7 +111,7 @@ public class RightClickHarvest {
         return InteractionResult.PASS;
     }
 
-    private static void startRadiusHarvesting(Player player, BlockHitResult hitResult) {
+    private static void doRadiusHarvesting(Player player, BlockHitResult hitResult) {
         int radius = 0;
         boolean circle = false;
 
@@ -134,7 +129,7 @@ public class RightClickHarvest {
 
         if (radius == 1 && circle) {
             for (Direction dir : CARDINAL_DIRECTIONS) {
-                maybeHarvest(player, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), true);
+                maybeRadiusHarvest(player, hitResult.withPosition(hitResult.getBlockPos().relative(dir)));
             }
         } else if (radius > 0) {
             for (int x = -radius; x <= radius; x++) {
@@ -148,10 +143,26 @@ public class RightClickHarvest {
                         continue;
                     }
 
-                    maybeHarvest(player, hitResult.withPosition(pos), true);
+                    maybeRadiusHarvest(player, hitResult.withPosition(pos));
                 }
             }
         }
+    }
+
+    private static void maybeRadiusHarvest(Player player, BlockHitResult hitResult) {
+        Level level = player.level();
+        BlockState state = level.getBlockState(hitResult.getBlockPos());
+
+        // Check if the block is in the blacklist
+        if (state.is(BLACKLIST)) return;
+
+        // We are radius harvesting so if the block cannot not be, return
+        if (state.is(RADIUS_HARVEST_BLACKLIST)) return;
+
+        if (isHungry(player)) return;
+
+        if (isReplantableAndMature(state)) completeHarvest(state, player, hitResult.getBlockPos());
+        else if (isSugarCaneOrCactus(state)) harvestSugarCaneOrCactus(player, hitResult, state);
     }
 
     private static InteractionResult harvestSugarCaneOrCactus(Player player, BlockHitResult hitResult, BlockState state) {
