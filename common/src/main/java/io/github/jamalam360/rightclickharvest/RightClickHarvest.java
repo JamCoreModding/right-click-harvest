@@ -107,7 +107,9 @@ public class RightClickHarvest {
             }
 
             return completeHarvest(state, player, hitResult.getBlockPos());
-        } else if (isSugarCaneOrCactus(state)) {
+        }
+
+        if (isSugarCaneOrCactus(state)) {
             ItemStack stackInHand = player.getMainHandItem();
             if (hitResult.getDirection() == Direction.UP && ((stackInHand.getItem() == Items.SUGAR_CANE && state.getBlock() instanceof SugarCaneBlock) || (stackInHand.getItem() == Items.CACTUS && state.getBlock() instanceof CactusBlock))) {
                 return InteractionResult.PASS;
