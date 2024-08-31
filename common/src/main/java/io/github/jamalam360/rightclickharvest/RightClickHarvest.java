@@ -228,8 +228,8 @@ public class RightClickHarvest {
 
     // Check for hunger, if config requires it
     private static boolean isHungry(Player player) {
+        if (player.hasInfiniteMaterials()) return false;
         if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE) return false;
-        if (player.getAbilities().instabuild) return false;
         return player.getFoodData().getFoodLevel() <= 0;
     }
 
