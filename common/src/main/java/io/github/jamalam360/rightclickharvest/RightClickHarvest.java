@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class RightClickHarvest {
 
@@ -95,23 +94,23 @@ public class RightClickHarvest {
 
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
         if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe) {
-            if (!isHoe(stackInHand)) {
+            if (isHoe(stackInHand)) {
+                hoeInUse = true;
+            } else {
                 if (isHarvestable(state) && player.level().isClientSide && !CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
                     player.displayClientMessage(
-                          Component.translatable(
-                                "text.rightclickharvest.use_a_hoe_warning",
-                                Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
-                                Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
-                                )),
-                          false
+                            Component.translatable(
+                                    "text.rightclickharvest.use_a_hoe_warning",
+                                    Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
+                                    Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
+                                    )),
+                            false
                     );
                     CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
                     CONFIG.save();
                 }
 
                 return InteractionResult.PASS;
-            } else {
-                hoeInUse = true;
             }
         }
 
@@ -161,7 +160,11 @@ public class RightClickHarvest {
                     }
                 }
 
-                return completeHarvest(level, state, hitResult.getBlockPos(), player, hand, stackInHand, hoeInUse, () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
+                if (level.isClientSide) {
+                    return completeHarvestClientSide(state, player);
+                } else {
+                    return completeHarvestServerSide(level, state, hitResult.getBlockPos(), player, hand, stackInHand, hoeInUse, () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
+                }
             }
         } else if (isSugarCaneOrCactus(state)) {
             if (hitResult.getDirection() == Direction.UP && ((stackInHand.getItem() == Items.SUGAR_CANE && state.getBlock() instanceof SugarCaneBlock) || (stackInHand.getItem() == Items.CACTUS && state.getBlock() instanceof CactusBlock))) {
@@ -180,15 +183,17 @@ public class RightClickHarvest {
             }
 
             final BlockPos breakPos = bottom.above(1);
-            return completeHarvest(level, state, breakPos, player, hand, stackInHand, hoeInUse, () -> level.removeBlock(breakPos, false));
+            if (level.isClientSide) {
+                return completeHarvestClientSide(state, player);
+            } else {
+                return completeHarvestServerSide(level, state, breakPos, player, hand, stackInHand, hoeInUse, () -> level.removeBlock(breakPos, false));
+            }
         }
 
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult completeHarvest(Level level, BlockState state, BlockPos pos, Player player, InteractionHand hand, ItemStack stackInHand, boolean hoeInUse, Runnable setBlockAction) {
-        if (level.isClientSide) return completeHarvestClientSide(state, player);
-
+    private static InteractionResult completeHarvestServerSide(Level level, BlockState state, BlockPos pos, Player player, InteractionHand hand, ItemStack stackInHand, boolean hoeInUse, Runnable setBlockAction) {
         Block originalBlock = state.getBlock();
         // Event posts are for things like claim mods
         if (RightClickHarvestPlatform.postBreakEvent(level, pos, state, player)) {
