@@ -93,7 +93,7 @@ public class RightClickHarvest {
         }
 
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
-        if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoe(stackInHand)) {
+        if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand(player)) {
             warnOnceForNotUsingHoe(player, state);
             return InteractionResult.PASS;
         }
@@ -106,7 +106,7 @@ public class RightClickHarvest {
         if (isReplantable(state)) {
             if (isMature(state)) {
                 // Start radius harvesting
-                if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoe(stackInHand)) {
+                if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
                     int radius = 0;
                     boolean circle = false;
 
@@ -193,7 +193,7 @@ public class RightClickHarvest {
         dropStacks(drops, originalBlock, world, pos);
         setBlockAction.run();
 
-        if (isHoe(stackInHand)) {
+        if (isHoeInHand(player)) {
             stackInHand.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
         }
 
@@ -244,6 +244,10 @@ public class RightClickHarvest {
         } else {
             return false;
         }
+    }
+
+    private static boolean isHoeInHand(Player player) {
+        return isHoe(player.getMainHandItem());
     }
 
     private static boolean isHoe(ItemStack stack) {
