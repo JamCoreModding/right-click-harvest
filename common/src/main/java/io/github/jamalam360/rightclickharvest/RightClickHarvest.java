@@ -94,19 +94,7 @@ public class RightClickHarvest {
 
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
         if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoe(stackInHand)) {
-            if (isHarvestable(state) && player.level().isClientSide && !CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
-                player.displayClientMessage(
-                        Component.translatable(
-                                "text.rightclickharvest.use_a_hoe_warning",
-                                Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
-                                Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
-                                )),
-                        false
-                );
-                CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
-                CONFIG.save();
-            }
-
+            warnOnceForNotUsingHoe(player, state);
             return InteractionResult.PASS;
         }
 
@@ -219,6 +207,20 @@ public class RightClickHarvest {
     private static InteractionResult playSoundClientSide(BlockState state, Player player) {
         player.playSound(getSoundEvent(state), 1.0f, 1.0f);
         return InteractionResult.SUCCESS;
+    }
+
+    private static void warnOnceForNotUsingHoe(Player player, BlockState state) {
+        if (CONFIG.get().hasUserBeenWarnedForNotUsingHoe || !player.level().isClientSide || !isHarvestable(state)) return;
+
+        var translatable = Component.translatable(
+                "text.rightclickharvest.use_a_hoe_warning",
+                Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
+                Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
+                ));
+        player.displayClientMessage(translatable, false);
+
+        CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
+        CONFIG.save();
     }
 
     private static boolean isReplantable(BlockState state) {
