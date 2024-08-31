@@ -59,7 +59,7 @@ public class RightClickHarvest {
         JamLib.checkForJarRenaming(RightClickHarvest.class);
 
         InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> {
-            InteractionResult res = RightClickHarvest.onBlockUse(player, player.level(), hand, new BlockHitResult(player.position(), face, pos, false), true);
+            InteractionResult res = RightClickHarvest.onBlockUse(player, hand, new BlockHitResult(player.position(), face, pos, false), true);
 
             return switch (res) {
                 case SUCCESS -> EventResult.interruptTrue();
@@ -71,11 +71,12 @@ public class RightClickHarvest {
     }
 
     @Internal
-    public static InteractionResult onBlockUse(Player player, Level level, InteractionHand hand, BlockHitResult hitResult, boolean initialCall) {
+    public static InteractionResult onBlockUse(Player player, InteractionHand hand, BlockHitResult hitResult, boolean initialCall) {
         if (player.isSpectator() || player.isCrouching() || hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
 
+        Level level = player.level();
         BlockState state = level.getBlockState(hitResult.getBlockPos());
         ItemStack stackInHand = player.getItemInHand(hand);
         boolean hoeInUse = false;
@@ -140,7 +141,7 @@ public class RightClickHarvest {
 
                     if (radius == 1 && circle) {
                         for (Direction dir : CARDINAL_DIRECTIONS) {
-                            onBlockUse(player, level, hand, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), false);
+                            onBlockUse(player, hand, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), false);
                         }
                     } else if (radius > 0) {
                         for (int x = -radius; x <= radius; x++) {
@@ -154,7 +155,7 @@ public class RightClickHarvest {
                                     continue;
                                 }
 
-                                onBlockUse(player, level, hand, hitResult.withPosition(pos), false);
+                                onBlockUse(player, hand, hitResult.withPosition(pos), false);
                             }
                         }
                     }
