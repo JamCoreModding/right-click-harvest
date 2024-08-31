@@ -102,44 +102,7 @@ public class RightClickHarvest {
         }
 
         if (isReplantableAndMature(state)) {
-            // Start radius harvesting
-            if (!radiusHarvesting && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
-                int radius = 0;
-                boolean circle = false;
-
-                var hoeInHand = player.getMainHandItem();
-                if (hoeInHand.is(HIGH_TIER_HOES)) {
-                    radius = 2;
-                    circle = true;
-                } else if (hoeInHand.is(MID_TIER_HOES)) {
-                    radius = 1;
-                    circle = false;
-                } else if (hoeInHand.is(LOW_TIER_HOES)) {
-                    radius = 1;
-                    circle = true;
-                }
-
-                if (radius == 1 && circle) {
-                    for (Direction dir : CARDINAL_DIRECTIONS) {
-                        maybeHarvest(player, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), true);
-                    }
-                } else if (radius > 0) {
-                    for (int x = -radius; x <= radius; x++) {
-                        for (int z = -radius; z <= radius; z++) {
-                            if (x == 0 && z == 0) {
-                                continue;
-                            }
-
-                            BlockPos pos = hitResult.getBlockPos().relative(Direction.Axis.X, x).relative(Direction.Axis.Z, z);
-                            if (circle && pos.distManhattan(hitResult.getBlockPos()) > radius) {
-                                continue;
-                            }
-
-                            maybeHarvest(player, hitResult.withPosition(pos), true);
-                        }
-                    }
-                }
-            }
+            if (!radiusHarvesting) maybeStartRadiusHarvesting(player, hitResult, state);
 
             if (level.isClientSide) {
                 return playSoundClientSide(state, player);
@@ -172,6 +135,47 @@ public class RightClickHarvest {
         }
 
         return InteractionResult.PASS;
+    }
+
+    private static void maybeStartRadiusHarvesting(Player player, BlockHitResult hitResult, BlockState state) {
+        if (!CONFIG.get().harvestInRadius || state.is(RADIUS_HARVEST_BLACKLIST) || !isHoeInHand(player)) return;
+
+        // Start radius harvesting
+        int radius = 0;
+        boolean circle = false;
+
+        var hoeInHand = player.getMainHandItem();
+        if (hoeInHand.is(HIGH_TIER_HOES)) {
+            radius = 2;
+            circle = true;
+        } else if (hoeInHand.is(MID_TIER_HOES)) {
+            radius = 1;
+            circle = false;
+        } else if (hoeInHand.is(LOW_TIER_HOES)) {
+            radius = 1;
+            circle = true;
+        }
+
+        if (radius == 1 && circle) {
+            for (Direction dir : CARDINAL_DIRECTIONS) {
+                maybeHarvest(player, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), true);
+            }
+        } else if (radius > 0) {
+            for (int x = -radius; x <= radius; x++) {
+                for (int z = -radius; z <= radius; z++) {
+                    if (x == 0 && z == 0) {
+                        continue;
+                    }
+
+                    BlockPos pos = hitResult.getBlockPos().relative(Direction.Axis.X, x).relative(Direction.Axis.Z, z);
+                    if (circle && pos.distManhattan(hitResult.getBlockPos()) > radius) {
+                        continue;
+                    }
+
+                    maybeHarvest(player, hitResult.withPosition(pos), true);
+                }
+            }
+        }
     }
 
     private static InteractionResult completeHarvestServerSide(BlockState state, Player player, BlockPos pos) {
