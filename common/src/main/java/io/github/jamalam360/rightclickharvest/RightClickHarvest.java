@@ -106,11 +106,7 @@ public class RightClickHarvest {
                 startRadiusHarvesting(player, hitResult);
             }
 
-            if (level.isClientSide) {
-                return playSoundClientSide(state, player);
-            } else {
-                return completeHarvestServerSide(state, player, hitResult.getBlockPos());
-            }
+            return completeHarvest(state, player, hitResult.getBlockPos());
         } else if (isSugarCaneOrCactus(state)) {
             ItemStack stackInHand = player.getMainHandItem();
             if (hitResult.getDirection() == Direction.UP && ((stackInHand.getItem() == Items.SUGAR_CANE && state.getBlock() instanceof SugarCaneBlock) || (stackInHand.getItem() == Items.CACTUS && state.getBlock() instanceof CactusBlock))) {
@@ -128,12 +124,8 @@ public class RightClickHarvest {
                 return InteractionResult.PASS;
             }
 
-            if (level.isClientSide) {
-                return playSoundClientSide(state, player);
-            } else {
-                final BlockPos breakPos = bottom.above(1);
-                return completeHarvestServerSide(state, player, breakPos);
-            }
+            final BlockPos breakPos = bottom.above(1);
+            return completeHarvest(state, player, breakPos);
         }
 
         return InteractionResult.PASS;
@@ -177,7 +169,13 @@ public class RightClickHarvest {
         }
     }
 
-    private static InteractionResult completeHarvestServerSide(BlockState state, Player player, BlockPos pos) {
+    private static InteractionResult completeHarvest(BlockState state, Player player, BlockPos pos) {
+        Level level = player.level();
+
+        if (level.isClientSide) return playSoundClientSide(state, player);
+
+        // ==== Server Side only below ====
+
         // Event posts are for things like claim mods
         if (RightClickHarvestPlatform.postBreakEvent(pos, state, player)) {
             return InteractionResult.FAIL;
@@ -190,7 +188,6 @@ public class RightClickHarvest {
 
         Block originalBlock = state.getBlock();
 
-        Level level = player.level();
         if (isReplantableAndMature(state)) {
             level.setBlockAndUpdate(pos, getReplantState(state));
         }
