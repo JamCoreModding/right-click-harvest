@@ -144,7 +144,7 @@ public class RightClickHarvest {
             if (level.isClientSide) {
                 return playSoundClientSide(state, player);
             } else {
-                return completeHarvestServerSide(state, player, hitResult.getBlockPos(), () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
+                return completeHarvestServerSide(state, player, hitResult.getBlockPos());
             }
         } else if (isSugarCaneOrCactus(state)) {
             ItemStack stackInHand = player.getMainHandItem();
@@ -167,14 +167,14 @@ public class RightClickHarvest {
                 return playSoundClientSide(state, player);
             } else {
                 final BlockPos breakPos = bottom.above(1);
-                return completeHarvestServerSide(state, player, breakPos, () -> level.removeBlock(breakPos, false));
+                return completeHarvestServerSide(state, player, breakPos);
             }
         }
 
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult completeHarvestServerSide(BlockState state, Player player, BlockPos pos, Runnable setBlockAction) {
+    private static InteractionResult completeHarvestServerSide(BlockState state, Player player, BlockPos pos) {
         Level level = player.level();
 
         // Event posts are for things like claim mods
@@ -189,7 +189,14 @@ public class RightClickHarvest {
         dropStacks(state, player, pos);
 
         Block originalBlock = state.getBlock();
-        setBlockAction.run();
+
+        if (isReplantableAndMature(state)) {
+            level.setBlockAndUpdate(pos, getReplantState(state));
+        }
+
+        if (isSugarCaneOrCactus(state)) {
+            level.removeBlock(pos, false);
+        }
 
         maybeWearHoeInHand(player);
 
