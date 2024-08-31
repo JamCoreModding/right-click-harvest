@@ -191,10 +191,9 @@ public class RightClickHarvest {
             return InteractionResult.FAIL;
         }
 
-        ServerLevel world = (ServerLevel) level;
-        List<ItemStack> drops = Block.getDrops(state, world, pos, null, player, player.getMainHandItem());
+        dropStacks(state, player, pos);
+
         Block originalBlock = state.getBlock();
-        dropStacks(drops, originalBlock, world, pos);
         setBlockAction.run();
 
         maybeWearHoeInHand(player);
@@ -297,9 +296,12 @@ public class RightClickHarvest {
         return state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED;
     }
 
-    private static void dropStacks(List<ItemStack> drops, Block block, ServerLevel world, BlockPos pos) {
-        boolean needToReplant = isReplantable(block);
+    private static void dropStacks(BlockState state, Player player, BlockPos pos) {
+        ServerLevel world = (ServerLevel) player.level();
+        List<ItemStack> drops = Block.getDrops(state, world, pos, null, player, player.getMainHandItem());
+        Block block = state.getBlock();
         Item replant = block.asItem();
+        boolean needToReplant = isReplantable(block);
 
         for (ItemStack droppedStack : drops) {
             if (needToReplant && droppedStack.is(replant)) {
