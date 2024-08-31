@@ -95,9 +95,7 @@ public class RightClickHarvest {
             }
         }
 
-        // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
-        if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand(player)) {
-            warnOnceForNotUsingHoe(player, state);
+        if (isHoeRequiredWithWarning(player, state)) {
             return InteractionResult.PASS;
         }
 
@@ -211,6 +209,13 @@ public class RightClickHarvest {
     private static InteractionResult playSoundClientSide(BlockState state, Player player) {
         player.playSound(getSoundEvent(state), 1.0f, 1.0f);
         return InteractionResult.SUCCESS;
+    }
+
+    private static boolean isHoeRequiredWithWarning(Player player, BlockState state) {
+        // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
+        var isHoeRequired = !state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand(player);
+        if (isHoeRequired) warnOnceForNotUsingHoe(player, state);
+        return isHoeRequired;
     }
 
     private static void warnOnceForNotUsingHoe(Player player, BlockState state) {
