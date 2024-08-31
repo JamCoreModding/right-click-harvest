@@ -110,24 +110,7 @@ public class RightClickHarvest {
         }
 
         if (isSugarCaneOrCactus(state)) {
-            ItemStack stackInHand = player.getMainHandItem();
-            if (hitResult.getDirection() == Direction.UP && ((stackInHand.getItem() == Items.SUGAR_CANE && state.getBlock() instanceof SugarCaneBlock) || (stackInHand.getItem() == Items.CACTUS && state.getBlock() instanceof CactusBlock))) {
-                return InteractionResult.PASS;
-            }
-
-            Block lookingFor = state.getBlock() instanceof SugarCaneBlock ? Blocks.SUGAR_CANE : Blocks.CACTUS;
-            BlockPos bottom = hitResult.getBlockPos();
-            while (level.getBlockState(bottom.below()).is(lookingFor)) {
-                bottom = bottom.below();
-            }
-
-            // Only one block tall
-            if (!level.getBlockState(bottom.above()).is(lookingFor)) {
-                return InteractionResult.PASS;
-            }
-
-            final BlockPos breakPos = bottom.above(1);
-            return completeHarvest(state, player, breakPos);
+            return harvestSugarCaneOrCactus(player, hitResult, state);
         }
 
         return InteractionResult.PASS;
@@ -169,6 +152,28 @@ public class RightClickHarvest {
                 }
             }
         }
+    }
+
+    private static InteractionResult harvestSugarCaneOrCactus(Player player, BlockHitResult hitResult, BlockState state) {
+        ItemStack stackInHand = player.getMainHandItem();
+        if (hitResult.getDirection() == Direction.UP && ((stackInHand.getItem() == Items.SUGAR_CANE && state.getBlock() instanceof SugarCaneBlock) || (stackInHand.getItem() == Items.CACTUS && state.getBlock() instanceof CactusBlock))) {
+            return InteractionResult.PASS;
+        }
+
+        Block lookingFor = state.getBlock() instanceof SugarCaneBlock ? Blocks.SUGAR_CANE : Blocks.CACTUS;
+        BlockPos bottom = hitResult.getBlockPos();
+        Level level = player.level();
+        while (level.getBlockState(bottom.below()).is(lookingFor)) {
+            bottom = bottom.below();
+        }
+
+        // Only one block tall
+        if (!level.getBlockState(bottom.above()).is(lookingFor)) {
+            return InteractionResult.PASS;
+        }
+
+        final BlockPos breakPos = bottom.above(1);
+        return completeHarvest(state, player, breakPos);
     }
 
     private static InteractionResult completeHarvest(BlockState state, Player player, BlockPos pos) {
