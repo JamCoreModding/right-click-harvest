@@ -76,6 +76,10 @@ public class RightClickHarvest {
             return InteractionResult.PASS;
         }
 
+        return maybeHarvest(player, hitResult, initialCall);
+    }
+
+    private static InteractionResult maybeHarvest(Player player, BlockHitResult hitResult, boolean initialCall) {
         Level level = player.level();
         BlockState state = level.getBlockState(hitResult.getBlockPos());
 
@@ -123,7 +127,7 @@ public class RightClickHarvest {
 
                     if (radius == 1 && circle) {
                         for (Direction dir : CARDINAL_DIRECTIONS) {
-                            onBlockUse(player, hand, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), false);
+                            maybeHarvest(player, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), false);
                         }
                     } else if (radius > 0) {
                         for (int x = -radius; x <= radius; x++) {
@@ -137,7 +141,7 @@ public class RightClickHarvest {
                                     continue;
                                 }
 
-                                onBlockUse(player, hand, hitResult.withPosition(pos), false);
+                                maybeHarvest(player, hitResult.withPosition(pos), false);
                             }
                         }
                     }
