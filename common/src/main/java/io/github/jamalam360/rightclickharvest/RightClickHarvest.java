@@ -175,14 +175,11 @@ public class RightClickHarvest {
     }
 
     private static InteractionResult completeHarvestServerSide(BlockState state, Player player, BlockPos pos) {
-        Level level = player.level();
-
         // Event posts are for things like claim mods
-        if (RightClickHarvestPlatform.postBreakEvent(level, pos, state, player)) {
+        if (RightClickHarvestPlatform.postBreakEvent(pos, state, player)) {
             return InteractionResult.FAIL;
         }
-
-        if (RightClickHarvestPlatform.postPlaceEvent(level, pos, player)) {
+        if (RightClickHarvestPlatform.postPlaceEvent(pos, player)) {
             return InteractionResult.FAIL;
         }
 
@@ -190,6 +187,7 @@ public class RightClickHarvest {
 
         Block originalBlock = state.getBlock();
 
+        Level level = player.level();
         if (isReplantableAndMature(state)) {
             level.setBlockAndUpdate(pos, getReplantState(state));
         }
@@ -202,7 +200,8 @@ public class RightClickHarvest {
 
         // Regular block breaking causes 0.005f exhaustion
         player.causeFoodExhaustion(0.008f * CONFIG.get().hungerLevel.modifier);
-        RightClickHarvestPlatform.postAfterHarvestEvent(new HarvestContext(player, originalBlock));
+
+        RightClickHarvestPlatform.postAfterHarvestEvent(player, originalBlock);
 
         return InteractionResult.SUCCESS;
     }
