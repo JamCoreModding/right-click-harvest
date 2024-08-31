@@ -76,10 +76,10 @@ public class RightClickHarvest {
             return InteractionResult.PASS;
         }
 
-        return maybeHarvest(player, hitResult, true);
+        return maybeHarvest(player, hitResult, false);
     }
 
-    private static InteractionResult maybeHarvest(Player player, BlockHitResult hitResult, boolean initialCall) {
+    private static InteractionResult maybeHarvest(Player player, BlockHitResult hitResult, boolean radiusHarvesting) {
         Level level = player.level();
         BlockState state = level.getBlockState(hitResult.getBlockPos());
 
@@ -89,7 +89,7 @@ public class RightClickHarvest {
         }
 
         // If we are radius harvesting and the block cannot not be, return
-        if (!initialCall && state.is(RADIUS_HARVEST_BLACKLIST)) {
+        if (radiusHarvesting && state.is(RADIUS_HARVEST_BLACKLIST)) {
             return InteractionResult.PASS;
         }
 
@@ -103,7 +103,7 @@ public class RightClickHarvest {
 
         if (isReplantableAndMature(state)) {
             // Start radius harvesting
-            if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
+            if (!radiusHarvesting && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
                 int radius = 0;
                 boolean circle = false;
 
@@ -121,7 +121,7 @@ public class RightClickHarvest {
 
                 if (radius == 1 && circle) {
                     for (Direction dir : CARDINAL_DIRECTIONS) {
-                        maybeHarvest(player, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), false);
+                        maybeHarvest(player, hitResult.withPosition(hitResult.getBlockPos().relative(dir)), true);
                     }
                 } else if (radius > 0) {
                     for (int x = -radius; x <= radius; x++) {
@@ -135,7 +135,7 @@ public class RightClickHarvest {
                                 continue;
                             }
 
-                            maybeHarvest(player, hitResult.withPosition(pos), false);
+                            maybeHarvest(player, hitResult.withPosition(pos), true);
                         }
                     }
                 }
