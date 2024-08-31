@@ -59,7 +59,7 @@ public class RightClickHarvest {
         JamLib.checkForJarRenaming(RightClickHarvest.class);
 
         InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> {
-            InteractionResult res = RightClickHarvest.onBlockUse(player, hand, new BlockHitResult(player.position(), face, pos, false), true);
+            InteractionResult res = RightClickHarvest.onBlockUse(player, hand, new BlockHitResult(player.position(), face, pos, false));
 
             return switch (res) {
                 case SUCCESS -> EventResult.interruptTrue();
@@ -71,12 +71,12 @@ public class RightClickHarvest {
     }
 
     @Internal
-    public static InteractionResult onBlockUse(Player player, InteractionHand hand, BlockHitResult hitResult, boolean initialCall) {
+    public static InteractionResult onBlockUse(Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (player.isSpectator() || player.isCrouching() || hand != InteractionHand.MAIN_HAND) {
             return InteractionResult.PASS;
         }
 
-        return maybeHarvest(player, hitResult, initialCall);
+        return maybeHarvest(player, hitResult, true);
     }
 
     private static InteractionResult maybeHarvest(Player player, BlockHitResult hitResult, boolean initialCall) {
@@ -97,11 +97,8 @@ public class RightClickHarvest {
             return InteractionResult.PASS;
         }
 
-        // Check for hunger, if config requires it
-        if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE) {
-            if (!player.getAbilities().instabuild && player.getFoodData().getFoodLevel() <= 0) {
-                return InteractionResult.PASS;
-            }
+        if (isHungry(player)) {
+            return InteractionResult.PASS;
         }
 
         if (isReplantableAndMature(state)) {
@@ -228,6 +225,22 @@ public class RightClickHarvest {
         CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
         CONFIG.save();
     }
+
+    // Check for hunger, if config requires it
+    private static boolean isHungry(Player player) {
+        if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE) return false;
+        if (player.getAbilities().instabuild) return false;
+        return player.getFoodData().getFoodLevel() <= 0;
+    }
+
+    /* alternative implementation
+     private static boolean isHungry(Player player) {
+         boolean hungerCheckRequired = CONFIG.get().hungerLevel != Config.HungerLevel.NONE;
+         boolean instabuildMode = player.getAbilities().instabuild;
+         boolean notEnoughFoodLevel = player.getFoodData().getFoodLevel() <= 0;
+         return hungerCheckRequired && !instabuildMode && notEnoughFoodLevel;
+     }
+    */
 
     private static boolean isReplantable(BlockState state) {
         return isReplantable(state.getBlock());
