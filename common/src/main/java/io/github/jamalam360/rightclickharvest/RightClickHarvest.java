@@ -83,6 +83,7 @@ public class RightClickHarvest {
         private final Player player;
         private final BlockHitResult hitResult;
         private final Level level;
+        private final ItemStack mainHandItem;
         private final BlockState state;
 
         public Harvester(Player player, BlockHitResult hitResult) {
@@ -90,6 +91,7 @@ public class RightClickHarvest {
             this.hitResult = hitResult;
 
             this.level = player.level();
+            this.mainHandItem = player.getMainHandItem();
             this.state = level.getBlockState(hitResult.getBlockPos());
         }
 
@@ -105,7 +107,7 @@ public class RightClickHarvest {
 
         private boolean isHoeRequiredWithWarning() {
             // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
-            var isHoeRequired = !state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand(player);
+            var isHoeRequired = !state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand();
             if (isHoeRequired) warnOnceForNotUsingHoe();
             return isHoeRequired;
         }
@@ -124,7 +126,14 @@ public class RightClickHarvest {
             CONFIG.save();
         }
 
-        // isHoeInHand(player)
+        private boolean isHoeInHand() {
+            return mainHandItem.is(ItemTags.HOES)
+                    || mainHandItem.is(LOW_TIER_HOES)
+                    || mainHandItem.is(MID_TIER_HOES)
+                    || mainHandItem.is(HIGH_TIER_HOES)
+                    || RightClickHarvestPlatform.isHoeAccordingToPlatform(mainHandItem);
+        }
+
         // isHarvestable(state)
     }
 
@@ -298,20 +307,17 @@ public class RightClickHarvest {
 
     private static void wearHoeInHand(Player player) {
         ItemStack hoeInHand = player.getMainHandItem();
-        if (!isHoe(hoeInHand)) return;
+        if (!isHoeInHand(player)) return;
         hoeInHand.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
     }
 
     private static boolean isHoeInHand(Player player) {
-        return isHoe(player.getMainHandItem());
-    }
-
-    private static boolean isHoe(ItemStack stack) {
-        return stack.is(ItemTags.HOES)
-               || stack.is(LOW_TIER_HOES)
-               || stack.is(MID_TIER_HOES)
-               || stack.is(HIGH_TIER_HOES)
-               || RightClickHarvestPlatform.isHoeAccordingToPlatform(stack);
+        ItemStack mainHandItem = player.getMainHandItem();
+        return mainHandItem.is(ItemTags.HOES)
+               || mainHandItem.is(LOW_TIER_HOES)
+               || mainHandItem.is(MID_TIER_HOES)
+               || mainHandItem.is(HIGH_TIER_HOES)
+               || RightClickHarvestPlatform.isHoeAccordingToPlatform(mainHandItem);
     }
 
     private static BlockState getReplantState(BlockState state) {
