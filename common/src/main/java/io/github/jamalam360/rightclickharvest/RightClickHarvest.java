@@ -94,7 +94,7 @@ public class RightClickHarvest {
         }
 
         public InteractionResult harvest() {
-            if (isHoeRequiredWithWarning(player, state)) return InteractionResult.PASS;
+            if (isHoeRequiredWithWarning()) return InteractionResult.PASS;
 
             if (cannotHarvest(player, state)) return InteractionResult.PASS;
 
@@ -102,6 +102,30 @@ public class RightClickHarvest {
 
             return maybeBlockHarvest(player, hitResult, state);
         }
+
+        private boolean isHoeRequiredWithWarning() {
+            // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
+            var isHoeRequired = !state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand(player);
+            if (isHoeRequired) warnOnceForNotUsingHoe();
+            return isHoeRequired;
+        }
+
+        private void warnOnceForNotUsingHoe() {
+            if (CONFIG.get().hasUserBeenWarnedForNotUsingHoe || !level.isClientSide || !isHarvestable(state)) return;
+
+            var translatable = Component.translatable(
+                    "text.rightclickharvest.use_a_hoe_warning",
+                    Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
+                    Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
+                    ));
+            player.displayClientMessage(translatable, false);
+
+            CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
+            CONFIG.save();
+        }
+
+        // isHoeInHand(player)
+        // isHarvestable(state)
     }
 
     private static BlockState getBlockState(Player player, BlockHitResult hitResult) {
@@ -232,27 +256,6 @@ public class RightClickHarvest {
 
     private static SoundEvent getSoundEvent(BlockState state) {
         return state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED;
-    }
-
-    private static boolean isHoeRequiredWithWarning(Player player, BlockState state) {
-        // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
-        var isHoeRequired = !state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand(player);
-        if (isHoeRequired) warnOnceForNotUsingHoe(player, state);
-        return isHoeRequired;
-    }
-
-    private static void warnOnceForNotUsingHoe(Player player, BlockState state) {
-        if (CONFIG.get().hasUserBeenWarnedForNotUsingHoe || !player.level().isClientSide || !isHarvestable(state)) return;
-
-        var translatable = Component.translatable(
-                "text.rightclickharvest.use_a_hoe_warning",
-                Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
-                Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
-                ));
-        player.displayClientMessage(translatable, false);
-
-        CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
-        CONFIG.save();
     }
 
     // Check for hunger, if config requires it
