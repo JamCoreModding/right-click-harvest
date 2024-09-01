@@ -97,9 +97,7 @@ public class RightClickHarvest {
         }
 
         if (isReplantableAndMature(state)) {
-            if (CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
-                doRadiusHarvesting(player, hitResult);
-            }
+            maybeDoRadiusHarvesting(player, hitResult, state);
 
             return completeHarvest(state, player, hitResult.getBlockPos());
         }
@@ -109,6 +107,12 @@ public class RightClickHarvest {
         }
 
         return InteractionResult.PASS;
+    }
+
+    private static void maybeDoRadiusHarvesting(Player player, BlockHitResult hitResult, BlockState state) {
+        if (CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player)) {
+            doRadiusHarvesting(player, hitResult);
+        }
     }
 
     private static void doRadiusHarvesting(Player player, BlockHitResult hitResult) {
