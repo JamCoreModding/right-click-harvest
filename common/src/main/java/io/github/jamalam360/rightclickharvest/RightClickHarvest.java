@@ -104,10 +104,10 @@ public class RightClickHarvest {
         return state.is(BLACKLIST) || isExhausted(player);
     }
 
-    private static InteractionResult maybeRadiusHarvest(Player player, BlockHitResult hitResult) {
+    private static void maybeRadiusHarvest(Player player, BlockHitResult hitResult) {
         BlockState state = getBlockState(player, hitResult);
-        if (cannotRadiusHarvest(player, state)) return InteractionResult.PASS;
-        return maybeBlockHarvest(player, hitResult, state);
+        if (cannotRadiusHarvest(player, state)) return;
+        maybeBlockHarvest(player, hitResult, state);
     }
 
     private static InteractionResult maybeBlockHarvest(Player player, BlockHitResult hitResult, BlockState state) {
