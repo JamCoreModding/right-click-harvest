@@ -76,8 +76,7 @@ public class RightClickHarvest {
             return InteractionResult.PASS;
         }
 
-        Level level = player.level();
-        BlockState state = level.getBlockState(hitResult.getBlockPos());
+        BlockState state = getBlockState(player, hitResult);
 
         if (isHoeRequiredWithWarning(player, state) || cannotHarvest(player, state)) return InteractionResult.PASS;
 
@@ -86,17 +85,21 @@ public class RightClickHarvest {
         return maybeBlockHarvest(player, hitResult, state);
     }
 
+    private static BlockState getBlockState(Player player, BlockHitResult hitResult) {
+        Level level = player.level();
+        return level.getBlockState(hitResult.getBlockPos());
+    }
+
     private static boolean canRadiusHarvest(Player player, BlockState state) {
         return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player) && isReplantableAndMature(state);
     }
 
     private static boolean cannotHarvest(Player player, BlockState state) {
-        return state.is(BLACKLIST) || isHungry(player);
+        return state.is(BLACKLIST) || isExhausted(player);
     }
 
     private static InteractionResult maybeRadiusHarvest(Player player, BlockHitResult hitResult) {
-        Level level = player.level();
-        BlockState state = level.getBlockState(hitResult.getBlockPos());
+        BlockState state = getBlockState(player, hitResult);
 
         if (state.is(RADIUS_HARVEST_BLACKLIST) || cannotHarvest(player, state)) return InteractionResult.PASS;
 
@@ -178,12 +181,8 @@ public class RightClickHarvest {
         // ==== Server Side only below ====
 
         // Event posts are for things like claim mods
-        if (RightClickHarvestPlatform.postBreakEvent(pos, state, player)) {
-            return InteractionResult.FAIL;
-        }
-        if (RightClickHarvestPlatform.postPlaceEvent(pos, player)) {
-            return InteractionResult.FAIL;
-        }
+        if (RightClickHarvestPlatform.postBreakEvent(pos, state, player)) return InteractionResult.FAIL;
+        if (RightClickHarvestPlatform.postPlaceEvent(pos, player)) return InteractionResult.FAIL;
 
         dropStacks(state, player, pos);
 
@@ -191,9 +190,7 @@ public class RightClickHarvest {
 
         if (isReplantableAndMature(state)) {
             level.setBlockAndUpdate(pos, getReplantState(state));
-        }
-
-        if (isSugarCaneOrCactus(state)) {
+        } else if (isSugarCaneOrCactus(state)) {
             level.removeBlock(pos, false);
         }
 
@@ -210,6 +207,10 @@ public class RightClickHarvest {
     private static InteractionResult playSoundClientSide(BlockState state, Player player) {
         player.playSound(getSoundEvent(state), 1.0f, 1.0f);
         return InteractionResult.SUCCESS;
+    }
+
+    private static SoundEvent getSoundEvent(BlockState state) {
+        return state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED;
     }
 
     private static boolean isHoeRequiredWithWarning(Player player, BlockState state) {
@@ -234,20 +235,11 @@ public class RightClickHarvest {
     }
 
     // Check for hunger, if config requires it
-    private static boolean isHungry(Player player) {
+    private static boolean isExhausted(Player player) {
         if (player.hasInfiniteMaterials()) return false;
         if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE) return false;
         return player.getFoodData().getFoodLevel() <= 0;
     }
-
-    /* alternative implementation
-     private static boolean isHungry(Player player) {
-         boolean hungerCheckRequired = CONFIG.get().hungerLevel != Config.HungerLevel.NONE;
-         boolean instabuildMode = player.getAbilities().instabuild;
-         boolean notEnoughFoodLevel = player.getFoodData().getFoodLevel() <= 0;
-         return hungerCheckRequired && !instabuildMode && notEnoughFoodLevel;
-     }
-    */
 
     private static boolean isReplantable(BlockState state) {
         return isReplantable(state.getBlock());
@@ -306,10 +298,6 @@ public class RightClickHarvest {
             case NetherWartBlock netherWartBlock -> state.setValue(NetherWartBlock.AGE, 0);
             default -> state;
         };
-    }
-
-    private static SoundEvent getSoundEvent(BlockState state) {
-        return state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED;
     }
 
     private static void dropStacks(BlockState state, Player player, BlockPos pos) {
