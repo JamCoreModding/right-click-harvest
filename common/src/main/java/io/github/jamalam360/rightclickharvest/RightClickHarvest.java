@@ -76,15 +76,32 @@ public class RightClickHarvest {
             return InteractionResult.PASS;
         }
 
-        BlockState state = getBlockState(player, hitResult);
+        return new Harvester(player, hitResult).harvest();
+    }
 
-        if (isHoeRequiredWithWarning(player, state)) return InteractionResult.PASS;
+    static class Harvester {
+        private final Player player;
+        private final BlockHitResult hitResult;
+        private final Level level;
+        private final BlockState state;
 
-        if (cannotHarvest(player, state)) return InteractionResult.PASS;
+        public Harvester(Player player, BlockHitResult hitResult) {
+            this.player = player;
+            this.hitResult = hitResult;
 
-        if (canRadiusHarvest(player, state)) attemptRadiusHarvesting(player, hitResult);
+            this.level = player.level();
+            this.state = level.getBlockState(hitResult.getBlockPos());
+        }
 
-        return maybeBlockHarvest(player, hitResult, state);
+        public InteractionResult harvest() {
+            if (isHoeRequiredWithWarning(player, state)) return InteractionResult.PASS;
+
+            if (cannotHarvest(player, state)) return InteractionResult.PASS;
+
+            if (canRadiusHarvest(player, state)) attemptRadiusHarvesting(player, hitResult);
+
+            return maybeBlockHarvest(player, hitResult, state);
+        }
     }
 
     private static BlockState getBlockState(Player player, BlockHitResult hitResult) {
