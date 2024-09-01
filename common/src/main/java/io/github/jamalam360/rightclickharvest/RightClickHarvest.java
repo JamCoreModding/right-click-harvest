@@ -83,30 +83,31 @@ public class RightClickHarvest {
         Level level = player.level();
         BlockState state = level.getBlockState(hitResult.getBlockPos());
 
-        // Check if the block is in the blacklist
-        if (state.is(BLACKLIST)) {
-            return InteractionResult.PASS;
-        }
+        if (isHoeRequiredWithWarning(player, state)) return InteractionResult.PASS;
 
-        if (isHoeRequiredWithWarning(player, state)) {
-            return InteractionResult.PASS;
-        }
-
-        if (isHungry(player)) {
-            return InteractionResult.PASS;
-        }
+        if (state.is(BLACKLIST)) return InteractionResult.PASS; // Check if the block is in the blacklist
+        if (isHungry(player)) return InteractionResult.PASS;
 
         maybeDoRadiusHarvesting(player, hitResult, state);
 
-        if (isReplantableAndMature(state)) {
-            return completeHarvest(state, player, hitResult.getBlockPos());
-        }
-
-        if (isSugarCaneOrCactus(state)) {
-            return harvestSugarCaneOrCactus(player, hitResult, state);
-        }
+        if (isReplantableAndMature(state)) return completeHarvest(state, player, hitResult.getBlockPos());
+        if (isSugarCaneOrCactus(state)) return harvestSugarCaneOrCactus(player, hitResult, state);
 
         return InteractionResult.PASS;
+    }
+
+    private static void maybeRadiusHarvest(Player player, BlockHitResult hitResult) {
+        Level level = player.level();
+        BlockState state = level.getBlockState(hitResult.getBlockPos());
+
+        // We are radius harvesting so if the block cannot not be, return
+        if (state.is(RADIUS_HARVEST_BLACKLIST)) return;
+
+        if (state.is(BLACKLIST)) return; // Check if the block is in the blacklist
+        if (isHungry(player)) return;
+
+        if (isReplantableAndMature(state)) completeHarvest(state, player, hitResult.getBlockPos());
+        else if (isSugarCaneOrCactus(state)) harvestSugarCaneOrCactus(player, hitResult, state);
     }
 
     private static void maybeDoRadiusHarvesting(Player player, BlockHitResult hitResult, BlockState state) {
@@ -151,22 +152,6 @@ public class RightClickHarvest {
                 }
             }
         }
-    }
-
-    private static void maybeRadiusHarvest(Player player, BlockHitResult hitResult) {
-        Level level = player.level();
-        BlockState state = level.getBlockState(hitResult.getBlockPos());
-
-        // Check if the block is in the blacklist
-        if (state.is(BLACKLIST)) return;
-
-        // We are radius harvesting so if the block cannot not be, return
-        if (state.is(RADIUS_HARVEST_BLACKLIST)) return;
-
-        if (isHungry(player)) return;
-
-        if (isReplantableAndMature(state)) completeHarvest(state, player, hitResult.getBlockPos());
-        else if (isSugarCaneOrCactus(state)) harvestSugarCaneOrCactus(player, hitResult, state);
     }
 
     private static InteractionResult harvestSugarCaneOrCactus(Player player, BlockHitResult hitResult, BlockState state) {
