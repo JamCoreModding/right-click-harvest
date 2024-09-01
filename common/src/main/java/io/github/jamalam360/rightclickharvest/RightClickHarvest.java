@@ -80,7 +80,7 @@ public class RightClickHarvest {
 
         if (isHoeRequiredWithWarning(player, state) || cannotHarvest(player, state)) return InteractionResult.PASS;
 
-        if (canRadiusHarvest(player, state)) doRadiusHarvesting(player, hitResult);
+        if (canRadiusHarvest(player, state)) attemptRadiusHarvesting(player, hitResult);
 
         return maybeBlockHarvest(player, hitResult, state);
     }
@@ -113,7 +113,7 @@ public class RightClickHarvest {
         return InteractionResult.PASS;
     }
 
-    private static void doRadiusHarvesting(Player player, BlockHitResult hitResult) {
+    private static void attemptRadiusHarvesting(Player player, BlockHitResult hitResult) {
         int radius = 0;
         boolean circle = false;
 
