@@ -78,7 +78,9 @@ public class RightClickHarvest {
 
         BlockState state = getBlockState(player, hitResult);
 
-        if (isHoeRequiredWithWarning(player, state) || cannotHarvest(player, state)) return InteractionResult.PASS;
+        if (isHoeRequiredWithWarning(player, state)) return InteractionResult.PASS;
+
+        if (cannotHarvest(player, state)) return InteractionResult.PASS;
 
         if (canRadiusHarvest(player, state)) attemptRadiusHarvesting(player, hitResult);
 
@@ -94,15 +96,17 @@ public class RightClickHarvest {
         return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player) && isReplantableAndMature(state);
     }
 
+    private static boolean cannotRadiusHarvest(Player player, BlockState state) {
+        return state.is(RADIUS_HARVEST_BLACKLIST) && cannotHarvest(player, state);
+    }
+
     private static boolean cannotHarvest(Player player, BlockState state) {
         return state.is(BLACKLIST) || isExhausted(player);
     }
 
     private static InteractionResult maybeRadiusHarvest(Player player, BlockHitResult hitResult) {
         BlockState state = getBlockState(player, hitResult);
-
-        if (state.is(RADIUS_HARVEST_BLACKLIST) || cannotHarvest(player, state)) return InteractionResult.PASS;
-
+        if (cannotRadiusHarvest(player, state)) return InteractionResult.PASS;
         return maybeBlockHarvest(player, hitResult, state);
     }
 
