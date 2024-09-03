@@ -92,12 +92,6 @@ public class RightClickHarvest {
         return state.is(BLACKLIST) || isExhausted(player);
     }
 
-    private static void maybeRadiusHarvest(Player player, BlockHitResult hitResult) {
-        BlockState state = getBlockState(player, hitResult);
-        if (cannotRadiusHarvest(player, state)) return;
-        blockHarvest(player, hitResult, state);
-    }
-
     private static InteractionResult blockHarvest(Player player, BlockHitResult hitResult, BlockState state) {
         if (isReplantableAndMature(state)) return completeHarvest(state, player, hitResult.getBlockPos());
         if (isSugarCaneOrCactus(state)) return harvestSugarCaneOrCactus(player, hitResult, state);
@@ -305,7 +299,7 @@ public class RightClickHarvest {
 
             if (radius == 1 && circle) {
                 for (Direction dir : CARDINAL_DIRECTIONS) {
-                    maybeRadiusHarvest(player, hitResult.withPosition(hitBlockPos.relative(dir)));
+                    new RadiusHarvester(player, hitResult.withPosition(hitBlockPos.relative(dir))).harvest();
                 }
             } else if (radius > 0) {
                 for (int x = -radius; x <= radius; x++) {
@@ -319,7 +313,7 @@ public class RightClickHarvest {
                             continue;
                         }
 
-                        maybeRadiusHarvest(player, hitResult.withPosition(pos));
+                        new RadiusHarvester(player, hitResult.withPosition(pos)).harvest();
                     }
                 }
             }
@@ -330,6 +324,13 @@ public class RightClickHarvest {
         public RadiusHarvester(Player player, BlockHitResult hitResult) {
             super(player, hitResult);
         }
+
+        public void harvest() {
+            if (cannotRadiusHarvest(player, state)) return;
+            blockHarvest();
+        }
+
+        // cannotRadiusHarvest(player, state)
     }
 
     static class BaseHarvester {
