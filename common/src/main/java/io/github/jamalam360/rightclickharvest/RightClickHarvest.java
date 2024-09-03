@@ -83,7 +83,7 @@ public class RightClickHarvest {
         private final Player player;
         private final BlockHitResult hitResult;
         private final Level level;
-        private final ItemStack mainHandItem;
+        private final ItemStack stackInMainHand;
         private final BlockState state;
         private final BlockPos hitBlockPos;
         private final Block block;
@@ -93,7 +93,7 @@ public class RightClickHarvest {
             this.hitResult = hitResult;
 
             this.level = player.level();
-            this.mainHandItem = player.getMainHandItem();
+            this.stackInMainHand = player.getMainHandItem();
             this.hitBlockPos = hitResult.getBlockPos();
             this.state = level.getBlockState(hitBlockPos);
             this.block = state.getBlock();
@@ -131,11 +131,11 @@ public class RightClickHarvest {
         }
 
         private boolean isHoeInHand() {
-            return mainHandItem.is(ItemTags.HOES)
-                    || mainHandItem.is(LOW_TIER_HOES)
-                    || mainHandItem.is(MID_TIER_HOES)
-                    || mainHandItem.is(HIGH_TIER_HOES)
-                    || RightClickHarvestPlatform.isHoeAccordingToPlatform(mainHandItem);
+            return stackInMainHand.is(ItemTags.HOES)
+                    || stackInMainHand.is(LOW_TIER_HOES)
+                    || stackInMainHand.is(MID_TIER_HOES)
+                    || stackInMainHand.is(HIGH_TIER_HOES)
+                    || RightClickHarvestPlatform.isHoeAccordingToPlatform(stackInMainHand);
         }
 
         private boolean isHarvestable() {
@@ -172,14 +172,35 @@ public class RightClickHarvest {
 
         private InteractionResult maybeBlockHarvest() {
             if (isReplantableAndMature()) return completeHarvest(state, player, hitBlockPos);
-            if (isSugarCaneOrCactus()) return harvestSugarCaneOrCactus(player, hitResult, state);
+            if (isSugarCaneOrCactus()) return harvestSugarCaneOrCactus();
 
             return InteractionResult.PASS;
         }
 
-        // completeHarvest(state, player, hitBlockPos)
+        private InteractionResult harvestSugarCaneOrCactus() {
+            var itemInHand = stackInMainHand.getItem();
+            var isSugarCane = itemInHand == Items.SUGAR_CANE && block instanceof SugarCaneBlock;
+            var isCactus = itemInHand == Items.CACTUS && block instanceof CactusBlock;
+            if (hitResult.getDirection() == Direction.UP && (isSugarCane || isCactus)) {
+                return InteractionResult.PASS;
+            }
 
-        // harvestSugarCaneOrCactus(player, hitResult, state)
+            var lookingFor = block instanceof SugarCaneBlock ? Blocks.SUGAR_CANE : Blocks.CACTUS;
+            var bottom = hitBlockPos;
+            while (level.getBlockState(bottom.below()).is(lookingFor)) {
+                bottom = bottom.below();
+            }
+
+            // Only one block tall
+            if (!level.getBlockState(bottom.above()).is(lookingFor)) {
+                return InteractionResult.PASS;
+            }
+
+            var breakPos = bottom.above(1);
+            return completeHarvest(state, player, breakPos);
+        }
+
+        // completeHarvest(state, player, hitBlockPos) // keep hitBlockPos | breakPos arg
 
         private boolean canRadiusHarvest() {
             return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand() && isReplantableAndMature();
@@ -189,7 +210,7 @@ public class RightClickHarvest {
             int radius = 0;
             boolean circle = false;
 
-            var hoeInHand = mainHandItem;
+            var hoeInHand = stackInMainHand; // b/c radius harvesting is done only by a hoe
             if (hoeInHand.is(HIGH_TIER_HOES)) {
                 radius = 2;
                 circle = true;
