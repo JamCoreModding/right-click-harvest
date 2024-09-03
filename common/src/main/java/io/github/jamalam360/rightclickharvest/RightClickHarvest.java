@@ -95,10 +95,10 @@ public class RightClickHarvest {
     private static void maybeRadiusHarvest(Player player, BlockHitResult hitResult) {
         BlockState state = getBlockState(player, hitResult);
         if (cannotRadiusHarvest(player, state)) return;
-        maybeBlockHarvest(player, hitResult, state);
+        blockHarvest(player, hitResult, state);
     }
 
-    private static InteractionResult maybeBlockHarvest(Player player, BlockHitResult hitResult, BlockState state) {
+    private static InteractionResult blockHarvest(Player player, BlockHitResult hitResult, BlockState state) {
         if (isReplantableAndMature(state)) return completeHarvest(state, player, hitResult.getBlockPos());
         if (isSugarCaneOrCactus(state)) return harvestSugarCaneOrCactus(player, hitResult, state);
 
@@ -255,41 +255,18 @@ public class RightClickHarvest {
 
             if (canRadiusHarvest()) attemptRadiusHarvesting();
 
-            return maybeBlockHarvest();
-        }
-    }
-
-    static class RadiusHarvester extends BaseHarvester {
-        public RadiusHarvester(Player player, BlockHitResult hitResult) {
-            super(player, hitResult);
-        }
-    }
-
-    static class BaseHarvester {
-        private final Player player;
-        private final BlockHitResult hitResult;
-        private final Level level;
-        private final ItemStack stackInMainHand;
-        private final BlockState state;
-        private final BlockPos hitBlockPos;
-        private final Block block;
-
-        public BaseHarvester(Player player, BlockHitResult hitResult) {
-            this.player = player;
-            this.hitResult = hitResult;
-
-            this.level = player.level();
-            this.stackInMainHand = player.getMainHandItem();
-            this.hitBlockPos = hitResult.getBlockPos();
-            this.state = level.getBlockState(hitBlockPos);
-            this.block = state.getBlock();
+            return blockHarvest();
         }
 
-        protected boolean isHoeRequiredWithWarning() {
+        private boolean isHoeRequiredWithWarning() {
             // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
             var required = !state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand() && isHarvestable();
             if (required) warnOnceForNotUsingHoe();
             return required;
+        }
+
+        private boolean isHarvestable() {
+            return isReplantableAndMature() || isSugarCaneOrCactus();
         }
 
         private void warnOnceForNotUsingHoe() {
@@ -306,7 +283,76 @@ public class RightClickHarvest {
             CONFIG.save();
         }
 
-        private boolean isHoeInHand() {
+        private boolean canRadiusHarvest() {
+            return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand() && isReplantableAndMature();
+        }
+
+        private void attemptRadiusHarvesting() {
+            int radius = 0;
+            boolean circle = false;
+
+            var hoeInHand = stackInMainHand; // b/c radius harvesting is done only by a hoe
+            if (hoeInHand.is(HIGH_TIER_HOES)) {
+                radius = 2;
+                circle = true;
+            } else if (hoeInHand.is(MID_TIER_HOES)) {
+                radius = 1;
+                // circle = false;
+            } else if (hoeInHand.is(LOW_TIER_HOES)) {
+                radius = 1;
+                circle = true;
+            }
+
+            if (radius == 1 && circle) {
+                for (Direction dir : CARDINAL_DIRECTIONS) {
+                    maybeRadiusHarvest(player, hitResult.withPosition(hitBlockPos.relative(dir)));
+                }
+            } else if (radius > 0) {
+                for (int x = -radius; x <= radius; x++) {
+                    for (int z = -radius; z <= radius; z++) {
+                        if (x == 0 && z == 0) {
+                            continue;
+                        }
+
+                        BlockPos pos = hitBlockPos.relative(Direction.Axis.X, x).relative(Direction.Axis.Z, z);
+                        if (circle && pos.distManhattan(hitBlockPos) > radius) {
+                            continue;
+                        }
+
+                        maybeRadiusHarvest(player, hitResult.withPosition(pos));
+                    }
+                }
+            }
+        }
+    }
+
+    static class RadiusHarvester extends BaseHarvester {
+        public RadiusHarvester(Player player, BlockHitResult hitResult) {
+            super(player, hitResult);
+        }
+    }
+
+    static class BaseHarvester {
+        protected final Player player;
+        protected final BlockHitResult hitResult;
+        protected final Level level;
+        protected final ItemStack stackInMainHand;
+        protected final BlockState state;
+        protected final BlockPos hitBlockPos;
+        private final Block block;
+
+        public BaseHarvester(Player player, BlockHitResult hitResult) {
+            this.player = player;
+            this.hitResult = hitResult;
+
+            this.level = player.level();
+            this.stackInMainHand = player.getMainHandItem();
+            this.hitBlockPos = hitResult.getBlockPos();
+            this.state = level.getBlockState(hitBlockPos);
+            this.block = state.getBlock();
+        }
+
+        protected boolean isHoeInHand() {
             return stackInMainHand.is(ItemTags.HOES)
                     || stackInMainHand.is(LOW_TIER_HOES)
                     || stackInMainHand.is(MID_TIER_HOES)
@@ -314,19 +360,15 @@ public class RightClickHarvest {
                     || RightClickHarvestPlatform.isHoeAccordingToPlatform(stackInMainHand);
         }
 
-        private boolean isHarvestable() {
-            return isReplantableAndMature() || isSugarCaneOrCactus();
-        }
-
         private boolean isReplantable() {
             return block instanceof CocoaBlock || block instanceof CropBlock || block instanceof NetherWartBlock;
         }
 
-        private boolean isSugarCaneOrCactus() {
+        protected boolean isSugarCaneOrCactus() {
             return block instanceof SugarCaneBlock || block instanceof CactusBlock;
         }
 
-        private boolean isReplantableAndMature() {
+        protected boolean isReplantableAndMature() {
             return switch (block) {
                 case CocoaBlock cocoaBlock -> state.getValue(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE;
                 case CropBlock cropBlock -> cropBlock.isMaxAge(state);
@@ -355,7 +397,7 @@ public class RightClickHarvest {
             return player.getFoodData().getFoodLevel() <= 0;
         }
 
-        protected InteractionResult maybeBlockHarvest() {
+        protected InteractionResult blockHarvest() {
             if (isReplantableAndMature()) return completeHarvest();
             if (isSugarCaneOrCactus()) return harvestSugarCaneOrCactus();
 
@@ -438,49 +480,5 @@ public class RightClickHarvest {
                 Block.popResource(world, pos, droppedStack);
             }
         }
-
-        protected boolean canRadiusHarvest() {
-            return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand() && isReplantableAndMature();
-        }
-
-        protected void attemptRadiusHarvesting() {
-            int radius = 0;
-            boolean circle = false;
-
-            var hoeInHand = stackInMainHand; // b/c radius harvesting is done only by a hoe
-            if (hoeInHand.is(HIGH_TIER_HOES)) {
-                radius = 2;
-                circle = true;
-            } else if (hoeInHand.is(MID_TIER_HOES)) {
-                radius = 1;
-                // circle = false;
-            } else if (hoeInHand.is(LOW_TIER_HOES)) {
-                radius = 1;
-                circle = true;
-            }
-
-            if (radius == 1 && circle) {
-                for (Direction dir : CARDINAL_DIRECTIONS) {
-                    maybeRadiusHarvest(player, hitResult.withPosition(hitBlockPos.relative(dir)));
-                }
-            } else if (radius > 0) {
-                for (int x = -radius; x <= radius; x++) {
-                    for (int z = -radius; z <= radius; z++) {
-                        if (x == 0 && z == 0) {
-                            continue;
-                        }
-
-                        BlockPos pos = hitBlockPos.relative(Direction.Axis.X, x).relative(Direction.Axis.Z, z);
-                        if (circle && pos.distManhattan(hitBlockPos) > radius) {
-                            continue;
-                        }
-
-                        maybeRadiusHarvest(player, hitResult.withPosition(pos));
-                    }
-                }
-            }
-        }
-
-        // maybeRadiusHarvest(player, hitResult.withPosition(pos))
     }
 }
