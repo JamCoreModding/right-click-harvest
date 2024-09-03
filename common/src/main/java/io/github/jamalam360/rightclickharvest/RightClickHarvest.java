@@ -140,15 +140,11 @@ public class RightClickHarvest {
             return isReplantableAndMature() || isSugarCaneOrCactus(state);
         }
 
-        private boolean isReplantableAndMature() {
-            return isReplantable() && isMature();
-        }
-
         private boolean isReplantable() {
             return block instanceof CocoaBlock || block instanceof CropBlock || block instanceof NetherWartBlock;
         }
 
-        private boolean isMature() {
+        private boolean isReplantableAndMature() {
             return switch (block) {
                 case CocoaBlock cocoaBlock -> state.getValue(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE;
                 case CropBlock cropBlock -> cropBlock.isMaxAge(state);
@@ -311,10 +307,6 @@ public class RightClickHarvest {
     }
 
     private static boolean isReplantableAndMature(BlockState state) {
-        return isReplantable(state) && isMature(state);
-    }
-
-    private static boolean isMature(BlockState state) {
         Block block = state.getBlock();
         return switch (block) {
             case CocoaBlock cocoaBlock -> state.getValue(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE;
