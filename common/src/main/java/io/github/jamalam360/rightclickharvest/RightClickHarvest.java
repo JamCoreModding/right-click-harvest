@@ -227,7 +227,7 @@ public class RightClickHarvest {
             if (isReplantableAndMature()) level.setBlockAndUpdate(pos, getReplantState());
             else if (isSugarCaneOrCactus()) level.removeBlock(pos, false);
 
-            wearHoeInHand(player);
+            wearHoeInHand();
 
             // Regular block breaking causes 0.005f exhaustion
             player.causeFoodExhaustion(0.008f * CONFIG.get().hungerLevel.modifier);
@@ -243,7 +243,9 @@ public class RightClickHarvest {
             return InteractionResult.SUCCESS;
         }
 
-        // wearHoeInHand(player)
+        private void wearHoeInHand() {
+            if (isHoeInHand()) stackInMainHand.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
+        }
 
         // dropStacks(state, player, pos) // keep the pos arg
 
