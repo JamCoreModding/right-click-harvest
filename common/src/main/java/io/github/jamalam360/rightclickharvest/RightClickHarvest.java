@@ -107,13 +107,13 @@ public class RightClickHarvest {
 
         private boolean isHoeRequiredWithWarning() {
             // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
-            var isHoeRequired = !state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand();
-            if (isHoeRequired) warnOnceForNotUsingHoe();
-            return isHoeRequired;
+            var required = !state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand() && isHarvestable();
+            if (required) warnOnceForNotUsingHoe();
+            return required;
         }
 
         private void warnOnceForNotUsingHoe() {
-            if (CONFIG.get().hasUserBeenWarnedForNotUsingHoe || !level.isClientSide || !isHarvestable(state)) return;
+            if (CONFIG.get().hasUserBeenWarnedForNotUsingHoe || !level.isClientSide) return;
 
             var translatable = Component.translatable(
                     "text.rightclickharvest.use_a_hoe_warning",
@@ -134,7 +134,9 @@ public class RightClickHarvest {
                     || RightClickHarvestPlatform.isHoeAccordingToPlatform(mainHandItem);
         }
 
-        // isHarvestable(state)
+        private boolean isHarvestable() {
+            return isReplantableAndMature(state) || isSugarCaneOrCactus(state);
+        }
     }
 
     private static BlockState getBlockState(Player player, BlockHitResult hitResult) {
@@ -285,10 +287,6 @@ public class RightClickHarvest {
     private static boolean isSugarCaneOrCactus(BlockState state) {
         Block block = state.getBlock();
         return block instanceof SugarCaneBlock || block instanceof CactusBlock;
-    }
-
-    private static boolean isHarvestable(BlockState state) {
-        return isReplantableAndMature(state) || isSugarCaneOrCactus(state);
     }
 
     private static boolean isReplantableAndMature(BlockState state) {
