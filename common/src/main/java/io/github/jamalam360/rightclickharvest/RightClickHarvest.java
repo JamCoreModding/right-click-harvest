@@ -106,7 +106,7 @@ public class RightClickHarvest {
 
             if (canRadiusHarvest()) attemptRadiusHarvesting();
 
-            return maybeBlockHarvest(player, hitResult, state);
+            return maybeBlockHarvest();
         }
 
         private boolean isHoeRequiredWithWarning() {
@@ -170,7 +170,16 @@ public class RightClickHarvest {
             return player.getFoodData().getFoodLevel() <= 0;
         }
 
-        // maybeBlockHarvest(player, hitResult, state)
+        private InteractionResult maybeBlockHarvest() {
+            if (isReplantableAndMature()) return completeHarvest(state, player, hitBlockPos);
+            if (isSugarCaneOrCactus()) return harvestSugarCaneOrCactus(player, hitResult, state);
+
+            return InteractionResult.PASS;
+        }
+
+        // completeHarvest(state, player, hitBlockPos)
+
+        // harvestSugarCaneOrCactus(player, hitResult, state)
 
         private boolean canRadiusHarvest() {
             return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand() && isReplantableAndMature();
