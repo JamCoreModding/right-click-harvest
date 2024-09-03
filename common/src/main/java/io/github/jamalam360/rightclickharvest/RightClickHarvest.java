@@ -222,7 +222,7 @@ public class RightClickHarvest {
             if (RightClickHarvestPlatform.postBreakEvent(pos, state, player)) return InteractionResult.FAIL;
             if (RightClickHarvestPlatform.postPlaceEvent(pos, player)) return InteractionResult.FAIL;
 
-            dropStacks(state, player, pos);
+            dropStacks(pos);
 
             if (isReplantableAndMature()) level.setBlockAndUpdate(pos, getReplantState());
             else if (isSugarCaneOrCactus()) level.removeBlock(pos, false);
@@ -247,7 +247,21 @@ public class RightClickHarvest {
             if (isHoeInHand()) stackInMainHand.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
         }
 
-        // dropStacks(state, player, pos) // keep the pos arg
+        private void dropStacks(BlockPos pos) {
+            ServerLevel world = (ServerLevel) level;
+            List<ItemStack> drops = Block.getDrops(state, world, pos, null, player, stackInMainHand);
+            boolean needToReplant = isReplantable();
+            Item replant = block.asItem();
+
+            for (ItemStack droppedStack : drops) {
+                if (needToReplant && droppedStack.is(replant)) {
+                    droppedStack.shrink(1);
+                    needToReplant = false;
+                }
+
+                Block.popResource(world, pos, droppedStack);
+            }
+        }
 
         private boolean canRadiusHarvest() {
             return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand() && isReplantableAndMature();
