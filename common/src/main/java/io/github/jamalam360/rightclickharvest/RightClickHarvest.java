@@ -159,6 +159,15 @@ public class RightClickHarvest {
             };
         }
 
+        private BlockState getReplantState() {
+            return switch (block) {
+                case CocoaBlock cocoaBlock -> state.setValue(CocoaBlock.AGE, 0);
+                case CropBlock cropBlock -> cropBlock.getStateForAge(0);
+                case NetherWartBlock netherWartBlock -> state.setValue(NetherWartBlock.AGE, 0);
+                default -> state;
+            };
+        }
+
         private boolean cannotHarvest() {
             return state.is(BLACKLIST) || isExhausted();
         }
@@ -215,7 +224,7 @@ public class RightClickHarvest {
 
             dropStacks(state, player, pos);
 
-            if (isReplantableAndMature()) level.setBlockAndUpdate(pos, getReplantState(state));
+            if (isReplantableAndMature()) level.setBlockAndUpdate(pos, getReplantState());
             else if (isSugarCaneOrCactus()) level.removeBlock(pos, false);
 
             wearHoeInHand(player);
@@ -233,8 +242,6 @@ public class RightClickHarvest {
             player.playSound(soundEvent, 1.0f, 1.0f);
             return InteractionResult.SUCCESS;
         }
-
-        // getReplantState(state)
 
         // wearHoeInHand(player)
 
