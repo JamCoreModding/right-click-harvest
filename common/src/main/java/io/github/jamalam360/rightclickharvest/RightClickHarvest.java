@@ -194,7 +194,8 @@ public class RightClickHarvest {
                 return InteractionResult.PASS;
             }
 
-            var lookingFor = block instanceof SugarCaneBlock ? Blocks.SUGAR_CANE : Blocks.CACTUS;
+            var lookingFor = block;
+            var lookingFor = block;
             var bottom = hitBlockPos;
             while (level.getBlockState(bottom.below()).is(lookingFor)) {
                 bottom = bottom.below();
