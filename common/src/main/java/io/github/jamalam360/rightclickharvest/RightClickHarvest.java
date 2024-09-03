@@ -171,7 +171,7 @@ public class RightClickHarvest {
         }
 
         private InteractionResult maybeBlockHarvest() {
-            if (isReplantableAndMature()) return completeHarvest(state, player, hitBlockPos);
+            if (isReplantableAndMature()) return completeHarvest();
             if (isSugarCaneOrCactus()) return harvestSugarCaneOrCactus();
 
             return InteractionResult.PASS;
@@ -197,10 +197,44 @@ public class RightClickHarvest {
             }
 
             var breakPos = bottom.above(1);
-            return completeHarvest(state, player, breakPos);
+            return completeHarvest(breakPos);
         }
 
-        // completeHarvest(state, player, hitBlockPos) // keep hitBlockPos | breakPos arg
+        private InteractionResult completeHarvest() {
+            return completeHarvest(hitBlockPos);
+        }
+
+        private InteractionResult completeHarvest(BlockPos pos) {
+            if (level.isClientSide) return playSoundClientSide(state, player);
+
+            // ==== Server Side only below ====
+
+            // Event posts are for things like claim mods
+            if (RightClickHarvestPlatform.postBreakEvent(pos, state, player)) return InteractionResult.FAIL;
+            if (RightClickHarvestPlatform.postPlaceEvent(pos, player)) return InteractionResult.FAIL;
+
+            dropStacks(state, player, pos);
+
+            if (isReplantableAndMature()) level.setBlockAndUpdate(pos, getReplantState(state));
+            else if (isSugarCaneOrCactus()) level.removeBlock(pos, false);
+
+            wearHoeInHand(player);
+
+            // Regular block breaking causes 0.005f exhaustion
+            player.causeFoodExhaustion(0.008f * CONFIG.get().hungerLevel.modifier);
+
+            RightClickHarvestPlatform.postAfterHarvestEvent(player, block); // block is the original one here
+
+            return InteractionResult.SUCCESS;
+        }
+
+        // playSoundClientSide(state, player)
+
+        // getReplantState(state)
+
+        // wearHoeInHand(player)
+
+        // dropStacks(state, player, pos) // keep the pos arg
 
         private boolean canRadiusHarvest() {
             return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand() && isReplantableAndMature();
