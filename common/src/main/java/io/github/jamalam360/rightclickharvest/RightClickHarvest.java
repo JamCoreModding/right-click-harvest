@@ -85,6 +85,7 @@ public class RightClickHarvest {
         private final Level level;
         private final ItemStack mainHandItem;
         private final BlockState state;
+        private final Block block;
 
         public Harvester(Player player, BlockHitResult hitResult) {
             this.player = player;
@@ -93,6 +94,7 @@ public class RightClickHarvest {
             this.level = player.level();
             this.mainHandItem = player.getMainHandItem();
             this.state = level.getBlockState(hitResult.getBlockPos());
+            this.block = state.getBlock();
         }
 
         public InteractionResult harvest() {
@@ -135,8 +137,27 @@ public class RightClickHarvest {
         }
 
         private boolean isHarvestable() {
-            return isReplantableAndMature(state) || isSugarCaneOrCactus(state);
+            return isReplantableAndMature() || isSugarCaneOrCactus(state);
         }
+
+        private boolean isReplantableAndMature() {
+            return isReplantable() && isMature();
+        }
+
+        private boolean isReplantable() {
+            return block instanceof CocoaBlock || block instanceof CropBlock || block instanceof NetherWartBlock;
+        }
+
+        private boolean isMature() {
+            return switch (block) {
+                case CocoaBlock cocoaBlock -> state.getValue(CocoaBlock.AGE) >= CocoaBlock.MAX_AGE;
+                case CropBlock cropBlock -> cropBlock.isMaxAge(state);
+                case NetherWartBlock netherWartBlock -> state.getValue(NetherWartBlock.AGE) >= NetherWartBlock.MAX_AGE;
+                default -> false;
+            };
+        }
+
+        // isSugarCaneOrCactus(state)
     }
 
     private static BlockState getBlockState(Player player, BlockHitResult hitResult) {
