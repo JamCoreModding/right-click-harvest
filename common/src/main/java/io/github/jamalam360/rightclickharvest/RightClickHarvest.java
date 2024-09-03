@@ -100,7 +100,7 @@ public class RightClickHarvest {
         public InteractionResult harvest() {
             if (isHoeRequiredWithWarning()) return InteractionResult.PASS;
 
-            if (cannotHarvest(player, state)) return InteractionResult.PASS;
+            if (cannotHarvest()) return InteractionResult.PASS;
 
             if (canRadiusHarvest(player, state)) attemptRadiusHarvesting(player, hitResult);
 
@@ -156,6 +156,21 @@ public class RightClickHarvest {
                 default -> false;
             };
         }
+
+        private boolean cannotHarvest() {
+            return state.is(BLACKLIST) || isExhausted();
+        }
+
+        // Check for hunger, if config requires it
+        private boolean isExhausted() {
+            if (player.hasInfiniteMaterials()) return false;
+            if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE) return false;
+            return player.getFoodData().getFoodLevel() <= 0;
+        }
+
+        // canRadiusHarvest(player, state)
+        // attemptRadiusHarvesting(player, hitResult)
+        // maybeBlockHarvest(player, hitResult, state)
     }
 
     private static BlockState getBlockState(Player player, BlockHitResult hitResult) {
