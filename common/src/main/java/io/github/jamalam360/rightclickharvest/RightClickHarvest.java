@@ -205,7 +205,7 @@ public class RightClickHarvest {
         }
 
         private InteractionResult completeHarvest(BlockPos pos) {
-            if (level.isClientSide) return playSoundClientSide(state, player);
+            if (level.isClientSide) return playSoundClientSide();
 
             // ==== Server Side only below ====
 
@@ -228,7 +228,11 @@ public class RightClickHarvest {
             return InteractionResult.SUCCESS;
         }
 
-        // playSoundClientSide(state, player)
+        private InteractionResult playSoundClientSide() {
+            var soundEvent = block instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED;
+            player.playSound(soundEvent, 1.0f, 1.0f);
+            return InteractionResult.SUCCESS;
+        }
 
         // getReplantState(state)
 
