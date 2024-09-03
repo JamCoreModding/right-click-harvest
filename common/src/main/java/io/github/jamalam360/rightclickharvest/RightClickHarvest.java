@@ -137,11 +137,15 @@ public class RightClickHarvest {
         }
 
         private boolean isHarvestable() {
-            return isReplantableAndMature() || isSugarCaneOrCactus(state);
+            return isReplantableAndMature() || isSugarCaneOrCactus();
         }
 
         private boolean isReplantable() {
             return block instanceof CocoaBlock || block instanceof CropBlock || block instanceof NetherWartBlock;
+        }
+
+        private boolean isSugarCaneOrCactus() {
+            return block instanceof SugarCaneBlock || block instanceof CactusBlock;
         }
 
         private boolean isReplantableAndMature() {
@@ -152,8 +156,6 @@ public class RightClickHarvest {
                 default -> false;
             };
         }
-
-        // isSugarCaneOrCactus(state)
     }
 
     private static BlockState getBlockState(Player player, BlockHitResult hitResult) {
