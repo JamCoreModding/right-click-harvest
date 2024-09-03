@@ -24,7 +24,7 @@ public class TestHelper {
         pos = helper.absolutePos(pos);
         player.setItemInHand(InteractionHand.MAIN_HAND, stack);
         BlockHitResult hitResult = new BlockHitResult(Vec3.atLowerCornerOf(pos), Direction.NORTH, pos, false);
-        RightClickHarvest.onBlockUse(player, InteractionHand.MAIN_HAND, hitResult);
+        RightClickHarvest.onBlockUse(player, hitResult);
     }
 
     public static void assertStateInRadius(GameTestHelper helper, BlockPos center, int radius, boolean circle, boolean includeCentre, Predicate<BlockState> predicate) {

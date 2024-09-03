@@ -57,7 +57,12 @@ public class RightClickHarvest {
         JamLib.checkForJarRenaming(RightClickHarvest.class);
 
         InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> {
-            InteractionResult res = RightClickHarvest.onBlockUse(player, hand, new BlockHitResult(player.position(), face, pos, false));
+            if (player.isSpectator() || player.isCrouching() || hand != InteractionHand.MAIN_HAND) {
+                return EventResult.pass();
+            }
+
+            var hitResult = new BlockHitResult(player.position(), face, pos, false);
+            var res = RightClickHarvest.onBlockUse(player, hitResult);
 
             return switch (res) {
                 case SUCCESS -> EventResult.interruptTrue();
@@ -69,11 +74,7 @@ public class RightClickHarvest {
     }
 
     @Internal
-    public static InteractionResult onBlockUse(Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (player.isSpectator() || player.isCrouching() || hand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.PASS;
-        }
-
+    public static InteractionResult onBlockUse(Player player, BlockHitResult hitResult) {
         return new Harvester(player, hitResult).harvest();
     }
 
@@ -82,17 +83,14 @@ public class RightClickHarvest {
     }
 
     static class Harvester extends BaseHarvester {
-        public Harvester(Player player, BlockHitResult hitResult) {
+        Harvester(Player player, BlockHitResult hitResult) {
             super(player, hitResult);
         }
 
-        public InteractionResult harvest() {
+        InteractionResult harvest() {
             if (isHoeRequiredWithWarning()) return InteractionResult.PASS;
-
             if (cannotHarvest()) return InteractionResult.PASS;
-
             if (canRadiusHarvest()) radiusHarvest();
-
             return blockHarvest();
         }
 
@@ -165,11 +163,11 @@ public class RightClickHarvest {
     }
 
     static class RadiusHarvester extends BaseHarvester {
-        public RadiusHarvester(Player player, BlockHitResult hitResult) {
+        RadiusHarvester(Player player, BlockHitResult hitResult) {
             super(player, hitResult);
         }
 
-        public void harvest() {
+        void harvest() {
             if (cannotRadiusHarvest()) return;
             blockHarvest();
         }
@@ -188,7 +186,7 @@ public class RightClickHarvest {
         protected final BlockPos hitBlockPos;
         private final Block block;
 
-        public BaseHarvester(Player player, BlockHitResult hitResult) {
+        BaseHarvester(Player player, BlockHitResult hitResult) {
             this.player = player;
             this.hitResult = hitResult;
 
