@@ -102,7 +102,7 @@ public class RightClickHarvest {
 
             if (cannotHarvest()) return InteractionResult.PASS;
 
-            if (canRadiusHarvest(player, state)) attemptRadiusHarvesting(player, hitResult);
+            if (canRadiusHarvest()) attemptRadiusHarvesting(player, hitResult);
 
             return maybeBlockHarvest(player, hitResult, state);
         }
@@ -168,7 +168,10 @@ public class RightClickHarvest {
             return player.getFoodData().getFoodLevel() <= 0;
         }
 
-        // canRadiusHarvest(player, state)
+        private boolean canRadiusHarvest() {
+            return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand() && isReplantableAndMature();
+        }
+
         // attemptRadiusHarvesting(player, hitResult)
         // maybeBlockHarvest(player, hitResult, state)
     }
@@ -176,10 +179,6 @@ public class RightClickHarvest {
     private static BlockState getBlockState(Player player, BlockHitResult hitResult) {
         Level level = player.level();
         return level.getBlockState(hitResult.getBlockPos());
-    }
-
-    private static boolean canRadiusHarvest(Player player, BlockState state) {
-        return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand(player) && isReplantableAndMature(state);
     }
 
     private static boolean cannotRadiusHarvest(Player player, BlockState state) {
