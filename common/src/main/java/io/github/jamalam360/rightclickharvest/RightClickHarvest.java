@@ -12,7 +12,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -25,7 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
@@ -79,21 +77,6 @@ public class RightClickHarvest {
         return new Harvester(player, hitResult).harvest();
     }
 
-    private static boolean cannotRadiusHarvest(Player player, BlockState state) {
-        return state.is(RADIUS_HARVEST_BLACKLIST) && cannotHarvest(player, state);
-    }
-
-    private static boolean cannotHarvest(Player player, BlockState state) {
-        return state.is(BLACKLIST) || isExhausted(player);
-    }
-
-    // Check for hunger, if config requires it
-    private static boolean isExhausted(Player player) {
-        if (player.hasInfiniteMaterials()) return false;
-        if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE) return false;
-        return player.getFoodData().getFoodLevel() <= 0;
-    }
-
     private static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
@@ -108,7 +91,7 @@ public class RightClickHarvest {
 
             if (cannotHarvest()) return InteractionResult.PASS;
 
-            if (canRadiusHarvest()) attemptRadiusHarvesting();
+            if (canRadiusHarvest()) radiusHarvest();
 
             return blockHarvest();
         }
@@ -142,7 +125,7 @@ public class RightClickHarvest {
             return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand() && isReplantableAndMature();
         }
 
-        private void attemptRadiusHarvesting() {
+        private void radiusHarvest() {
             int radius = 0;
             boolean circle = false;
 
@@ -187,11 +170,13 @@ public class RightClickHarvest {
         }
 
         public void harvest() {
-            if (cannotRadiusHarvest(player, state)) return;
+            if (cannotRadiusHarvest()) return;
             blockHarvest();
         }
 
-        // cannotRadiusHarvest(player, state)
+        private boolean cannotRadiusHarvest() {
+            return state.is(RADIUS_HARVEST_BLACKLIST) && cannotHarvest();
+        }
     }
 
     static class BaseHarvester {
