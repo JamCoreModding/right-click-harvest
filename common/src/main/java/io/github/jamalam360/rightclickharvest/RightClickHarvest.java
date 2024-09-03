@@ -195,7 +195,6 @@ public class RightClickHarvest {
             }
 
             var lookingFor = block;
-            var lookingFor = block;
             var bottom = hitBlockPos;
             while (level.getBlockState(bottom.below()).is(lookingFor)) {
                 bottom = bottom.below();
