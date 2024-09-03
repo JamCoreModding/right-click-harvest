@@ -79,24 +79,9 @@ public class RightClickHarvest {
         return new Harvester(player, hitResult).harvest();
     }
 
-    static class Harvester {
-        private final Player player;
-        private final BlockHitResult hitResult;
-        private final Level level;
-        private final ItemStack stackInMainHand;
-        private final BlockState state;
-        private final BlockPos hitBlockPos;
-        private final Block block;
-
+    static class Harvester extends BaseHarvester {
         public Harvester(Player player, BlockHitResult hitResult) {
-            this.player = player;
-            this.hitResult = hitResult;
-
-            this.level = player.level();
-            this.stackInMainHand = player.getMainHandItem();
-            this.hitBlockPos = hitResult.getBlockPos();
-            this.state = level.getBlockState(hitBlockPos);
-            this.block = state.getBlock();
+            super(player, hitResult);
         }
 
         public InteractionResult harvest() {
@@ -108,8 +93,35 @@ public class RightClickHarvest {
 
             return maybeBlockHarvest();
         }
+    }
 
-        private boolean isHoeRequiredWithWarning() {
+    static class RadiusHarvester extends BaseHarvester {
+        public RadiusHarvester(Player player, BlockHitResult hitResult) {
+            super(player, hitResult);
+        }
+    }
+
+    static class BaseHarvester {
+        private final Player player;
+        private final BlockHitResult hitResult;
+        private final Level level;
+        private final ItemStack stackInMainHand;
+        private final BlockState state;
+        private final BlockPos hitBlockPos;
+        private final Block block;
+
+        public BaseHarvester(Player player, BlockHitResult hitResult) {
+            this.player = player;
+            this.hitResult = hitResult;
+
+            this.level = player.level();
+            this.stackInMainHand = player.getMainHandItem();
+            this.hitBlockPos = hitResult.getBlockPos();
+            this.state = level.getBlockState(hitBlockPos);
+            this.block = state.getBlock();
+        }
+
+         protected boolean isHoeRequiredWithWarning() {
             // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
             var required = !state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoeInHand() && isHarvestable();
             if (required) warnOnceForNotUsingHoe();
@@ -168,7 +180,7 @@ public class RightClickHarvest {
             };
         }
 
-        private boolean cannotHarvest() {
+        protected boolean cannotHarvest() {
             return state.is(BLACKLIST) || isExhausted();
         }
 
@@ -179,7 +191,7 @@ public class RightClickHarvest {
             return player.getFoodData().getFoodLevel() <= 0;
         }
 
-        private InteractionResult maybeBlockHarvest() {
+        protected InteractionResult maybeBlockHarvest() {
             if (isReplantableAndMature()) return completeHarvest();
             if (isSugarCaneOrCactus()) return harvestSugarCaneOrCactus();
 
@@ -263,11 +275,11 @@ public class RightClickHarvest {
             }
         }
 
-        private boolean canRadiusHarvest() {
+        protected boolean canRadiusHarvest() {
             return CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoeInHand() && isReplantableAndMature();
         }
 
-        private void attemptRadiusHarvesting() {
+        protected void attemptRadiusHarvesting() {
             int radius = 0;
             boolean circle = false;
 
@@ -307,6 +319,7 @@ public class RightClickHarvest {
 
         // maybeRadiusHarvest(player, hitResult.withPosition(pos))
     }
+
 
     private static BlockState getBlockState(Player player, BlockHitResult hitResult) {
         Level level = player.level();
