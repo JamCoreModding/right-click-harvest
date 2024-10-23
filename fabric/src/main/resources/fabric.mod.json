@@ -18,6 +18,9 @@
   "entrypoints": {
     "main": [
       "io.github.jamalam360.rightclickharvest.fabric.RightClickHarvestFabric"
+    ],
+    "client": [
+      "io.github.jamalam360.rightclickharvest.fabric.RightClickHarvestClientFabric"
     ]
   },
   "mixins": [

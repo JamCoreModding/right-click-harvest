@@ -2,6 +2,10 @@ package io.github.jamalam360.rightclickharvest;
 
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.InteractionEvent;
+import dev.architectury.event.events.common.PlayerEvent;
+import dev.architectury.networking.NetworkManager;
+import dev.architectury.platform.Platform;
+import dev.architectury.utils.Env;
 import io.github.jamalam360.jamlib.JamLib;
 import io.github.jamalam360.jamlib.JamLibPlatform;
 import io.github.jamalam360.jamlib.config.ConfigManager;
@@ -53,9 +57,15 @@ public class RightClickHarvest {
     public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public static void init() {
-        LOGGER.info("Initializing Right Click Harvest on " + JamLibPlatform.getPlatform().name());
+        LOGGER.info("Initializing Right Click Harvest on {}", JamLibPlatform.getPlatform().name());
         JamLib.checkForJarRenaming(RightClickHarvest.class);
 
+        if (Platform.getEnvironment() == Env.SERVER) {
+            NetworkManager.registerS2CPayloadType(HelloPacket.TYPE, HelloPacket.STREAM_CODEC);
+        }
+
+        PlayerEvent.PLAYER_JOIN.register((player) -> NetworkManager.sendToPlayer(player, new HelloPacket()));
+        
         InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> {
             InteractionResult res = RightClickHarvest.onBlockUse(player, player.level(), hand, new BlockHitResult(player.position(), face, pos, false), true);
 
@@ -270,7 +280,7 @@ public class RightClickHarvest {
         state.spawnAfterBreak(world, pos, toolStack, true);
     }
 
-    private static ResourceLocation id(String path) {
+    public static ResourceLocation id(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 }
