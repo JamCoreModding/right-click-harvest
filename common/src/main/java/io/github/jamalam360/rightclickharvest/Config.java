@@ -11,6 +11,7 @@ public class Config implements ConfigExtensions<Config> {
     public boolean requireHoe = true;
     public boolean harvestInRadius = true;
     public HungerLevel hungerLevel = HungerLevel.NORMAL;
+    public ExperienceType experienceType = ExperienceType.NONE;
     public boolean showServerWarning = true;
     @Comment("Modpack developers, set this to true to stop RCH telling users that they probably need to equip a hoe to harvest crops (if requireHoe is set to true). This message will only be displayed once.")
     @HiddenInGui
@@ -36,5 +37,11 @@ public class Config implements ConfigExtensions<Config> {
         HungerLevel(float modifier) {
             this.modifier = modifier;
         }
+    }
+    
+    public enum ExperienceType {
+        NONE,
+        COST,
+        REWARD
     }
 }

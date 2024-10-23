@@ -44,7 +44,7 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
             displayName = "V${project.version} (NeoForge ${project.minecraft_version})"
             changelog = rootProject.file("CHANGELOG.md").text
             releaseType = project.version.contains("beta") ? "beta" : "release"
-            gameVersions = [project.minecraft_version]
+            gameVersions = project.additional_minecraft_versions.split(",") + project.minecraft_version
             gameLoaders = ["neoforge"]
 
             mainPublication tasks.remapJar

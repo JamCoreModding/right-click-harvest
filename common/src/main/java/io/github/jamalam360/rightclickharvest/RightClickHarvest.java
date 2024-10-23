@@ -19,6 +19,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -55,6 +57,7 @@ public class RightClickHarvest {
     public static final TagKey<Item> MID_TIER_HOES = TagKey.create(Registries.ITEM, id("mid_tier_hoes"));
     public static final TagKey<Item> HIGH_TIER_HOES = TagKey.create(Registries.ITEM, id("high_tier_hoes"));
     public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+    private static final IntProvider XP_PROVIDER = UniformInt.of(0, 2);
 
     public static void init() {
         LOGGER.info("Initializing Right Click Harvest on {}", JamLibPlatform.getPlatform().name());
@@ -94,16 +97,19 @@ public class RightClickHarvest {
         }
 
         // Check for hunger, if config requires it
-        if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE) {
-            if (!player.getAbilities().instabuild && player.getFoodData().getFoodLevel() <= 0) {
-                return InteractionResult.PASS;
-            }
+        if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE && !player.getAbilities().instabuild && player.getFoodData().getFoodLevel() <= 0) {
+            return InteractionResult.PASS;
+        }
+        
+        // Check for XP, if the config requires it
+        if (CONFIG.get().experienceType == Config.ExperienceType.COST && !player.getAbilities().instabuild && player.experienceLevel < XP_PROVIDER.getMaxValue()) {
+            return InteractionResult.PASS;
         }
 
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
         if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe) {
             if (!isHoe(stackInHand)) {
-                if (isHarvestable(state) && player.level().isClientSide && !CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
+                if (isHarvestable(state) && player.level().isClientSide && !CONFIG.get().hasUserBeenWarnedForNotUsingHoe && stackInHand.isEmpty()) {
                     player.displayClientMessage(
                           Component.translatable(
                                 "text.rightclickharvest.use_a_hoe_warning",
@@ -214,6 +220,14 @@ public class RightClickHarvest {
 
             // Regular block breaking causes 0.005f exhaustion
             player.causeFoodExhaustion(0.008f * CONFIG.get().hungerLevel.modifier);
+            
+            int xp = switch (CONFIG.get().experienceType) {
+	            case COST -> -XP_PROVIDER.sample(player.getRandom());
+	            case REWARD -> XP_PROVIDER.sample(player.getRandom());
+                case NONE -> 0;
+            };
+            player.giveExperiencePoints(xp);
+            
             RightClickHarvestPlatform.postAfterHarvestEvent(new HarvestContext(player, originalBlock));
         } else {
             player.playSound(state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED, 1.0f, 1.0f);
@@ -225,11 +239,7 @@ public class RightClickHarvest {
     private static boolean isHarvestable(BlockState state) {
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
             return isMature(state);
-        } else if (state.getBlock() instanceof SugarCaneBlock || state.getBlock() instanceof CactusBlock) {
-            return true;
-        } else {
-            return false;
-        }
+        } else return state.getBlock() instanceof SugarCaneBlock || state.getBlock() instanceof CactusBlock;
     }
 
     private static boolean isHoe(ItemStack stack) {
