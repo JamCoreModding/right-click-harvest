@@ -2,6 +2,14 @@ architectury {
     common(rootProject.enabled_platforms.split(","))
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/generated/resources"
+        }
+    }
+}
+
 dependencies {
     modImplementation libs.fabric.loader
     modImplementation libs.architectury.common

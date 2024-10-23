@@ -1,0 +1,32 @@
+plugins {
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+fabricApi {
+    configureDataGeneration {
+        createSourceSet = false
+        addToResources = false
+        outputDirectory = project(":common").file("src/generated/resources")
+    }
+}
+
+configurations {
+    common
+    shadowCommon
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+dependencies {
+    modImplementation libs.fabric.loader
+    modImplementation libs.fabric.api
+    modImplementation libs.architectury.fabric
+    modImplementation libs.jamlib.fabric
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+}

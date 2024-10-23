@@ -1,0 +1,52 @@
+{
+  "values": [
+    {
+      "id": "minecraft:iron_hoe",
+      "required": false
+    },
+    {
+      "id": "ae2:certus_quartz_hoe",
+      "required": false
+    },
+    {
+      "id": "ae2:fluix_hoe",
+      "required": false
+    },
+    {
+      "id": "exlinecopperequipment:copper_hoe",
+      "required": false
+    },
+    {
+      "id": "mythicmetals:bronze_hoe",
+      "required": false
+    },
+    {
+      "id": "mythicmetals:copper_hoe",
+      "required": false
+    },
+    {
+      "id": "mythicmetals:steel_hoe",
+      "required": false
+    },
+    {
+      "id": "azurepaxels:iron_paxel",
+      "required": false
+    },
+    {
+      "id": "earlystage:steel_hoe",
+      "required": false
+    },
+    {
+      "id": "sassot:copper_hoe",
+      "required": false
+    },
+    {
+      "id": "nature_arise:aluminium_hoe",
+      "required": false
+    },
+    {
+      "id": "nature_arise:copper_hoe",
+      "required": false
+    }
+  ]
+}

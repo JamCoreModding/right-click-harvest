@@ -39,13 +39,13 @@ jobs:
         run: ./gradlew clean neoforge:build fabric:build
 
       - name: Capture Fabric Build Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Fabric Artifacts
           path: fabric/build/libs/
 
       - name: Capture NeoForge Build Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: NeoForge Artifacts
           path: neoforge/build/libs/
