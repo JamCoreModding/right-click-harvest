@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.CocoaBlock;
 
 public class CocoaBeanTestSuite implements FabricGameTest {
 
-    private static final BlockPos COCOA_BEANS_POS = new BlockPos(0, 2, 1);
+    private static final BlockPos COCOA_BEANS_POS = new BlockPos(0, 1, 1);
 
     @GameTest(template = "rightclickharvest-gametest:cocoa_beans")
     public void testCocoaBeans(GameTestHelper helper) {

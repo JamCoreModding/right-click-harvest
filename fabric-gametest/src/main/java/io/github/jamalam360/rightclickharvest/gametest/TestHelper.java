@@ -6,8 +6,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -63,5 +65,13 @@ public class TestHelper {
                 }
             }
         }
+    }
+    
+    // Easier than making a mixin accessor
+    public static float getPlayerExhaustion(Player player) {
+        FoodData data = player.getFoodData();
+        CompoundTag tag = new CompoundTag();
+        data.addAdditionalSaveData(tag);
+        return tag.getFloat("foodExhaustionLevel");
     }
 }

@@ -1,6 +1,5 @@
 package io.github.jamalam360.rightclickharvest;
 
-import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.networking.NetworkManager;
@@ -69,16 +68,7 @@ public class RightClickHarvest {
 
         PlayerEvent.PLAYER_JOIN.register((player) -> NetworkManager.sendToPlayer(player, new HelloPacket()));
         
-        InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> {
-            InteractionResult res = RightClickHarvest.onBlockUse(player, player.level(), hand, new BlockHitResult(player.position(), face, pos, false), true);
-
-            return switch (res) {
-                case SUCCESS -> EventResult.interruptTrue();
-                case PASS -> EventResult.pass();
-                case FAIL -> EventResult.interruptFalse();
-                default -> throw new IllegalStateException("Unexpected value: " + res);
-            };
-        }));
+        InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> RightClickHarvest.onBlockUse(player, player.level(), hand, new BlockHitResult(player.position(), face, pos, false), true)));
     }
 
     @Internal

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.Blocks;
 // Cacti and sugarcane
 public class TallPlantsTestSuite implements FabricGameTest {
 
-    private static final BlockPos SUGARCANE_BOTTOM_POS = new BlockPos(2, 2, 1);
+    private static final BlockPos SUGARCANE_BOTTOM_POS = new BlockPos(2, 1, 1);
 
     @GameTest(template = "rightclickharvest-gametest:sugarcane_tall")
     public void testTallBottom(GameTestHelper helper) {

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.CropBlock;
 
 public class CropsTestSuite {
 
-    private static final BlockPos CROP_CENTRE_POS = new BlockPos(4, 3, 4);
+    private static final BlockPos CROP_CENTRE_POS = new BlockPos(4,  2, 4);
 
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testWoodenHoe(GameTestHelper helper) {
