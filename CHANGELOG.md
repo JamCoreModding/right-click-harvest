@@ -1,4 +1,1 @@
-- Only show hoe warning when hand is empty.
-- Add a warning which sends when the client connects to a server without RightClickHarvest.
-- Add configuration for XP levels (loss or gain, depending on config).
-- Lots of modded hoe support.
+- Change versioning logic (closes #76)

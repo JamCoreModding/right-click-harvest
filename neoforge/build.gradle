@@ -96,17 +96,20 @@ publishing {
 }
 
 processResources {
-    filesMatching("mods.toml") {
-        expand "minecraft_version": project.minecraft_version,
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand "version": project.version,
+                "minecraft_version": project.minimum_minecraft_version,
+                "neoforge_version": libs.versions.neoforge.get(),
                 "architectury_version": libs.versions.architectury.get(),
                 "jamlib_version": libs.versions.jamlib.get()
     }
 
-    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minimum_minecraft_version
+    inputs.property "neoforge_version", libs.versions.neoforge.get()
     inputs.property "architectury_version", libs.versions.architectury.get()
     inputs.property "jamlib_version", libs.versions.jamlib.get()
 }
-
 shadowJar {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"

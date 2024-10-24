@@ -5,7 +5,7 @@ issueTrackerURL = "https://github.com/JamCoreModding/right-click-harvest/issues"
 
 [[mods]]
 modId = "rightclickharvest"
-version = "${file.jarVersion}"
+version = "${version}"
 displayName = "Right Click Harvest"
 displayURL = "https://github.com/JamCoreModding/right-click-harvest"
 logoFile = "icon.png"
@@ -15,7 +15,7 @@ description = "Right click crops to harvest them - with style."
 [[dependencies.rightclickharvest]]
 modId = "neoforge"
 type = "required"
-versionRange = "[20.4,)"
+versionRange = "[${neoforge_version},)"
 ordering = "NONE"
 side = "BOTH"
 
