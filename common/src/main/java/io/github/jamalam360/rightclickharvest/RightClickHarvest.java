@@ -67,7 +67,11 @@ public class RightClickHarvest {
             NetworkManager.registerS2CPayloadType(HelloPacket.TYPE, HelloPacket.STREAM_CODEC);
         }
 
-        PlayerEvent.PLAYER_JOIN.register((player) -> NetworkManager.sendToPlayer(player, new HelloPacket()));
+        PlayerEvent.PLAYER_JOIN.register((player) -> {
+            if (NetworkManager.canPlayerReceive(player, HelloPacket.TYPE)) {
+                NetworkManager.sendToPlayer(player, new HelloPacket());
+            }
+        });
         
         InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> {
             InteractionResult res = RightClickHarvest.onBlockUse(player, player.level(), hand, new BlockHitResult(player.position(), face, pos, false), true);
