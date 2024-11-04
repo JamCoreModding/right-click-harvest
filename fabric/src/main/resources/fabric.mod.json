@@ -24,6 +24,7 @@
     ]
   },
   "mixins": [
+    "rightclickharvest.mixins.json"
   ],
   "depends": {
     "fabric": ">=${fabric_api_version}",

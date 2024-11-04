@@ -9,6 +9,7 @@ import dev.architectury.utils.Env;
 import io.github.jamalam360.jamlib.JamLib;
 import io.github.jamalam360.jamlib.JamLibPlatform;
 import io.github.jamalam360.jamlib.config.ConfigManager;
+import io.github.jamalam360.rightclickharvest.mixin.CropBlockAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -270,7 +271,12 @@ public class RightClickHarvest {
         if (state.getBlock() instanceof CocoaBlock) {
             return state.setValue(CocoaBlock.AGE, 0);
         } else if (state.getBlock() instanceof CropBlock cropBlock) {
-            return cropBlock.getStateForAge(0);
+            // This is used instead of getStateForAge(i) because of an issue with Farmers Delight
+            // tomatoes - they have a 'ropelogged' property. Since getStateForAge returns the
+            // default block state with the age set, the ropelogged property is reset to false
+            // when calling it. This method requires a mixin accessor, but I don't think there are
+            // any potential issues with it other than that.
+            return state.setValue(((CropBlockAccessor) cropBlock).invokeGetAgeProperty(), 0);
         } else if (state.getBlock() instanceof NetherWartBlock) {
             return state.setValue(NetherWartBlock.AGE, 0);
         }
