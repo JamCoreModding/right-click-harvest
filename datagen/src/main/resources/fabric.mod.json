@@ -24,6 +24,7 @@
     ]
   },
   "mixins": [
+    "rightclickharvest.mixins.json"
   ],
   "depends": {
   }

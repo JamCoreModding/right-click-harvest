@@ -1,2 +1,2 @@
-- (fix) do not attempt to send the Hello packet when the client does not have RCH installed. 
-  - This means that RCH is now properly client-optional again, as intended.
+- (fix) modify some internals to support Farmers Delight tomato rope logging.
+  - Closes #75, #77
