@@ -275,7 +275,7 @@ public class RightClickHarvest {
     }
 
     private static void dropStacks(BlockState state, ServerLevel world, BlockPos pos, Entity entity, ItemStack toolStack, boolean removeReplant) {
-        Item replant = state.getBlock().getCloneItemStack(world, pos, state).getItem();
+        Item replant = state.getCloneItemStack(world, pos, true).getItem();
         final boolean[] removedReplant = {!removeReplant};
 
         Block.getDrops(state, world, pos, null, entity, toolStack).forEach(stack -> {
