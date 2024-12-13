@@ -1,2 +1,1 @@
-- (fix) modify some internals to support Farmers Delight tomato rope logging.
-  - Closes #75, #77
+Update versioning logic.
