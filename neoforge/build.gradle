@@ -44,7 +44,7 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
             displayName = "V${project.version} (NeoForge ${project.minecraft_version})"
             changelog = rootProject.file("CHANGELOG.md").text
             releaseType = project.version.contains("beta") ? "beta" : "release"
-            gameVersions = [project.minecraft_version, *project.additional_minecraft_versions.split(",")]
+            gameVersions = [project.minecraft_version, *(project.additional_minecraft_versions == "" ? [] : project.additional_minecraft_versions.split(","))]
             gameLoaders = ["neoforge"]
 
             mainPublication tasks.remapJar
@@ -96,20 +96,21 @@ publishing {
 }
 
 processResources {
+    def substitutions = [
+            "version"             : project.version,
+            "minecraft_version"   : project.minimum_minecraft_version,
+            "neoforge_version"    : project.minimum_minecraft_version.substring(2),
+            "architectury_version": project.minimum_architectury_api_version,
+            "jamlib_version"      : project.minimum_jamlib_version
+    ]
+
     filesMatching("META-INF/neoforge.mods.toml") {
-        expand "version": project.version,
-                "minecraft_version": project.minimum_minecraft_version,
-                "neoforge_version": libs.versions.neoforge.get(),
-                "architectury_version": libs.versions.architectury.get(),
-                "jamlib_version": libs.versions.jamlib.get()
+        expand substitutions
     }
 
-    inputs.property "version", project.version
-    inputs.property "minecraft_version", project.minimum_minecraft_version
-    inputs.property "neoforge_version", libs.versions.neoforge.get()
-    inputs.property "architectury_version", libs.versions.architectury.get()
-    inputs.property "jamlib_version", libs.versions.jamlib.get()
+    substitutions.each { inputs.property it.key, it.value }
 }
+
 shadowJar {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"
