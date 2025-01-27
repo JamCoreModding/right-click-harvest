@@ -77,6 +77,11 @@ allprojects {
             name = "Jamalam's Maven"
             url = "https://maven.jamalam.tech/releases"
         }
+
+        maven {
+            name = "ParchmentMC"
+            url = "https://maven.parchmentmc.org"
+        }
     }
 
     tasks.withType(JavaCompile) {
