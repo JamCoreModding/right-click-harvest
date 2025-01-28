@@ -17,7 +17,12 @@ public class RightClickHarvestClient {
 			serverHasSaidHello = true;
 			RightClickHarvest.LOGGER.info("Server has said hello! Hi Server :)");
 		});
-		ClientPlayLifecycleEvents.DISCONNECT.register((client) -> serverHasSaidHello = false);
+
+		ClientPlayLifecycleEvents.DISCONNECT.register((client) -> {
+			serverHasSaidHello = false;
+			warned = false;
+			delay = 100;
+		});
 
 		ClientTickEvent.CLIENT_LEVEL_POST.register((level) -> {
 			if (delay > 0) {

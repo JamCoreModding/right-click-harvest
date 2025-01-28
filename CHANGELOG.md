@@ -1,1 +1,2 @@
-Update versioning logic.
+- Add Chinese translation.
+- Attempt to fix issues with 'not installed on server' warning.
