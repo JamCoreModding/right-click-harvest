@@ -7,7 +7,7 @@ parchment-minecraft = "1.21.4"
 parchment = "2024.12.07"
 
 # https://projects.neoforged.net/neoforged/neoforge
-neoforge = "21.4.13-beta"
+neoforge = "21.4.77-beta"
 
 # https://fabricmc.net/develop
 fabric-loader = "0.16.9"

@@ -1,1 +1,2 @@
-Update to 1.21.4
+- Add Chinese translation.
+- Attempt to fix issues with 'not installed on server' warning.
