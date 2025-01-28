@@ -1,3 +1,4 @@
 - Add Chinese translation.
 - Attempt to fix issues with 'not installed on server' warning.
 - Show the 'hoe is required' message even if the mod is not installed on the client (closes #82).
+- Hoes are no longer required by default (closes #81).
