@@ -1,12 +1,12 @@
 [versions]
 # https://modrinth.com/mod/architectury-api/versions
-architectury = "14.0.3"
+architectury = "14.0.4"
 
 # https://projects.neoforged.net/neoforged/neoforge
 neoforge = "21.3.1-beta"
 
 # https://fabricmc.net/develop
-fabric-loader = "0.16.7"
+fabric-loader = "0.16.9"
 fabric-api = "0.106.1+1.21.3"
 
 # https://maven.jamalam.tech/#/releases
