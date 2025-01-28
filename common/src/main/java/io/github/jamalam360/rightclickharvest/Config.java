@@ -8,7 +8,7 @@ import net.minecraft.network.chat.Component;
 
 public class Config implements ConfigExtensions<Config> {
 
-    public boolean requireHoe = true;
+    public boolean requireHoe = false;
     public boolean harvestInRadius = true;
     public HungerLevel hungerLevel = HungerLevel.NORMAL;
     public ExperienceType experienceType = ExperienceType.NONE;
