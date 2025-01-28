@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 architectury {
     common(rootProject.enabled_platforms.split(","))
 }
@@ -14,6 +16,46 @@ dependencies {
     modImplementation libs.fabric.loader
     modImplementation libs.architectury.common
     modImplementation libs.jamlib.common
+}
+
+tasks.processResources.dependsOn("updateServerLangProvider")
+tasks.register("updateServerLangProvider") {
+    def langDir = project.file("src/main/resources/assets/rightclickharvest/lang")
+    def outputFile = project.file("src/main/java/io/github/jamalam360/rightclickharvest/ServerLangProvider.java")
+    def output = []
+
+    doLast {
+        if (langDir.exists() && langDir.isDirectory()) {
+            langDir.listFiles((FilenameFilter) { dir, name -> name.endsWith(".json") }).each { jsonFile ->
+                try {
+                    def jsonSlurper = new JsonSlurper()
+                    def json = jsonSlurper.parse(jsonFile)
+                    def useHoe = json["text.rightclickharvest.use_a_hoe_warning"]
+                    def requireHoe = json["config.rightclickharvest.requireHoe"]
+
+                    if (useHoe != null) {
+                        output += "\t\tUSE_HOE_MESSAGE_BY_LANGUAGE.put(\"${jsonFile.name.split(".json")[0]}\", \"${useHoe}\");";
+                    }
+
+                    if (requireHoe != null) {
+                        output += "\t\tREQUIRE_HOE_CONFIG_BY_LANGUAGE.put(\"${jsonFile.name.split(".json")[0]}\", \"${requireHoe}\");";
+                    }
+                } catch (Exception e) {
+                    println "Error processing ${jsonFile.name}: ${e.message}"
+                }
+            }
+        } else {
+            println "Warning: Language directory not found"
+        }
+
+        def lines = outputFile.readLines()
+        def startIndex = lines.stream().findIndexOf { it.contains("gradle-auto-populated") }
+        def endIndex = lines.stream().findLastIndexOf { it.contains("gradle-auto-populated") }
+        lines.subList(startIndex + 1, endIndex).clear()
+        lines.addAll(startIndex + 1, output)
+        outputFile.write(lines.join("\n"))
+        println "Language values written to: ${outputFile.absolutePath}"
+    }
 }
 
 publishing {

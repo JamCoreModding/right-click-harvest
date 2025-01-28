@@ -17,6 +17,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -31,18 +32,16 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CactusBlock;
-import net.minecraft.world.level.block.CocoaBlock;
-import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.NetherWartBlock;
-import net.minecraft.world.level.block.SugarCaneBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class RightClickHarvest {
 
@@ -59,6 +58,7 @@ public class RightClickHarvest {
     public static final TagKey<Item> HIGH_TIER_HOES = TagKey.create(Registries.ITEM, id("high_tier_hoes"));
     public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static final IntProvider XP_PROVIDER = UniformInt.of(0, 2);
+    private static final List<UUID> PLAYERS_WARNED_FOR_NOT_USING_HOE = new ArrayList<>();
 
     public static void init() {
         LOGGER.info("Initializing Right Click Harvest on {}", JamLibPlatform.getPlatform().name());
@@ -114,19 +114,7 @@ public class RightClickHarvest {
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
         if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe) {
             if (!isHoe(stackInHand)) {
-                if (isHarvestable(state) && player.level().isClientSide && !CONFIG.get().hasUserBeenWarnedForNotUsingHoe && stackInHand.isEmpty()) {
-                    player.displayClientMessage(
-                          Component.translatable(
-                                "text.rightclickharvest.use_a_hoe_warning",
-                                Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
-                                Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
-                                )),
-                          false
-                    );
-                    CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
-                    CONFIG.save();
-                }
-
+                warnPlayerForNotUsingHoe(player, state, stackInHand);
                 return InteractionResult.PASS;
             } else {
                 hoeInUse = true;
@@ -202,6 +190,35 @@ public class RightClickHarvest {
         }
 
         return InteractionResult.PASS;
+    }
+
+    private static void warnPlayerForNotUsingHoe(Player player, BlockState state, ItemStack stackInHand) {
+        if (!isHarvestable(state) || !stackInHand.isEmpty()) {
+            return;
+        }
+
+        if (player.level().isClientSide) {
+            if (!CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
+                player.displayClientMessage(Component.translatable(
+                        "text.rightclickharvest.use_a_hoe_warning",
+                        Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
+                        Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
+                        )), false);
+                CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
+                CONFIG.save();
+            }
+        } else if (!NetworkManager.canPlayerReceive((ServerPlayer) player, HelloPacket.TYPE)) { // The mod is not installed on the client
+            if (!PLAYERS_WARNED_FOR_NOT_USING_HOE.contains(player.getUUID())) {
+                // Since the mod isn't installed clientside, we can't send translatable text
+                String playerLang = ((ServerPlayer) player).clientInformation().language();
+                player.displayClientMessage(Component.translatable(
+                        ServerLangProvider.getUseHoeMessageByLanguage(playerLang),
+                        Component.literal(ServerLangProvider.getRequireHoeConfigByLanguage(playerLang)).withStyle(s -> s.withColor(ChatFormatting.GREEN)),
+                        Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
+                        )), false);
+                PLAYERS_WARNED_FOR_NOT_USING_HOE.add(player.getUUID());
+            }
+        }
     }
 
     private static InteractionResult completeHarvest(Level level, BlockState state, BlockPos pos, Player player, InteractionHand hand, ItemStack stackInHand, boolean hoeInUse, boolean removeReplant, Runnable setBlockAction) {
