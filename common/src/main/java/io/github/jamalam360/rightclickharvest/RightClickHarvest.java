@@ -207,10 +207,10 @@ public class RightClickHarvest {
                 CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
                 CONFIG.save();
             }
-        } else if (!NetworkManager.canPlayerReceive((ServerPlayer) player, HelloPacket.TYPE)) { // The mod is not installed on the client
+        } else if (player instanceof ServerPlayer serverPlayer && !NetworkManager.canPlayerReceive(serverPlayer, HelloPacket.TYPE)) { // The mod is not installed on the client
             if (!PLAYERS_WARNED_FOR_NOT_USING_HOE.contains(player.getUUID())) {
                 // Since the mod isn't installed clientside, we can't send translatable text
-                String playerLang = ((ServerPlayer) player).clientInformation().language();
+                String playerLang = serverPlayer.clientInformation().language();
                 player.displayClientMessage(Component.translatable(
                         ServerLangProvider.getUseHoeMessageByLanguage(playerLang),
                         Component.literal(ServerLangProvider.getRequireHoeConfigByLanguage(playerLang)).withStyle(s -> s.withColor(ChatFormatting.GREEN)),

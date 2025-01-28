@@ -1,5 +1,6 @@
 package io.github.jamalam360.rightclickharvest.gametest;
 
+import io.github.jamalam360.rightclickharvest.Config;
 import io.github.jamalam360.rightclickharvest.Config.HungerLevel;
 import io.github.jamalam360.rightclickharvest.RightClickHarvest;
 import net.minecraft.core.BlockPos;
@@ -17,6 +18,7 @@ public class ConfigTestSuite {
 
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testRequireHoeTrueFail(GameTestHelper helper) {
+        RightClickHarvest.CONFIG.get().requireHoe = true;
         TestHelper.interact(helper, CROP_CENTRE_POS, ItemStack.EMPTY);
 
         helper.succeedIf(() -> {
@@ -27,6 +29,7 @@ public class ConfigTestSuite {
 
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testRequireHoeTrueSucceed(GameTestHelper helper) {
+        RightClickHarvest.CONFIG.get().requireHoe = true;
         TestHelper.interact(helper, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
 
         helper.succeedIf(() -> {
