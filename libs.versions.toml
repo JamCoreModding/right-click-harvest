@@ -6,7 +6,7 @@ architectury = "13.0.8"
 neoforge = "21.1.72"
 
 # https://fabricmc.net/develop
-fabric-loader = "0.15.11"
+fabric-loader = "0.16.9"
 fabric-api = "0.106.0+1.21.1"
 
 # https://maven.jamalam.tech/#/releases
