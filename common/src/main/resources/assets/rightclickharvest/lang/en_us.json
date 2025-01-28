@@ -20,7 +20,7 @@
   "config.rightclickharvest.discord": "Chat on Discord",
   "config.rightclickharvest.github": "Report bugs and request new features on GitHub",
   "config.rightclickharvest.modrinth": "Check for updates on Modrinth",
-  "text.rightclickharvest.use_a_hoe_warning": "RightClickHarvest is configured to require a hoe - hold a hoe or set %s to %s in the config to disable this requirement. This message will only be shown once.",
+  "text.rightclickharvest.use_a_hoe_warning": "RightClickHarvest is configured to require holding a hoe for harvesting - do so, or set %s to %s in the config to disable this requirement. This message will only be shown once.",
   "text.rightclickharvest.install_on_server_warning": "RightClickHarvest is not installed on the server. To function, the mod needs to be installed on the server, as well as optionally on the client. Set %s to %s in the config to disable this message.",
   "tag.block.rightclickharvest.blacklist": "Harvest Blacklist",
   "tag.block.rightclickharvest.hoe_never_required": "Hoe Not Required",
