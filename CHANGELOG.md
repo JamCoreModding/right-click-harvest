@@ -1,4 +1,1 @@
-- Add Chinese translation.
-- Attempt to fix issues with 'not installed on server' warning.
-- Show the 'hoe is required' message even if the mod is not installed on the client (closes #82).
-- Hoes are no longer required by default (closes #81).
+- Attempt to work-around flaky Hello packet causing 'RightClickHarvest is not installed on the server' messages. If you still experience these, please chime in on the discussion in [this GitHub issue](https://github.com/JamCoreModding/right-click-harvest/issues/86).
