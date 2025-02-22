@@ -28,6 +28,11 @@ public class RightClickHarvestClient {
 			if (delay > 0) {
 				delay--;
 			} else if (delay == 0 && !warned && !serverHasSaidHello && RightClickHarvest.CONFIG.get().showServerWarning) {
+				if (NetworkManager.canServerReceive(HelloPacket.TYPE)) {
+					RightClickHarvest.LOGGER.warn("Server has RightClickHarvest installed, but the hello packet was not received before timeout");
+					return;
+				}
+
 				Minecraft.getInstance().player.displayClientMessage(
 						Component.translatable(
 								"text.rightclickharvest.install_on_server_warning",
