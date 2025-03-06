@@ -5,7 +5,7 @@
   "config.rightclickharvest.showServerWarning": "Server-Warnung anzeigen",
   "config.rightclickharvest.showServerWarning.tooltip": "Ob die Warnung über das Spielen auf einem Server ohne installiertes RightClickHarvest angezeigt werden soll.",
   "config.rightclickharvest.harvestInRadius": "Ernte in Radius",
-  "config.rightclickharvest.harvestInRadius.tooltip": "Lässt Hacken verschiedener Stufen mehrere Blöcke in einem Radius ernten. Erfordert, dass `Benötigt Hacke` auf Yes gesetzt wird.",
+  "config.rightclickharvest.harvestInRadius.tooltip": "Lässt Hacken verschiedener Stufen mehrere Blöcke in einem Radius ernten.",
   "config.rightclickharvest.hungerLevel": "Hunger Level",
   "config.rightclickharvest.hungerLevel.tooltip": "Die Verbrauch von Nahrung bei der Ernte von Pflanzen.",
   "config.rightclickharvest.hungerLevel.none": "Keine",

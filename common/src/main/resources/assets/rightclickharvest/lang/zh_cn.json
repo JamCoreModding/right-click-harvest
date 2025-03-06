@@ -5,7 +5,7 @@
   "config.rightclickharvest.showServerWarning": "显示服务器警告",
   "config.rightclickharvest.showServerWarning.tooltip": "是否在未安装RightClickHarvest的服务器上显示警告。",
   "config.rightclickharvest.harvestInRadius": "半径收获",
-  "config.rightclickharvest.harvestInRadius.tooltip": "让不同等级的锄头可以在半径内收获多个方块。需要将`requireHoe`设置为true。",
+  "config.rightclickharvest.harvestInRadius.tooltip": "让不同等级的锄头可以在半径内收获多个方块。",
   "config.rightclickharvest.hungerLevel": "饥饿程度",
   "config.rightclickharvest.hungerLevel.tooltip": "收获作物时消耗的食物。",
   "config.rightclickharvest.hungerLevel.none": "无",
