@@ -3,7 +3,7 @@
   "config.rightclickharvest.requireHoe": "Требования мотыги",
   "config.rightclickharvest.requireHoe.tooltip": "Разрешает игроку собирать урожай только с мотыгой в руке",
   "config.rightclickharvest.harvestInRadius": "Собирать в радиусе",
-  "config.rightclickharvest.harvestInRadius.tooltip": "Используйте мотыги разных уровней для уборки нескольких блоков в радиусе. Требуется, чтобы для параметр `Требование мотыги` был включен.",
+  "config.rightclickharvest.harvestInRadius.tooltip": "Используйте мотыги разных уровней для уборки нескольких блоков в радиусе.",
   "config.rightclickharvest.hungerLevel": "Уровень сытости",
   "config.rightclickharvest.hungerLevel.tooltip": "Использования сытости при сборе урожая.",
   "config.rightclickharvest.hungerLevel.none": "Нет",

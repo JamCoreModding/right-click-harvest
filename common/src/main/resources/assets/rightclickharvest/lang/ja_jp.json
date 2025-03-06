@@ -3,7 +3,7 @@
   "config.rightclickharvest.requireHoe": "クワを必須にする",
   "config.rightclickharvest.requireHoe.tooltip": "プレイヤーがクワを持っている場合のみ、小麦、ニンジンなど特定の作物の収穫を可能にします。",
   "config.rightclickharvest.harvestInRadius": "収穫範囲",
-  "config.rightclickharvest.harvestInRadius.tooltip": "クワのランクに応じて、収穫範囲を広げます。「クワを必須にする」がtrueである必要があります。",
+  "config.rightclickharvest.harvestInRadius.tooltip": "クワのランクに応じて、収穫範囲を広げます。",
   "config.rightclickharvest.hungerLevel": "消費する満腹度",
   "config.rightclickharvest.hungerLevel.tooltip": "収穫時に消費する満腹度レベル",
   "config.rightclickharvest.hungerLevel.none": "なし",
