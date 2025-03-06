@@ -13,7 +13,115 @@
       "required": false
     },
     {
+      "id": "amethystequipment:amethyst_hoe",
+      "required": false
+    },
+    {
+      "id": "azurepaxels:diamond_paxel",
+      "required": false
+    },
+    {
+      "id": "azurepaxels:golden_paxel",
+      "required": false
+    },
+    {
+      "id": "bedrockplus:impurebedrock_hoe",
+      "required": false
+    },
+    {
+      "id": "betternether:cincinnasite_hoe",
+      "required": false
+    },
+    {
+      "id": "betternether:cincinnasite_hoe_diamond",
+      "required": false
+    },
+    {
+      "id": "betternether:flaming_ruby_hoe",
+      "required": false
+    },
+    {
+      "id": "betternether:nether_ruby_hoe",
+      "required": false
+    },
+    {
+      "id": "deeperdarker:resonarium_hoe",
+      "required": false
+    },
+    {
       "id": "emeraldequipment:emerald_hoe",
+      "required": false
+    },
+    {
+      "id": "endreborn:curious_endorium_hoe",
+      "required": false
+    },
+    {
+      "id": "endreborn:endorium_hoe",
+      "required": false
+    },
+    {
+      "id": "endreborn:mysterious_endorium_hoe",
+      "required": false
+    },
+    {
+      "id": "exotelcraft:opal_hoe",
+      "required": false
+    },
+    {
+      "id": "exotelcraft:ruby_hoe",
+      "required": false
+    },
+    {
+      "id": "exotelcraft:upgraded_ruby_hoe",
+      "required": false
+    },
+    {
+      "id": "generations_core:amethyst_hoe",
+      "required": false
+    },
+    {
+      "id": "generations_core:crystal_hoe",
+      "required": false
+    },
+    {
+      "id": "generations_core:ruby_hoe",
+      "required": false
+    },
+    {
+      "id": "generations_core:sapphire_hoe",
+      "required": false
+    },
+    {
+      "id": "lithereal:burning_litherite_hoe",
+      "required": false
+    },
+    {
+      "id": "lithereal:frozen_litherite_hoe",
+      "required": false
+    },
+    {
+      "id": "lithereal:infused_litherite_hoe",
+      "required": false
+    },
+    {
+      "id": "lithereal:litherite_hoe",
+      "required": false
+    },
+    {
+      "id": "lithereal:odysium_hoe",
+      "required": false
+    },
+    {
+      "id": "lithereal:withering_litherite_hoe",
+      "required": false
+    },
+    {
+      "id": "multitool:diamond_multitool",
+      "required": false
+    },
+    {
+      "id": "multitool:golden_multitool",
       "required": false
     },
     {
@@ -93,46 +201,6 @@
       "required": false
     },
     {
-      "id": "deeperdarker:resonarium_hoe",
-      "required": false
-    },
-    {
-      "id": "azurepaxels:golden_paxel",
-      "required": false
-    },
-    {
-      "id": "azurepaxels:diamond_paxel",
-      "required": false
-    },
-    {
-      "id": "obsidianequipment:obsidian_hoe",
-      "required": false
-    },
-    {
-      "id": "phantasm:crystalline_hoe",
-      "required": false
-    },
-    {
-      "id": "generations_core:amethyst_hoe",
-      "required": false
-    },
-    {
-      "id": "generations_core:crystal_hoe",
-      "required": false
-    },
-    {
-      "id": "generations_core:ruby_hoe",
-      "required": false
-    },
-    {
-      "id": "generations_core:sapphire_hoe",
-      "required": false
-    },
-    {
-      "id": "amethystequipment:amethyst_hoe",
-      "required": false
-    },
-    {
       "id": "mythicupgrades:ametrine_hoe",
       "required": false
     },
@@ -161,71 +229,11 @@
       "required": false
     },
     {
-      "id": "lithereal:burning_litherite_hoe",
+      "id": "obsidianequipment:obsidian_hoe",
       "required": false
     },
     {
-      "id": "lithereal:frozen_litherite_hoe",
-      "required": false
-    },
-    {
-      "id": "lithereal:infused_litherite_hoe",
-      "required": false
-    },
-    {
-      "id": "lithereal:litherite_hoe",
-      "required": false
-    },
-    {
-      "id": "lithereal:odysium_hoe",
-      "required": false
-    },
-    {
-      "id": "lithereal:withering_litherite_hoe",
-      "required": false
-    },
-    {
-      "id": "exotelcraft:opal_hoe",
-      "required": false
-    },
-    {
-      "id": "exotelcraft:ruby_hoe",
-      "required": false
-    },
-    {
-      "id": "exotelcraft:upgraded_ruby_hoe",
-      "required": false
-    },
-    {
-      "id": "betternether:cincinnasite_hoe",
-      "required": false
-    },
-    {
-      "id": "betternether:cincinnasite_hoe_diamond",
-      "required": false
-    },
-    {
-      "id": "betternether:flaming_ruby_hoe",
-      "required": false
-    },
-    {
-      "id": "betternether:nether_ruby_hoe",
-      "required": false
-    },
-    {
-      "id": "bedrockplus:impurebedrock_hoe",
-      "required": false
-    },
-    {
-      "id": "endreborn:endorium_hoe",
-      "required": false
-    },
-    {
-      "id": "endreborn:curious_endorium_hoe",
-      "required": false
-    },
-    {
-      "id": "endreborn:mysterious_endorium_hoe",
+      "id": "phantasm:crystalline_hoe",
       "required": false
     },
     {
