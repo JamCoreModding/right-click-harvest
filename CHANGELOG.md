@@ -1,1 +1,1 @@
-- Attempt to work-around flaky Hello packet causing 'RightClickHarvest is not installed on the server' messages. If you still experience these, please chime in on the discussion in [this GitHub issue](https://github.com/JamCoreModding/right-click-harvest/issues/86).
+- Add [Multitool Enhanced](https://modrinth.com/mod/multitool-enhanced) multitools to tiered hoe tags (closes #88).

@@ -5,23 +5,7 @@
       "required": false
     },
     {
-      "id": "mythicmetals:legendary_banglum_hoe",
-      "required": false
-    },
-    {
-      "id": "deeperdarker:warden_hoe",
-      "required": false
-    },
-    {
-      "id": "azurepaxels:netherite_paxel",
-      "required": false
-    },
-    {
-      "id": "advancednetherite:netherite_iron_hoe",
-      "required": false
-    },
-    {
-      "id": "advancednetherite:netherite_gold_hoe",
+      "id": "advancednetherite:netherite_diamond_hoe",
       "required": false
     },
     {
@@ -29,11 +13,19 @@
       "required": false
     },
     {
-      "id": "advancednetherite:netherite_diamond_hoe",
+      "id": "advancednetherite:netherite_gold_hoe",
       "required": false
     },
     {
-      "id": "wardentools:warden_hoe",
+      "id": "advancednetherite:netherite_iron_hoe",
+      "required": false
+    },
+    {
+      "id": "azurepaxels:netherite_paxel",
+      "required": false
+    },
+    {
+      "id": "deeperdarker:warden_hoe",
       "required": false
     },
     {
@@ -42,6 +34,18 @@
     },
     {
       "id": "enderitemod:enderite_hoe",
+      "required": false
+    },
+    {
+      "id": "multitool:netherite_multitool",
+      "required": false
+    },
+    {
+      "id": "mythicmetals:legendary_banglum_hoe",
+      "required": false
+    },
+    {
+      "id": "wardentools:warden_hoe",
       "required": false
     }
   ]
