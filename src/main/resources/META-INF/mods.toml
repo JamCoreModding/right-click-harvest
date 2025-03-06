@@ -18,7 +18,7 @@ Allows you to harvest crops with a single right click.
 modId = "forge"
 mandatory = true
 # The version range of the dependency
-versionRange = "[47,)"
+versionRange = "[47.4.0,)"
 ordering = "NONE"
 side = "BOTH"
 

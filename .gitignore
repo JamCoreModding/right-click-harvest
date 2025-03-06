@@ -22,3 +22,10 @@ bin/
 
 #fabric
 run/
+
+#stuff that stays when I switch branch
+fabric
+fabric-gametest
+datagen
+neoforge
+common
