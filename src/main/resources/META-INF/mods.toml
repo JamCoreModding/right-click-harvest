@@ -14,17 +14,17 @@ description = '''
 Allows you to harvest crops with a single right click.
 '''
 
-[[dependencies.examplemod]]
+[[dependencies.rightclickharvest]]
 modId = "forge"
 mandatory = true
 # The version range of the dependency
-versionRange = "[45,)"
+versionRange = "[47,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.examplemod]]
+[[dependencies.rightclickharvest]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.19.4,1.20.1)"
+versionRange = "[1.20.1,)"
 ordering = "NONE"
 side = "BOTH"

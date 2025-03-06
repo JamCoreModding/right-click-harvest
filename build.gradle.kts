@@ -5,9 +5,8 @@ import org.gradle.jvm.tasks.Jar
 plugins {
 	id("eclipse")
 	id("maven-publish")
-	id("net.minecraftforge.gradle") version "5.1.+"
-	id("io.github.p03w.machete") version "1.+"
-	id("org.cadixdev.licenser") version "0.6.+"
+	id("idea")
+	id("net.minecraftforge.gradle") version "[6.0,6.2)"
 	id("com.modrinth.minotaur") version "2.+"
 	id("com.matthewprenger.cursegradle") version "1.4.0"
 	id("com.github.breadmoirai.github-release") version "2.4.1"
@@ -23,14 +22,6 @@ version = mod_version
 base { archivesBaseName = archive_base_name }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-
-println(
-	"Java: ${System.getProperty("java.version")}, JVM: ${System.getProperty("java.vm.version")} (${System.getProperty("java.vendor")}), Arch: ${
-		System.getProperty(
-			"os.arch"
-		)
-	}"
-)
 
 minecraft {
 	mappings("official", "1.20.1")
@@ -174,12 +165,6 @@ tasks {
 		dependsOn("githubRelease")
 		dependsOn("curseforge")
 		dependsOn("modrinth")
-
-		doLast {
-			val changelog = project.rootProject.file("CHANGELOG.md")
-			val changelogTemplate = project.rootProject.file("CHANGELOG_TEMPLATE.md")
-			changelog.writeText(changelogTemplate.readText())
-		}
 	}
 }
 

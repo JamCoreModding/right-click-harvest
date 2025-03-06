@@ -3,6 +3,7 @@
 build/
 out/
 classes/
+.architectury-transformer/
 local.properties
 secrets.properties
 

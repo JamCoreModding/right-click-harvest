@@ -44,19 +44,15 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 
 /**
@@ -64,33 +60,27 @@ import org.slf4j.Logger;
  */
 @Mod(RightClickHarvestModInit.MOD_ID)
 public class RightClickHarvestModInit {
-
 	public static final String MOD_ID = "rightclickharvest";
 	public static final Logger LOGGER = LogUtils.getLogger();
-
-	public static final Pair<Config, ForgeConfigSpec> CONFIG = new ForgeConfigSpec.Builder()
-			.configure(Config::new);
-
 	public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST,
 			Direction.SOUTH, Direction.WEST};
 	@Deprecated(forRemoval = true)
 	public static final TagKey<Block> HOE_REQUIRED = BlockTags.create(
-			new ResourceLocation(MOD_ID, "hoe_required"));
+			ResourceLocation.fromNamespaceAndPath(MOD_ID, "hoe_required"));
 	public static final TagKey<Block> HOE_NEVER_REQUIRED = BlockTags.create(
-			new ResourceLocation(MOD_ID, "hoe_never_required"));
+			ResourceLocation.fromNamespaceAndPath(MOD_ID, "hoe_never_required"));
 	public static final TagKey<Block> RADIUS_HARVEST_BLACKLIST = BlockTags.create(
-			new ResourceLocation(MOD_ID, "radius_harvest_blacklist"));
+			ResourceLocation.fromNamespaceAndPath(MOD_ID, "radius_harvest_blacklist"));
 	public static final TagKey<Item> LOW_TIER_HOES = ItemTags.create(
-			new ResourceLocation(MOD_ID, "low_tier_hoes"));
+			ResourceLocation.fromNamespaceAndPath(MOD_ID, "low_tier_hoes"));
 	public static final TagKey<Item> MID_TIER_HOES = ItemTags.create(
-			new ResourceLocation(MOD_ID, "mid_tier_hoes"));
+			ResourceLocation.fromNamespaceAndPath(MOD_ID, "mid_tier_hoes"));
 	public static final TagKey<Item> HIGH_TIER_HOES = ItemTags.create(
-			new ResourceLocation(MOD_ID, "high_tier_hoes"));
+			ResourceLocation.fromNamespaceAndPath(MOD_ID, "high_tier_hoes"));
 
-	public RightClickHarvestModInit() {
-		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		ModLoadingContext.get().registerConfig(Type.COMMON, CONFIG.getRight(), MOD_ID + ".toml");
-		modEventBus.addListener(this::onCommonSetup);
+	public RightClickHarvestModInit(FMLJavaModLoadingContext context) {
+		context.getModEventBus().addListener(this::onCommonSetup);
+		context.registerConfig(Type.COMMON, Config.SPEC);
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
@@ -121,13 +111,13 @@ public class RightClickHarvestModInit {
 		Block originalBlock = state.getBlock();
 		ItemStack stack = player.getItemInHand(hand);
 
-		if (CONFIG.getLeft().hungerLevel.get() != Config.HungerLevel.NONE) {
+		if (Config.hungerLevel != Config.HungerLevel.NONE) {
 			if (!player.getAbilities().instabuild && player.getFoodData().getFoodLevel() <= 0) {
 				return InteractionResult.PASS;
 			}
 		}
 
-		if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.getLeft().requireHoe.get()) {
+		if (!state.is(HOE_NEVER_REQUIRED) && Config.requireHoe) {
 			if (!stack.is(ItemTags.HOES)) {
 				return InteractionResult.PASS;
 			}
@@ -140,7 +130,7 @@ public class RightClickHarvestModInit {
 		if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock
 				|| state.getBlock() instanceof NetherWartBlock) {
 			if (isMature(state)) {
-				if (initialCall && CONFIG.getLeft().harvestInRadius.get() && !state.is(RADIUS_HARVEST_BLACKLIST)
+				if (initialCall && Config.harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST)
 						&& stack.is(ItemTags.HOES)) {
 					int radius = 0;
 					boolean circle = false;
@@ -190,12 +180,12 @@ public class RightClickHarvestModInit {
 					dropStacks(state, (ServerLevel) world, hitResult.getBlockPos(), player,
 							player.getItemInHand(hand));
 
-					if (CONFIG.getLeft().requireHoe.get()) {
+					if (Config.requireHoe) {
 						stack.hurtAndBreak(1, player, (entity) -> entity.broadcastBreakEvent(hand));
 					}
 
 					// Regular block breaking causes 0.005f exhaustion
-					player.causeFoodExhaustion(0.008f * CONFIG.getLeft().hungerLevel.get().modifier);
+					player.causeFoodExhaustion(0.008f * Config.hungerLevel.modifier);
 				} else {
 					player.playSound(
 							state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED
@@ -206,28 +196,31 @@ public class RightClickHarvestModInit {
 				RightClickHarvestCallbacks.AfterHarvest.post(player, originalBlock);
 				return InteractionResult.SUCCESS;
 			}
-		} else if (state.getBlock() instanceof SugarCaneBlock) {
-			if (hitResult.getDirection() == Direction.UP && stack.getItem() == Items.SUGAR_CANE) {
+		} else if (state.getBlock() instanceof SugarCaneBlock || state.getBlock() instanceof CactusBlock) {
+			Block block = state.getBlock();
+			if (hitResult.getDirection() == Direction.UP && ((stack.getItem() == Items.SUGAR_CANE && block instanceof SugarCaneBlock) || (stack.getItem() == Items.CACTUS && block instanceof CactusBlock))) {
 				return InteractionResult.PASS;
 			}
 
 			int count = 1;
 
 			BlockPos bottom = hitResult.getBlockPos().below();
-			while (world.getBlockState(bottom).is(Blocks.SUGAR_CANE)) {
+			while (world.getBlockState(bottom).is(block)) {
 				count++;
 				bottom = bottom.below();
 			}
 
-			if (count == 1 && !world.getBlockState(hitResult.getBlockPos().above()).is(Blocks.SUGAR_CANE)) {
+			if (count == 1 && !world.getBlockState(hitResult.getBlockPos().above()).is(block)) {
 				return InteractionResult.PASS;
 			}
 
 			if (!world.isClientSide) {
+				BlockEvent.BreakEvent breakEv = new BlockEvent.BreakEvent(world, bottom.above(2), state, player);
+				if (MinecraftForge.EVENT_BUS.post(breakEv)) return InteractionResult.FAIL;
 				world.destroyBlock(bottom.above(2), true);
 
 				// Regular block breaking causes 0.005f exhaustion
-				player.causeFoodExhaustion(0.008f * CONFIG.getLeft().hungerLevel.get().modifier);
+				player.causeFoodExhaustion(0.008f * Config.hungerLevel.modifier);
 			} else {
 				player.playSound(SoundEvents.CROP_PLANTED, 1.0f, 1.0f);
 			}

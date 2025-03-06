@@ -1,9 +1,0 @@
-{
-    "rightclickharvest.jamlibconfig.title": "Configuração de colheita do botão direito",
-    "rightclickharvest.jamlibconfig.requireHoe": "Requer enxada",
-    "rightclickharvest.jamlibconfig.requireHoe.tooltip": "Apenas permita a colheita de certas culturas (por exemplo, trigo, cenoura) se o jogador estiver segurando uma enxada na mão.",
-    "rightclickharvest.jamlibconfig.harvestInRadius": "Colheita no raio",
-    "rightclickharvest.jamlibconfig.harvestInRadius.tooltip": "Faça enxadas de diferentes níveis colher vários blocos em um raio. Requer que `requireHoe` seja definido como true.",
-    "rightclickharvest.jamlibconfig.useHunger": "Use a Fome",
-    "rightclickharvest.jamlibconfig.useHunger.tooltip": "Use a fome ao colher colheitas."
-  }

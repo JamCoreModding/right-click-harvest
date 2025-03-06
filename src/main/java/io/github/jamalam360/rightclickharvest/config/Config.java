@@ -24,21 +24,42 @@
 
 package io.github.jamalam360.rightclickharvest.config;
 
+import io.github.jamalam360.rightclickharvest.RightClickHarvestModInit;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 /**
  * @author Jamalam360
  */
+@Mod.EventBusSubscriber(modid = RightClickHarvestModInit.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config {
-    public final ConfigValue<Boolean> requireHoe;
-    public final ConfigValue<Boolean> harvestInRadius;
-    public final ConfigValue<HungerLevel> hungerLevel;
+    private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
-    public Config(ForgeConfigSpec.Builder builder) {
-        requireHoe = builder.define("requireHoe", true);
-        harvestInRadius = builder.define("harvestInRadius", true);
-        hungerLevel = builder.defineEnum("hungerLevel", HungerLevel.NORMAL);
+    private static final ForgeConfigSpec.BooleanValue REQUIRE_HOE = BUILDER
+            .comment("Only allow harvesting certain crops (e.g. wheat, carrots) if the player is holding a hoe in their hand.")
+            .define("requireHoe", false);
+
+    private static final ForgeConfigSpec.BooleanValue HARVEST_IN_RADIUS = BUILDER
+            .comment("Make hoes of different tiers harvest multiple blocks in a radius.")
+            .define("harvestInRadius", true);
+
+    private static final ForgeConfigSpec.EnumValue<HungerLevel> HUNGER_LEVEL = BUILDER
+            .comment("The food usage when harvesting crops.")
+            .defineEnum("hungerLevel", HungerLevel.NORMAL);
+
+    public static final ForgeConfigSpec SPEC = BUILDER.build();
+
+    public static boolean requireHoe;
+    public static boolean harvestInRadius;
+    public static HungerLevel hungerLevel;
+
+    @SubscribeEvent
+    public static void onLoad(final ModConfigEvent event) {
+        requireHoe = REQUIRE_HOE.get();
+        harvestInRadius = HARVEST_IN_RADIUS.get();
+        hungerLevel = HUNGER_LEVEL.get();
     }
 
     public enum HungerLevel {
