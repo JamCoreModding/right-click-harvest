@@ -3,5 +3,5 @@
   "config.rightclickharvest.requireHoe": "Необхідна мотика",
   "config.rightclickharvest.requireHoe.tooltip": "Дозволяє збирати лише певні культури (наприклад, пшениця, морква), якщо гравець тримає в руці мотику.",
   "config.rightclickharvest.harvestInRadius": "Збір у радіусі",
-  "config.rightclickharvest.harvestInRadius.tooltip": "Дозволяє мотикам різних рівнів збирати декілька блоків у радіусі. Необхідно, щоб `requireHoe` мало значення true."
+  "config.rightclickharvest.harvestInRadius.tooltip": "Дозволяє мотикам різних рівнів збирати декілька блоків у радіусі."
 }

@@ -5,7 +5,7 @@
   "config.rightclickharvest.showServerWarning": "Show Server Warning",
   "config.rightclickharvest.showServerWarning.tooltip": "Whether to show the warning about playing on a server without RightClickHarvest installed.",
   "config.rightclickharvest.harvestInRadius": "Harvest in Radius",
-  "config.rightclickharvest.harvestInRadius.tooltip": "Make hoes of different tiers harvest multiple blocks in a radius. Requires `requireHoe` to be set to true.",
+  "config.rightclickharvest.harvestInRadius.tooltip": "Make hoes of different tiers harvest multiple blocks in a radius.",
   "config.rightclickharvest.hungerLevel": "Hunger Level",
   "config.rightclickharvest.hungerLevel.tooltip": "The food usage when harvesting crops.",
   "config.rightclickharvest.hungerLevel.none": "None",
