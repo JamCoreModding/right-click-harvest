@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
 
       - name: Enable Caching
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
