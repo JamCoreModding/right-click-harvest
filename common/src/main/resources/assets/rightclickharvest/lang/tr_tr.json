@@ -17,7 +17,7 @@
   "config.rightclickharvest.experienceType.none": "Hiç",
   "config.rightclickharvest.experienceType.cost": "XP Ücreti",
   "config.rightclickharvest.experienceType.reward": "XP Kazancı",
-  "config.rightclickharvest.discord": "Discord'da Takıl",
+  "config.rightclickharvest.discord": "Discord'da takıl",
   "config.rightclickharvest.github": "Github'da hata raporla ve yeni özellikler iste",
   "config.rightclickharvest.modrinth": "Modrinth'i güncellemeler için kontrol et",
   "text.rightclickharvest.use_a_hoe_warning": "RightClickHarvest çapa tutarak hasat etmeye ayarlanmış - öyle yap ya da bu zorunluluğu kapatmak için %s ayarını %s şeklinde ayarla. Bu mesaj bir kere gösterilecek.",
