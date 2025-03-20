@@ -7,7 +7,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.CropBlock;
 
 public class CropsTestSuite {
@@ -20,7 +19,7 @@ public class CropsTestSuite {
 
         helper.succeedIf(() -> {
             helper.assertBlockProperty(CROP_CENTRE_POS, CropBlock.AGE, 0);
-            helper.assertItemEntityPresent(Items.WHEAT);
+            helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
             TestHelper.assertStateInRadius(helper, CROP_CENTRE_POS, 2, false, false, state -> state.getBlock() instanceof CropBlock && state.getValue(CropBlock.AGE) == CropBlock.MAX_AGE);
         });
     }
@@ -30,7 +29,7 @@ public class CropsTestSuite {
         TestHelper.interact(helper, CROP_CENTRE_POS, Items.IRON_HOE.getDefaultInstance());
 
         helper.succeedIf(() -> {
-            helper.assertItemEntityPresent(Items.WHEAT);
+            helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
             TestHelper.assertStateInRadius(helper, CROP_CENTRE_POS, 1, true, true, state -> state.getBlock() instanceof CropBlock && state.getValue(CropBlock.AGE) == 0);
         });
     }
@@ -40,7 +39,7 @@ public class CropsTestSuite {
         TestHelper.interact(helper, CROP_CENTRE_POS, Items.DIAMOND_HOE.getDefaultInstance());
 
         helper.succeedIf(() -> {
-            helper.assertItemEntityPresent(Items.WHEAT);
+            helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
             TestHelper.assertStateInRadius(helper, CROP_CENTRE_POS, 1, false, true, state -> state.getBlock() instanceof CropBlock && state.getValue(CropBlock.AGE) == 0);
         });
     }
@@ -50,19 +49,19 @@ public class CropsTestSuite {
         TestHelper.interact(helper, CROP_CENTRE_POS, Items.NETHERITE_HOE.getDefaultInstance());
 
         helper.succeedIf(() -> {
-            helper.assertItemEntityPresent(Items.WHEAT);
+            helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
             TestHelper.assertStateInRadius(helper, CROP_CENTRE_POS, 2, true, true, state -> state.getBlock() instanceof CropBlock && state.getValue(CropBlock.AGE) == 0);
         });
     }
 
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testHoeDurability(GameTestHelper helper) {
-        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        Player player = helper.makeMockSurvivalPlayer();
         TestHelper.interact(helper, player, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
 
         helper.succeedIf(() -> {
             helper.assertBlockProperty(CROP_CENTRE_POS, CropBlock.AGE, 0);
-            helper.assertItemEntityPresent(Items.WHEAT);
+            helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
 
             if (player.getItemInHand(InteractionHand.MAIN_HAND).getMaxDamage() - player.getItemInHand(InteractionHand.MAIN_HAND).getDamageValue() == 0) {
                 throw new GameTestAssertException("Hoe durability not decremented correctly");

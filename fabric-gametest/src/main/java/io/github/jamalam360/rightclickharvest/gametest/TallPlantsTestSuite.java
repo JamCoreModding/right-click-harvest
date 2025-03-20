@@ -20,7 +20,7 @@ public class TallPlantsTestSuite implements FabricGameTest {
 
         helper.succeedIf(() -> {
             this.assertHeight(helper, 1);
-            helper.assertItemEntityPresent(Items.SUGAR_CANE);
+            helper.assertItemEntityPresent(Items.SUGAR_CANE, SUGARCANE_BOTTOM_POS, 5);
         });
     }
 
@@ -30,7 +30,7 @@ public class TallPlantsTestSuite implements FabricGameTest {
 
         helper.succeedIf(() -> {
             this.assertHeight(helper, 1);
-            helper.assertItemEntityPresent(Items.SUGAR_CANE);
+            helper.assertItemEntityPresent(Items.SUGAR_CANE, SUGARCANE_BOTTOM_POS, 5);
         });
     }
 

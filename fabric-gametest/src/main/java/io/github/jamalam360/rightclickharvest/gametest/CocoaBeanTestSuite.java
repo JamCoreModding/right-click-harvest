@@ -18,7 +18,7 @@ public class CocoaBeanTestSuite implements FabricGameTest {
 
         helper.succeedIf(() -> {
             helper.assertBlockProperty(COCOA_BEANS_POS, CocoaBlock.AGE, 0);
-            helper.assertItemEntityPresent(Items.COCOA_BEANS);
+            helper.assertItemEntityPresent(Items.COCOA_BEANS, COCOA_BEANS_POS, 5);
         });
     }
 }

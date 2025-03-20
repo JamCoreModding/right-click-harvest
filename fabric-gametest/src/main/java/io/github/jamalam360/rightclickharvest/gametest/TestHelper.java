@@ -9,7 +9,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -17,7 +16,7 @@ import net.minecraft.world.phys.Vec3;
 public class TestHelper {
 
     public static void interact(GameTestHelper helper, BlockPos pos, ItemStack stack) {
-        interact(helper, helper.makeMockPlayer(GameType.CREATIVE), pos, stack);
+        interact(helper, helper.makeMockPlayer(), pos, stack);
     }
 
     public static void interact(GameTestHelper helper, Player player, BlockPos pos, ItemStack stack) {
