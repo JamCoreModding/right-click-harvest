@@ -122,15 +122,15 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 			};
 
 			for (String hoe : lowTierHoes) {
-				this.getOrCreateTagBuilder(RightClickHarvest.LOW_TIER_HOES).setReplace(false).addOptional(ResourceLocation.parse(hoe));
+				this.getOrCreateTagBuilder(RightClickHarvest.LOW_TIER_HOES).setReplace(false).addOptional(new ResourceLocation(hoe));
 			}
 
 			for (String hoe : midTierHoes) {
-				this.getOrCreateTagBuilder(RightClickHarvest.MID_TIER_HOES).setReplace(false).addOptional(ResourceLocation.parse(hoe));
+				this.getOrCreateTagBuilder(RightClickHarvest.MID_TIER_HOES).setReplace(false).addOptional(new ResourceLocation(hoe));
 			}
 
 			for (String hoe : highTierHoes) {
-				this.getOrCreateTagBuilder(RightClickHarvest.HIGH_TIER_HOES).setReplace(false).addOptional(ResourceLocation.parse(hoe));
+				this.getOrCreateTagBuilder(RightClickHarvest.HIGH_TIER_HOES).setReplace(false).addOptional(new ResourceLocation(hoe));
 			}
 		}
 	}

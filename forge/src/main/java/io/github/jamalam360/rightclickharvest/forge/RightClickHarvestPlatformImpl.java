@@ -1,4 +1,4 @@
-package io.github.jamalam360.rightclickharvest.neoforge;
+package io.github.jamalam360.rightclickharvest.forge;
 
 import io.github.jamalam360.rightclickharvest.HarvestContext;
 import net.minecraft.core.BlockPos;
@@ -6,19 +6,19 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.util.BlockSnapshot;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.event.level.BlockEvent;
 
 public class RightClickHarvestPlatformImpl {
 	public static void postAfterHarvestEvent(HarvestContext context) {
-		RightClickHarvestNeoForgeEvents.AfterHarvest.post(context);
+		RightClickHarvestForgeEvents.AfterHarvest.post(context);
 	}
 
 	public static boolean postBreakEvent(Level level, BlockPos pos, BlockState state, Player player) {
 		BlockEvent.BreakEvent breakEv = new BlockEvent.BreakEvent(level, pos, state, player);
-		return NeoForge.EVENT_BUS.post(breakEv).isCanceled();
+		return MinecraftForge.EVENT_BUS.post(breakEv);
 	}
 
 	public static boolean postPlaceEvent(Level level, BlockPos pos, Player player) {
@@ -27,10 +27,10 @@ public class RightClickHarvestPlatformImpl {
 				level.getBlockState(pos.below()),
 				player
 		);
-		return NeoForge.EVENT_BUS.post(placeEv).isCanceled();
+		return MinecraftForge.EVENT_BUS.post(placeEv);
 	}
 
 	public static boolean isHoeAccordingToPlatform(ItemStack stack) {
-		return stack.canPerformAction(ItemAbilities.HOE_TILL);
+		return stack.canPerformAction(ToolActions.HOE_TILL);
 	}
 }

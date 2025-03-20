@@ -1,10 +1,10 @@
-package io.github.jamalam360.rightclickharvest.neoforge;
+package io.github.jamalam360.rightclickharvest.forge;
 
 import io.github.jamalam360.rightclickharvest.HarvestContext;
-import net.neoforged.bus.api.Event;
-import net.neoforged.neoforge.common.NeoForge;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.Event;
 
-public class RightClickHarvestNeoForgeEvents {
+public class RightClickHarvestForgeEvents {
 	/**
 	 * Called after right-click-harvesting.
 	 */
@@ -17,7 +17,7 @@ public class RightClickHarvestNeoForgeEvents {
 
 		protected static void post(HarvestContext context) {
 			AfterHarvest event = new AfterHarvest(context);
-			NeoForge.EVENT_BUS.post(event);
+			MinecraftForge.EVENT_BUS.post(event);
 		}
 
 		public HarvestContext getContext() {

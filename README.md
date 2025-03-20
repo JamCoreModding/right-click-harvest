@@ -1,7 +1,7 @@
 ![RCH Banner](https://www.bisecthosting.com/images/CF/RightClickHarvest/BH_RH_HEADER.webp)
 
 <center><img width="100%" src="https://github.com/JamCoreModding/right-click-harvest/blob/main/demo.gif?raw=true" /></center>
-<h3 align="center">RightClickHarvest is a mod for Fabric and NeoForge that allows harvesting crops and plants with just a right click.</h3>
+<h3 align="center">RightClickHarvest is a mod for Fabric, Forge, and NeoForge that allows harvesting crops and plants with just a right click.</h3>
 
 - Right click to harvest crops, replanting the seeds automatically.
 - Harvest all vanilla crops, including cocoa beans, cactus, sugar cane, and more.

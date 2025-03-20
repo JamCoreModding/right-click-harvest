@@ -4,12 +4,11 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.networking.NetworkManager;
-import dev.architectury.platform.Platform;
-import dev.architectury.utils.Env;
 import io.github.jamalam360.jamlib.JamLib;
 import io.github.jamalam360.jamlib.JamLibPlatform;
 import io.github.jamalam360.jamlib.config.ConfigManager;
 import io.github.jamalam360.rightclickharvest.mixin.CropBlockAccessor;
+import io.github.jamalam360.rightclickharvest.mixinsupport.ServerPlayerLanguageAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,7 +25,6 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -64,13 +62,9 @@ public class RightClickHarvest {
         LOGGER.info("Initializing Right Click Harvest on {}", JamLibPlatform.getPlatform().name());
         JamLib.checkForJarRenaming(RightClickHarvest.class);
 
-        if (Platform.getEnvironment() == Env.SERVER) {
-            NetworkManager.registerS2CPayloadType(HelloPacket.TYPE, HelloPacket.STREAM_CODEC);
-        }
-
         PlayerEvent.PLAYER_JOIN.register((player) -> {
             if (NetworkManager.canPlayerReceive(player, HelloPacket.TYPE)) {
-                NetworkManager.sendToPlayer(player, new HelloPacket());
+                NetworkManager.sendToPlayer(player, HelloPacket.TYPE, HelloPacket.of());
             }
         });
         
@@ -210,7 +204,7 @@ public class RightClickHarvest {
         } else if (player instanceof ServerPlayer serverPlayer && !NetworkManager.canPlayerReceive(serverPlayer, HelloPacket.TYPE)) { // The mod is not installed on the client
             if (!PLAYERS_WARNED_FOR_NOT_USING_HOE.contains(player.getUUID())) {
                 // Since the mod isn't installed clientside, we can't send translatable text
-                String playerLang = serverPlayer.clientInformation().language();
+                String playerLang = ((ServerPlayerLanguageAccessor) serverPlayer).rightclickharvest$getLanguage();
                 player.displayClientMessage(Component.translatable(
                         ServerLangProvider.getUseHoeMessageByLanguage(playerLang),
                         Component.literal(ServerLangProvider.getRequireHoeConfigByLanguage(playerLang)).withStyle(s -> s.withColor(ChatFormatting.GREEN)),
@@ -237,7 +231,7 @@ public class RightClickHarvest {
             setBlockAction.run();
 
             if (hoeInUse) {
-                stackInHand.hurtAndBreak(1, player, hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND);
+                stackInHand.hurtAndBreak(1, player, (p) -> {});
             }
 
             // Regular block breaking causes 0.005f exhaustion
@@ -318,6 +312,6 @@ public class RightClickHarvest {
     }
 
     public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+        return new ResourceLocation(MOD_ID, path);
     }
 }

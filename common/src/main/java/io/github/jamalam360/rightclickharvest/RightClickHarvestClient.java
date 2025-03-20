@@ -3,9 +3,6 @@ package io.github.jamalam360.rightclickharvest;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.networking.NetworkManager;
 import io.github.jamalam360.jamlib.events.client.ClientPlayLifecycleEvents;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 
 public class RightClickHarvestClient {
 	private static boolean serverHasSaidHello = false;
@@ -13,7 +10,7 @@ public class RightClickHarvestClient {
 	private static int delay = 100;
 
 	public static void init() {
-		NetworkManager.registerReceiver(NetworkManager.Side.S2C, HelloPacket.TYPE, HelloPacket.STREAM_CODEC, (packet, ctx) -> {
+		NetworkManager.registerReceiver(NetworkManager.Side.S2C, HelloPacket.TYPE, (packet, ctx) -> {
 			serverHasSaidHello = true;
 			RightClickHarvest.LOGGER.info("Server has said hello! Hi Server :)");
 		});

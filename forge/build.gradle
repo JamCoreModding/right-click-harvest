@@ -5,11 +5,17 @@ plugins {
 
 architectury {
     platformSetupLoomIde()
-    neoForge()
+    forge()
 }
 
 base {
-    archivesName = "rightclickharvest-neoforge"
+    archivesName = "rightclickharvest-forge"
+}
+
+loom {
+    forge {
+        mixinConfig "rightclickharvest.mixins.json"
+    }
 }
 
 configurations {
@@ -17,35 +23,35 @@ configurations {
     shadowCommon
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
-    developmentNeoForge.extendsFrom common
+    developmentForge.extendsFrom common
 }
 
 repositories {
     maven {
-        name = "NeoForge"
-        url = "https://maven.neoforged.net"
+        name = "Forge"
+        url = "https://maven.minecraftforge.net"
     }
 }
 
 dependencies {
-    neoForge libs.neoforge
-    modImplementation libs.architectury.neoforge
-    modImplementation libs.jamlib.neoforge
+    forge libs.forge
+    modImplementation libs.architectury.forge
+    modImplementation libs.jamlib.forge
 
     forgeRuntimeLibrary "blue.endless:jankson:1.2.3"
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 }
 
 if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_KEY") != null) {
     unifiedPublishing {
         project {
-            displayName = "V${project.version} (NeoForge ${project.minecraft_version})"
+            displayName = "V${project.version} (Forge ${project.minecraft_version})"
             changelog = rootProject.file("CHANGELOG.md").text
             releaseType = project.version.contains("beta") ? "beta" : "release"
             gameVersions = [project.minecraft_version, *(project.additional_minecraft_versions == "" ? [] : project.additional_minecraft_versions.split(","))]
-            gameLoaders = ["neoforge"]
+            gameLoaders = ["forge"]
 
             mainPublication tasks.remapJar
 
@@ -76,8 +82,8 @@ if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_K
 
 publishing {
     publications {
-        mavenNeoForge(MavenPublication) {
-            artifactId = rootProject.archivesBaseName + "-neoforge"
+        mavenForge(MavenPublication) {
+            artifactId = rootProject.archivesBaseName + "-forge"
             from components.java
         }
     }
@@ -99,12 +105,11 @@ processResources {
     def substitutions = [
             "version"             : project.version,
             "minecraft_version"   : project.minimum_minecraft_version,
-            "neoforge_version"    : project.minimum_minecraft_version.substring(2),
             "architectury_version": project.minimum_architectury_api_version,
             "jamlib_version"      : project.minimum_jamlib_version
     ]
 
-    filesMatching("META-INF/neoforge.mods.toml") {
+    filesMatching("META-INF/mods.toml") {
         expand substitutions
     }
 

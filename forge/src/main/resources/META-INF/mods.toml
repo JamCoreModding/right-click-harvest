@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[1,)"
+loaderVersion = "[47,)"
 license = "MIT"
 issueTrackerURL = "https://github.com/JamCoreModding/right-click-harvest/issues"
 
@@ -13,32 +13,29 @@ authors = "Jamalam"
 description = "Right click crops to harvest them - with style."
 
 [[dependencies.rightclickharvest]]
-modId = "neoforge"
-type = "required"
-versionRange = "[${neoforge_version},)"
+modId = "forge"
+mandatory = true
+versionRange = "[47.4.0,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.rightclickharvest]]
 modId = "minecraft"
-type = "required"
+mandatory = true
 versionRange = "[${minecraft_version},)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.rightclickharvest]]
 modId = "architectury"
-type = "required"
+mandatory = true
 versionRange = "[${architectury_version},)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.rightclickharvest]]
 modId = "jamlib"
-type = "required"
+mandatory = true
 versionRange = "[${jamlib_version},)"
 ordering = "AFTER"
 side = "BOTH"
-
-[[mixins]]
-config = "rightclickharvest.mixins.json"

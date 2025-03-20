@@ -86,7 +86,7 @@ allprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.release = 21
+        options.release = 17
     }
 
     tasks.create("prepareWorkspace") {}
@@ -101,7 +101,7 @@ allprojects {
         dependsOn("common:publishAllPublicationsToMavenRepository")
         dependsOn("fabric:publishUnified")
         dependsOn("fabric:publishAllPublicationsToMavenRepository")
-        dependsOn("neoforge:publishUnified")
-        dependsOn("neoforge:publishAllPublicationsToMavenRepository")
+        dependsOn("forge:publishUnified")
+        dependsOn("forge:publishAllPublicationsToMavenRepository")
     }
 }
