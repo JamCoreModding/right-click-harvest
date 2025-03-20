@@ -74,6 +74,7 @@ public class ConfigTestSuite {
 
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testHungerLevelNormal(GameTestHelper helper) {
+        RightClickHarvest.CONFIG.get().hungerLevel = HungerLevel.NORMAL;
         Player player = helper.makeMockSurvivalPlayer();
         float exhaustion = player.getFoodData().getExhaustionLevel();
         TestHelper.interact(helper, player, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
