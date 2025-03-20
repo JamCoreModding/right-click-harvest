@@ -23,6 +23,8 @@ public class ServerLangProvider {
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("ko_kr", "수확에 괭이 필요");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("ja_jp", "クワを必須にする");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("pt_br", "Requer enxada");
+		USE_HOE_MESSAGE_BY_LANGUAGE.put("tr_tr", "RightClickHarvest çapa tutarak hasat etmeye ayarlanmış - öyle yap ya da bu zorunluluğu kapatmak için %s ayarını %s şeklinde ayarla. Bu mesaj bir kere gösterilecek.");
+		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("tr_tr", "Çapa Gereksin");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("fr_fr", "Exiger une houe");
 		USE_HOE_MESSAGE_BY_LANGUAGE.put("ru_ru", "Сбор урожая по ПКМ настроен на использование мотыги. Держите мотыгу или установите %s на %s в настройках, чтобы отключить это требование. Это сообщение будет показано только один раз.");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("ru_ru", "Требования мотыги");
