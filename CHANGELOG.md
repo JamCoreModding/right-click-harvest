@@ -1,2 +1,3 @@
-- Add [Multitool Enhanced](https://modrinth.com/mod/multitool-enhanced) multitools to tiered hoe tags (closes #88).
-- Remove statement that `requireHoe` must be true to use harvest in radius in config tooltips (closes #90).
+- Add Turkish localization (#94).
+- Temporarily disable 'install on server' warning, till I can debug it and figure out the issue.
+

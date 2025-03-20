@@ -33,14 +33,14 @@ public class RightClickHarvestClient {
 					return;
 				}
 
-				Minecraft.getInstance().player.displayClientMessage(
-						Component.translatable(
-								"text.rightclickharvest.install_on_server_warning",
-								Component.translatable("config.rightclickharvest.showServerWarning").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
-								Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
-								)),
-						false
-				);
+//				Minecraft.getInstance().player.displayClientMessage(
+//						Component.translatable(
+//								"text.rightclickharvest.install_on_server_warning",
+//								Component.translatable("config.rightclickharvest.showServerWarning").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
+//								Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
+//								)),
+//						false
+//				);
 				warned = true;
 			}
 		});
