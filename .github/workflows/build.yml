@@ -8,44 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-
-      - name: Enable Caching
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/loom-cache
-            ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('**/gradle-wrapper.properties') }}-${{ hashFiles('./gradle.properties') }}-${{ hashFiles('./libs.versions.toml') }}
-          restore-keys: gradle
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-
-      - name: Setup JDK 21
-        uses: actions/setup-java@v1
+      - uses: JamCoreModding/.github/.github/workflows/mod.yml@main
         with:
           java-version: 21
-
-      - name: Run Game Tests
-        run: ./gradlew fabric-gametest:runGametest
-
-      - name: Build
-        run: ./gradlew clean neoforge:build fabric:build
-
-      - name: Capture Fabric Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: Fabric Artifacts
-          path: fabric/build/libs/
-
-      - name: Capture NeoForge Build Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: NeoForge Artifacts
-          path: neoforge/build/libs/
+          gametest-project-directory: fabric-gametest
