@@ -6,9 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: JamCoreModding/.github/.github/workflows/mod.yml@main
-        with:
-          java-version: 21
-          gametest-project-directory: fabric-gametest
+    uses: JamCoreModding/.github/.github/workflows/mod.yml@main
+    with:
+      java-version: 21
+      gametest-project-directory: fabric-gametest
