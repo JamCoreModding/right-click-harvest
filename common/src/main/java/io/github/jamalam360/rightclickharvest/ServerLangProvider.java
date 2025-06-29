@@ -17,19 +17,21 @@ public class ServerLangProvider {
 
 	static {
 		// gradle-auto-populated
-		USE_HOE_MESSAGE_BY_LANGUAGE.put("de_de", "RightClickHarvest ist so konfiguriert, dass eine Hacke erforderlich ist - halte eine Hacke oder setze %s auf %s in der Konfiguration, um diese Anforderung zu deaktivieren. Diese Meldung wird nur einmal angezeigt.");
-		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("de_de", "Benötigt Hacke");
-		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("uk_ua", "Необхідна мотика");
-		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("ko_kr", "수확에 괭이 필요");
-		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("ja_jp", "クワを必須にする");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("pt_br", "Requer enxada");
+		USE_HOE_MESSAGE_BY_LANGUAGE.put("en_us", "RightClickHarvest is configured to require holding a hoe for harvesting - do so, or set %s to %s in the config to disable this requirement. This message will only be shown once.");
+		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("en_us", "Require Hoe");
 		USE_HOE_MESSAGE_BY_LANGUAGE.put("tr_tr", "RightClickHarvest çapa tutarak hasat etmeye ayarlanmış - öyle yap ya da bu zorunluluğu kapatmak için %s ayarını %s şeklinde ayarla. Bu mesaj bir kere gösterilecek.");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("tr_tr", "Çapa Gereksin");
+		USE_HOE_MESSAGE_BY_LANGUAGE.put("es_ar", "RightClickHarvest está configurado para requerir tener una azada para cosechar. Hazlo, o configura %s a %s en la configuración para desactivar este requerimiento. Este mensaje solo se mostrará una vez.");
+		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("es_ar", "Requerir Azada");
+		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("ja_jp", "クワを必須にする");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("fr_fr", "Exiger une houe");
 		USE_HOE_MESSAGE_BY_LANGUAGE.put("ru_ru", "Сбор урожая по ПКМ настроен на использование мотыги. Держите мотыгу или установите %s на %s в настройках, чтобы отключить это требование. Это сообщение будет показано только один раз.");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("ru_ru", "Требования мотыги");
-		USE_HOE_MESSAGE_BY_LANGUAGE.put("en_us", "RightClickHarvest is configured to require holding a hoe for harvesting - do so, or set %s to %s in the config to disable this requirement. This message will only be shown once.");
-		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("en_us", "Require Hoe");
+		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("uk_ua", "Необхідна мотика");
+		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("ko_kr", "수확에 괭이 필요");
+		USE_HOE_MESSAGE_BY_LANGUAGE.put("de_de", "RightClickHarvest ist so konfiguriert, dass eine Hacke erforderlich ist - halte eine Hacke oder setze %s auf %s in der Konfiguration, um diese Anforderung zu deaktivieren. Diese Meldung wird nur einmal angezeigt.");
+		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("de_de", "Benötigt Hacke");
 		USE_HOE_MESSAGE_BY_LANGUAGE.put("zh_cn", "RightClickHarvest配置为需要锄头 - 请持有锄头或在配置中将%s设置为%s以禁用此要求。此消息只会显示一次。");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("zh_cn", "需要锄头");
 		// gradle-auto-populated

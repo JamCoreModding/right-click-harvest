@@ -1,20 +1,20 @@
 package io.github.jamalam360.rightclickharvest.gametest;
 
-import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
-import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
 // Cacti and sugarcane
-public class TallPlantsTestSuite implements FabricGameTest {
+public class TallPlantsTestSuite {
 
     private static final BlockPos SUGARCANE_BOTTOM_POS = new BlockPos(2, 1, 1);
 
-    @GameTest(template = "rightclickharvest-gametest:sugarcane_tall")
+    @GameTest(structure = "rightclickharvest-gametest:sugarcane_tall")
     public void testTallBottom(GameTestHelper helper) {
         TestHelper.interact(helper, SUGARCANE_BOTTOM_POS, Items.WOODEN_HOE.getDefaultInstance());
 
@@ -24,7 +24,7 @@ public class TallPlantsTestSuite implements FabricGameTest {
         });
     }
 
-    @GameTest(template = "rightclickharvest-gametest:sugarcane_tall")
+    @GameTest(structure = "rightclickharvest-gametest:sugarcane_tall")
     public void testTallAbove(GameTestHelper helper) {
         TestHelper.interact(helper, SUGARCANE_BOTTOM_POS.above(1), Items.WOODEN_HOE.getDefaultInstance());
 
@@ -34,7 +34,7 @@ public class TallPlantsTestSuite implements FabricGameTest {
         });
     }
 
-    @GameTest(template = "rightclickharvest-gametest:sugarcane_short")
+    @GameTest(structure = "rightclickharvest-gametest:sugarcane_short")
     public void testShort(GameTestHelper helper) {
         TestHelper.interact(helper, SUGARCANE_BOTTOM_POS, ItemStack.EMPTY);
 
@@ -55,6 +55,6 @@ public class TallPlantsTestSuite implements FabricGameTest {
             }
         }
 
-        helper.assertTrue(actualHeight == height, "Expected sugarcane to be " + height + " blocks tall, but it was " + actualHeight + " blocks tall");
+        helper.assertTrue(actualHeight == height, Component.literal("Expected sugarcane to be " + height + " blocks tall, but it was " + actualHeight + " blocks tall"));
     }
 }
