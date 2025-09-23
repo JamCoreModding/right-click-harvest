@@ -13,6 +13,14 @@
       "required": false
     },
     {
+      "id": "aether:gravitite_hoe",
+      "required": false
+    },
+    {
+      "id": "aether:valkyrie_hoe",
+      "required": false
+    },
+    {
       "id": "amethystequipment:amethyst_hoe",
       "required": false
     },
@@ -42,6 +50,10 @@
     },
     {
       "id": "betternether:nether_ruby_hoe",
+      "required": false
+    },
+    {
+      "id": "deep_aether:skyjade_hoe",
       "required": false
     },
     {

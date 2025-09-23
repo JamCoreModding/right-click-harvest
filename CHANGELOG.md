@@ -1,3 +1,2 @@
-- Add Turkish localization (#94).
-- Temporarily disable 'install on server' warning, till I can debug it and figure out the issue.
-
+- Update to 1.21.8.
+- Add new modded hoes to the tier tags (#102).
