@@ -8,7 +8,6 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.CropBlock;
 
 public class ConfigTestSuite {
@@ -22,7 +21,7 @@ public class ConfigTestSuite {
 
         helper.succeedIf(() -> {
             helper.assertBlockProperty(CROP_CENTRE_POS, CropBlock.AGE, CropBlock.MAX_AGE);
-            helper.assertItemEntityNotPresent(Items.WHEAT);
+	        helper.assertItemEntityNotPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
         });
     }
 
@@ -33,7 +32,7 @@ public class ConfigTestSuite {
 
         helper.succeedIf(() -> {
             helper.assertBlockProperty(CROP_CENTRE_POS, CropBlock.AGE, 0);
-            helper.assertItemEntityPresent(Items.WHEAT);
+	        helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
         });
     }
 
@@ -44,7 +43,7 @@ public class ConfigTestSuite {
 
         helper.succeedIf(() -> {
             helper.assertBlockProperty(CROP_CENTRE_POS, CropBlock.AGE, 0);
-            helper.assertItemEntityPresent(Items.WHEAT);
+	        helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
             RightClickHarvest.CONFIG.get().requireHoe = true;
         });
     }
@@ -56,7 +55,7 @@ public class ConfigTestSuite {
 
         helper.succeedIf(() -> {
             helper.assertBlockProperty(CROP_CENTRE_POS, CropBlock.AGE, 0);
-            helper.assertItemEntityPresent(Items.WHEAT);
+	        helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
             RightClickHarvest.CONFIG.get().requireHoe = true;
         });
     }
@@ -67,7 +66,7 @@ public class ConfigTestSuite {
         TestHelper.interact(helper, CROP_CENTRE_POS, Items.NETHERITE_HOE.getDefaultInstance());
 
         helper.succeedIf(() -> {
-            helper.assertItemEntityPresent(Items.WHEAT);
+	        helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
             TestHelper.assertStateInRadius(helper, CROP_CENTRE_POS, 2, true, true, state -> state.getBlock() instanceof CropBlock && state.getValue(CropBlock.AGE) == CropBlock.MAX_AGE);
             RightClickHarvest.CONFIG.get().harvestInRadius = true;
         });
@@ -76,13 +75,13 @@ public class ConfigTestSuite {
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testHungerLevelNormal(GameTestHelper helper) {
 	    RightClickHarvest.CONFIG.get().hungerLevel = HungerLevel.NORMAL;
-        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+	    Player player = helper.makeMockSurvivalPlayer();
         float exhaustion = TestHelper.getPlayerExhaustion(player);
         TestHelper.interact(helper, player, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
 
         helper.succeedIf(() -> {
             helper.assertBlockProperty(CROP_CENTRE_POS, CropBlock.AGE, 0);
-            helper.assertItemEntityPresent(Items.WHEAT);
+	        helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
 
             if (TestHelper.getPlayerExhaustion(player) <= exhaustion) {
                 throw new AssertionError("Player's exhaustion level did not increase");
@@ -93,13 +92,13 @@ public class ConfigTestSuite {
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testHungerLevelNone(GameTestHelper helper) {
         RightClickHarvest.CONFIG.get().hungerLevel = HungerLevel.NONE;
-        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+	    Player player = helper.makeMockSurvivalPlayer();
         float exhaustion = TestHelper.getPlayerExhaustion(player);
         TestHelper.interact(helper, player, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
 
         helper.succeedIf(() -> {
             helper.assertBlockProperty(CROP_CENTRE_POS, CropBlock.AGE, 0);
-            helper.assertItemEntityPresent(Items.WHEAT);
+	        helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
 
             if (TestHelper.getPlayerExhaustion(player) > exhaustion) {
                 throw new AssertionError("Player's exhaustion level increased when it shouldn't have");

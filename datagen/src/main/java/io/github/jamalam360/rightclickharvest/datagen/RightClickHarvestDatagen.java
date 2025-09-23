@@ -132,15 +132,15 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 			TagBuilder highTierHoeTag = this.getOrCreateRawBuilder(RightClickHarvest.HIGH_TIER_HOES);
 
 			for (String hoe : lowTierHoes) {
-				lowTierHoeTag.addOptionalElement(ResourceLocation.parse(hoe));
+				lowTierHoeTag.addOptionalElement(new ResourceLocation(hoe));
 			}
 
 			for (String hoe : midTierHoes) {
-				midTierHoeTag.addOptionalElement(ResourceLocation.parse(hoe));
+				midTierHoeTag.addOptionalElement(new ResourceLocation(hoe));
 			}
 
 			for (String hoe : highTierHoes) {
-				highTierHoeTag.addOptionalElement(ResourceLocation.parse(hoe));
+				highTierHoeTag.addOptionalElement(new ResourceLocation(hoe));
 			}
 		}
 	}
