@@ -25,6 +25,10 @@
       "required": false
     },
     {
+      "id": "deep_aether:stratus_hoe",
+      "required": false
+    },
+    {
       "id": "deeperdarker:warden_hoe",
       "required": false
     },
@@ -42,6 +46,10 @@
     },
     {
       "id": "mythicmetals:legendary_banglum_hoe",
+      "required": false
+    },
+    {
+      "id": "oreganized:electrum_hoe",
       "required": false
     },
     {
