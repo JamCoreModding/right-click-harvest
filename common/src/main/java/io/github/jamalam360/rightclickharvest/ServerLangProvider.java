@@ -30,6 +30,8 @@ public class ServerLangProvider {
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("ru_ru", "Требования мотыги");
 		USE_HOE_MESSAGE_BY_LANGUAGE.put("en_us", "RightClickHarvest is configured to require holding a hoe for harvesting - do so, or set %s to %s in the config to disable this requirement. This message will only be shown once.");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("en_us", "Require Hoe");
+		USE_HOE_MESSAGE_BY_LANGUAGE.put("es_ar", "RightClickHarvest está configurado para requerir tener una azada para cosechar. Hazlo, o configura %s a %s en la configuración para desactivar este requerimiento. Este mensaje solo se mostrará una vez.");
+		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("es_ar", "Requerir Azada");
 		USE_HOE_MESSAGE_BY_LANGUAGE.put("zh_cn", "RightClickHarvest配置为需要锄头 - 请持有锄头或在配置中将%s设置为%s以禁用此要求。此消息只会显示一次。");
 		REQUIRE_HOE_CONFIG_BY_LANGUAGE.put("zh_cn", "需要锄头");
 		// gradle-auto-populated

@@ -4,7 +4,6 @@ import io.github.jamalam360.rightclickharvest.RightClickHarvest;
 import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
@@ -39,7 +38,7 @@ public class TestHelper {
                 }
 
                 if (!predicate.test(helper.getBlockState(pos))) {
-                    throw new GameTestAssertException("Block at " + pos + " does not match predicate (" + helper.getBlockState(pos) + ")");
+                    throw helper.assertionException("Block at " + pos + " does not match predicate (" + helper.getBlockState(pos) + ")");
                 }
             }
         } else if (radius > 0) {
@@ -60,7 +59,7 @@ public class TestHelper {
                     }
 
                     if (!predicate.test(helper.getBlockState(pos))) {
-                        throw new GameTestAssertException("Block at " + pos + " does not match predicate (" + helper.getBlockState(pos) + ")");
+                        throw helper.assertionException("Block at " + pos + " does not match predicate (" + helper.getBlockState(pos) + ")");
                     }
                 }
             }
@@ -72,6 +71,6 @@ public class TestHelper {
         FoodData data = player.getFoodData();
         CompoundTag tag = new CompoundTag();
         data.addAdditionalSaveData(tag);
-        return tag.getFloat("foodExhaustionLevel");
+        return tag.getFloat("foodExhaustionLevel").orElse(0.0F);
     }
 }
