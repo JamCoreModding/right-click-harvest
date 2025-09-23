@@ -1,2 +1,3 @@
 - Update to 1.21.8.
 - Add new modded hoes to the tier tags (#102).
+- Fix warning message spam (#99).

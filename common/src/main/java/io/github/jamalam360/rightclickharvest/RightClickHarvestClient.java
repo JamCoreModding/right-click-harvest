@@ -30,9 +30,7 @@ public class RightClickHarvestClient {
 			} else if (delay == 0 && !warned && !serverHasSaidHello && RightClickHarvest.CONFIG.get().showServerWarning) {
 				if (NetworkManager.canServerReceive(HelloPacket.TYPE)) {
 					RightClickHarvest.LOGGER.warn("Server has RightClickHarvest installed, but the hello packet was not received before timeout");
-					return;
-				}
-
+				} else {
 //				Minecraft.getInstance().player.displayClientMessage(
 //						Component.translatable(
 //								"text.rightclickharvest.install_on_server_warning",
@@ -41,6 +39,7 @@ public class RightClickHarvestClient {
 //								)),
 //						false
 //				);
+				}
 				warned = true;
 			}
 		});
