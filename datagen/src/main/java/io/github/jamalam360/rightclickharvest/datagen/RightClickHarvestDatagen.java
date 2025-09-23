@@ -6,10 +6,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.tags.TagBuilder;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
@@ -22,9 +20,9 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 		pack.addProvider(BlockTagGenerator::new);
 	}
 
-	public static class ItemTagGenerator extends FabricTagProvider<Item> {
+	public static class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
 		public ItemTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-			super(output, Registries.ITEM, registriesFuture);
+			super(output, registriesFuture);
 		}
 
 		@Override
@@ -33,7 +31,10 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 					"minecraft:iron_hoe",
 					"ae2:certus_quartz_hoe",
 					"ae2:fluix_hoe",
+					"aether:zanite_hoe",
 					"azurepaxels:iron_paxel",
+					"copperequipment:copper_hoe",
+					"copperequipment:waxed_copper_hoe",
 					"earlystage:steel_hoe",
 					"exlinecopperequipment:copper_hoe",
 					"multitool:iron_multitool",
@@ -42,12 +43,14 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 					"mythicmetals:steel_hoe",
 					"nature_arise:aluminium_hoe",
 					"nature_arise:copper_hoe",
-					"sassot:copper_hoe"
+					"sassot:copper_hoe",
 			};
 			String[] midTierHoes = new String[]{
 					"minecraft:golden_hoe",
 					"minecraft:diamond_hoe",
 					"ae2:nether_quartz_hoe",
+					"aether:gravitite_hoe",
+					"aether:valkyrie_hoe",
 					"amethystequipment:amethyst_hoe",
 					"azurepaxels:diamond_paxel",
 					"azurepaxels:golden_paxel",
@@ -56,6 +59,7 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 					"betternether:cincinnasite_hoe_diamond",
 					"betternether:flaming_ruby_hoe",
 					"betternether:nether_ruby_hoe",
+					"deep_aether:skyjade_hoe",
 					"deeperdarker:resonarium_hoe",
 					"emeraldequipment:emerald_hoe",
 					"endreborn:curious_endorium_hoe",
@@ -104,7 +108,7 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 					"mythicupgrades:topaz_hoe",
 					"obsidianequipment:obsidian_hoe",
 					"phantasm:crystalline_hoe",
-					"winterly:cryomarble_hoe"
+					"winterly:cryomarble_hoe",
 			};
 			String[] highTierHoes = new String[]{
 					"minecraft:netherite_hoe",
@@ -113,41 +117,48 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 					"advancednetherite:netherite_gold_hoe",
 					"advancednetherite:netherite_iron_hoe",
 					"azurepaxels:netherite_paxel",
+					"deep_aether:stratus_hoe",
 					"deeperdarker:warden_hoe",
 					"dragonloot:dragon_hoe",
 					"enderitemod:enderite_hoe",
 					"multitool:netherite_multitool",
 					"mythicmetals:legendary_banglum_hoe",
-					"wardentools:warden_hoe"
+					"oreganized:electrum_hoe",
+					"wardentools:warden_hoe",
 			};
 
+			TagBuilder lowTierHoeTag = this.getOrCreateRawBuilder(RightClickHarvest.LOW_TIER_HOES);
+			TagBuilder midTierHoeTag = this.getOrCreateRawBuilder(RightClickHarvest.MID_TIER_HOES);
+			TagBuilder highTierHoeTag = this.getOrCreateRawBuilder(RightClickHarvest.HIGH_TIER_HOES);
+
 			for (String hoe : lowTierHoes) {
-				this.getOrCreateTagBuilder(RightClickHarvest.LOW_TIER_HOES).setReplace(false).addOptional(new ResourceLocation(hoe));
+				lowTierHoeTag.addOptionalElement(ResourceLocation.parse(hoe));
 			}
 
 			for (String hoe : midTierHoes) {
-				this.getOrCreateTagBuilder(RightClickHarvest.MID_TIER_HOES).setReplace(false).addOptional(new ResourceLocation(hoe));
+				midTierHoeTag.addOptionalElement(ResourceLocation.parse(hoe));
 			}
 
 			for (String hoe : highTierHoes) {
-				this.getOrCreateTagBuilder(RightClickHarvest.HIGH_TIER_HOES).setReplace(false).addOptional(new ResourceLocation(hoe));
+				highTierHoeTag.addOptionalElement(ResourceLocation.parse(hoe));
 			}
 		}
 	}
 
-	public static class BlockTagGenerator extends FabricTagProvider<Block> {
+	public static class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
 		public BlockTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-			super(output, Registries.BLOCK, registriesFuture);
+			super(output, registriesFuture);
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		protected void addTags(HolderLookup.Provider wrapperLookup) {
-			this.getOrCreateTagBuilder(RightClickHarvest.BLACKLIST)
+			valueLookupBuilder(RightClickHarvest.BLACKLIST)
 					.setReplace(false);
-			this.getOrCreateTagBuilder(RightClickHarvest.HOE_NEVER_REQUIRED)
+			valueLookupBuilder(RightClickHarvest.HOE_NEVER_REQUIRED)
 					.setReplace(false)
 					.add(Blocks.COCOA);
-			this.getOrCreateTagBuilder(RightClickHarvest.RADIUS_HARVEST_BLACKLIST)
+			valueLookupBuilder(RightClickHarvest.RADIUS_HARVEST_BLACKLIST)
 					.setReplace(false)
 					.add(Blocks.COCOA)
 					.add(Blocks.SUGAR_CANE)

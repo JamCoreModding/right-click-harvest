@@ -14,7 +14,19 @@
       "required": false
     },
     {
+      "id": "aether:zanite_hoe",
+      "required": false
+    },
+    {
       "id": "azurepaxels:iron_paxel",
+      "required": false
+    },
+    {
+      "id": "copperequipment:copper_hoe",
+      "required": false
+    },
+    {
+      "id": "copperequipment:waxed_copper_hoe",
       "required": false
     },
     {

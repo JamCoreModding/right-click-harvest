@@ -1,1 +1,2 @@
-Backport latest versions to 1.20.1!
+- Update to 1.21.8.
+- Add new modded hoes to the tier tags (#102).
