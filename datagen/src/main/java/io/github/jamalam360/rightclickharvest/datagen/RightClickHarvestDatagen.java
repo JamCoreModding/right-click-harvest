@@ -150,15 +150,14 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 			super(output, registriesFuture);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		protected void addTags(HolderLookup.Provider wrapperLookup) {
-			valueLookupBuilder(RightClickHarvest.BLACKLIST)
+			this.getOrCreateTagBuilder(RightClickHarvest.BLACKLIST)
 					.setReplace(false);
-			valueLookupBuilder(RightClickHarvest.HOE_NEVER_REQUIRED)
+			this.getOrCreateTagBuilder(RightClickHarvest.HOE_NEVER_REQUIRED)
 					.setReplace(false)
 					.add(Blocks.COCOA);
-			valueLookupBuilder(RightClickHarvest.RADIUS_HARVEST_BLACKLIST)
+			this.getOrCreateTagBuilder(RightClickHarvest.RADIUS_HARVEST_BLACKLIST)
 					.setReplace(false)
 					.add(Blocks.COCOA)
 					.add(Blocks.SUGAR_CANE)
