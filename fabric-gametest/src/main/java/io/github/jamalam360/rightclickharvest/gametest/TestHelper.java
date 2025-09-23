@@ -4,11 +4,13 @@ import io.github.jamalam360.rightclickharvest.RightClickHarvest;
 import java.util.function.Predicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -16,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 public class TestHelper {
 
     public static void interact(GameTestHelper helper, BlockPos pos, ItemStack stack) {
-        interact(helper, helper.makeMockPlayer(), pos, stack);
+        interact(helper, helper.makeMockPlayer(GameType.CREATIVE), pos, stack);
     }
 
     public static void interact(GameTestHelper helper, Player player, BlockPos pos, ItemStack stack) {
@@ -36,7 +38,7 @@ public class TestHelper {
                 }
 
                 if (!predicate.test(helper.getBlockState(pos))) {
-                    throw new GameTestAssertException("Block at " + pos + " does not match predicate (" + helper.getBlockState(pos) + ")");
+                    throw helper.assertionException("Block at " + pos + " does not match predicate (" + helper.getBlockState(pos) + ")");
                 }
             }
         } else if (radius > 0) {
@@ -57,10 +59,18 @@ public class TestHelper {
                     }
 
                     if (!predicate.test(helper.getBlockState(pos))) {
-                        throw new GameTestAssertException("Block at " + pos + " does not match predicate (" + helper.getBlockState(pos) + ")");
+                        throw helper.assertionException("Block at " + pos + " does not match predicate (" + helper.getBlockState(pos) + ")");
                     }
                 }
             }
         }
+    }
+    
+    // Easier than making a mixin accessor
+    public static float getPlayerExhaustion(Player player) {
+        FoodData data = player.getFoodData();
+        CompoundTag tag = new CompoundTag();
+        data.addAdditionalSaveData(tag);
+        return tag.getFloat("foodExhaustionLevel").orElse(0.0F);
     }
 }
