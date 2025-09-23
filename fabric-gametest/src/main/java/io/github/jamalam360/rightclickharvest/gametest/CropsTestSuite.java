@@ -1,7 +1,8 @@
 package io.github.jamalam360.rightclickharvest.gametest;
 
-import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -12,7 +13,7 @@ public class CropsTestSuite {
 
     private static final BlockPos CROP_CENTRE_POS = new BlockPos(4, 3, 4);
 
-    @GameTest(structure = "rightclickharvest-gametest:wheat")
+    @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testWoodenHoe(GameTestHelper helper) {
         TestHelper.interact(helper, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
 
@@ -23,7 +24,7 @@ public class CropsTestSuite {
         });
     }
 
-    @GameTest(structure = "rightclickharvest-gametest:wheat")
+    @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testIronHoe(GameTestHelper helper) {
         TestHelper.interact(helper, CROP_CENTRE_POS, Items.IRON_HOE.getDefaultInstance());
 
@@ -33,7 +34,7 @@ public class CropsTestSuite {
         });
     }
 
-    @GameTest(structure = "rightclickharvest-gametest:wheat")
+    @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testDiamondHoe(GameTestHelper helper) {
         TestHelper.interact(helper, CROP_CENTRE_POS, Items.DIAMOND_HOE.getDefaultInstance());
 
@@ -43,7 +44,7 @@ public class CropsTestSuite {
         });
     }
 
-    @GameTest(structure = "rightclickharvest-gametest:wheat")
+    @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testNetheriteHoe(GameTestHelper helper) {
         TestHelper.interact(helper, CROP_CENTRE_POS, Items.NETHERITE_HOE.getDefaultInstance());
 
@@ -53,7 +54,7 @@ public class CropsTestSuite {
         });
     }
 
-    @GameTest(structure = "rightclickharvest-gametest:wheat")
+    @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testHoeDurability(GameTestHelper helper) {
         Player player = helper.makeMockSurvivalPlayer();
         TestHelper.interact(helper, player, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
@@ -63,7 +64,7 @@ public class CropsTestSuite {
             helper.assertItemEntityPresent(Items.WHEAT, CROP_CENTRE_POS, 5);
 
             if (player.getItemInHand(InteractionHand.MAIN_HAND).getMaxDamage() - player.getItemInHand(InteractionHand.MAIN_HAND).getDamageValue() == 0) {
-				throw helper.assertionException("Hoe durability not decremented correctly");
+				throw new GameTestAssertException("Hoe durability not decremented correctly");
             }
         });
     }
