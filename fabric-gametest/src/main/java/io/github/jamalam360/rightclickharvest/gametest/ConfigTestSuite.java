@@ -76,6 +76,7 @@ public class ConfigTestSuite {
 
     @GameTest(template = "rightclickharvest-gametest:wheat")
     public void testHungerLevelNormal(GameTestHelper helper) {
+	    RightClickHarvest.CONFIG.get().hungerLevel = HungerLevel.NORMAL;
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         float exhaustion = TestHelper.getPlayerExhaustion(player);
         TestHelper.interact(helper, player, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
@@ -100,8 +101,6 @@ public class ConfigTestSuite {
         helper.succeedIf(() -> {
             helper.assertBlockProperty(CROP_CENTRE_POS, CropBlock.AGE, 0);
             helper.assertItemEntityPresent(Items.WHEAT);
-
-            RightClickHarvest.CONFIG.get().hungerLevel = HungerLevel.NORMAL;
 
             if (TestHelper.getPlayerExhaustion(player) > exhaustion) {
                 throw new AssertionError("Player's exhaustion level increased when it shouldn't have");
