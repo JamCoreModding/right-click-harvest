@@ -187,7 +187,7 @@ public class RightClickHarvest {
             return;
         }
 
-        if (player.level().isClientSide) {
+        if (player.level().isClientSide()) {
             if (!CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
                 player.displayClientMessage(Component.translatable(
                         "text.rightclickharvest.use_a_hoe_warning",
@@ -212,7 +212,7 @@ public class RightClickHarvest {
     }
 
     private static InteractionResult completeHarvest(Level level, BlockState state, BlockPos pos, Player player, InteractionHand hand, ItemStack stackInHand, boolean hoeInUse, boolean removeReplant, Runnable setBlockAction) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             Block originalBlock = state.getBlock();
             // Event posts are for things like claim mods
             if (RightClickHarvestPlatform.postBreakEvent(level, pos, state, player)) {
