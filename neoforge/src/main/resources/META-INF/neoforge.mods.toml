@@ -40,5 +40,12 @@ versionRange = "[${jamlib_version},)"
 ordering = "AFTER"
 side = "BOTH"
 
+[[dependencies.rightclickharvest]]
+modId = "luckperms"
+type = "optional"
+versionRange = "[${luckperms_version},)"
+ordering = "AFTER"
+side = "SERVER"
+
 [[mixins]]
 config = "rightclickharvest.mixins.json"

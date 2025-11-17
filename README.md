@@ -17,8 +17,13 @@
 - **Hunger Level**: the amount of hunger to require when harvesting, or none (_default: none_).
 - **Experience Type**: whether to consume or reward XP points for harvesting (_default: none_).
 - **Show Server Warning**: whether to display a warning when connecting to a server which does not have RightClickHarvest installed, as the mod will not work (_default: true_).
+- **Enable Permissions**: whether to check for permissions before doing anything (_default: false_).
 
 There are also a number of block and item tags available to customise the mod's behaviour, documented [here](https://docs.jamalam.tech/right-click-harvest/tags/).
+
+<h2 align="center">Available Permissions</h2>
+
+- **Harvest in Radius**: If Configuration has "Enable Permissions" set to `true` player will need the permission `rightclickharvest.radius_harvest` to harvest in radius.
 
 <h2 align="center">FAQ</h2>
 
