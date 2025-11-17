@@ -101,7 +101,8 @@ processResources {
                 "minecraft_version"   : project.minimum_minecraft_version,
                 "fabric_api_version"  : project.minimum_fabric_api_version,
                 "architectury_version": project.minimum_architectury_api_version,
-                "jamlib_version"      : project.minimum_jamlib_version
+                "jamlib_version"      : project.minimum_jamlib_version,
+                "luckperms_version"   : project.minimum_luckperms_version
         ]
 
         filesMatching("fabric.mod.json") {

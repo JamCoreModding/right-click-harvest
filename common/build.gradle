@@ -16,6 +16,7 @@ dependencies {
     modImplementation libs.fabric.loader
     modImplementation libs.architectury.common
     modImplementation libs.jamlib.common
+    compileOnly libs.luckperms.api
 }
 
 tasks.processResources.dependsOn("updateServerLangProvider")

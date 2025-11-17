@@ -16,6 +16,7 @@ public class Config implements ConfigExtensions<Config> {
     @Comment("Modpack developers, set this to true to stop RCH telling users that they probably need to equip a hoe to harvest crops (if requireHoe is set to true). This message will only be displayed once.")
     @HiddenInGui
     public boolean hasUserBeenWarnedForNotUsingHoe = false;
+    public boolean enablePermissions = false;
 
     @Override
     public List<Link> getLinks() {

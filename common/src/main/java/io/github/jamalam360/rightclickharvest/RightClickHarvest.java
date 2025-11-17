@@ -9,6 +9,8 @@ import io.github.jamalam360.jamlib.JamLib;
 import io.github.jamalam360.jamlib.JamLibPlatform;
 import io.github.jamalam360.jamlib.config.ConfigManager;
 import io.github.jamalam360.rightclickharvest.mixin.CropBlockAccessor;
+import io.github.jamalam360.rightclickharvest.permission.PermissionManager;
+import io.github.jamalam360.rightclickharvest.permission.Permissions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -119,7 +121,7 @@ public class RightClickHarvest {
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
             if (isMature(state)) {
                 // Start radius harvesting
-                if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoe(stackInHand)) {
+                if (initialCall && CONFIG.get().harvestInRadius && !state.is(RADIUS_HARVEST_BLACKLIST) && isHoe(stackInHand) && PermissionManager.getInstance().hasPermission(player, Permissions.HARVEST)) {
                     int radius = 0;
                     boolean circle = false;
                     hoeInUse = true;

@@ -101,7 +101,8 @@ processResources {
             "minecraft_version"   : project.minimum_minecraft_version,
             "neoforge_version"    : project.minimum_minecraft_version.substring(2),
             "architectury_version": project.minimum_architectury_api_version,
-            "jamlib_version"      : project.minimum_jamlib_version
+            "jamlib_version"      : project.minimum_jamlib_version,
+            "luckperms_version"   : project.minimum_luckperms_version
     ]
 
     filesMatching("META-INF/neoforge.mods.toml") {
