@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "minecraft:copper_hoe",
+      "required": false
+    },
+    {
       "id": "minecraft:iron_hoe",
       "required": false
     },

@@ -6,9 +6,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.world.level.block.Blocks;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -26,8 +27,9 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 		}
 
 		@Override
-		protected void addTags(HolderLookup.Provider wrapperLookup) {
+		protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
 			String[] lowTierHoes = new String[]{
+					"minecraft:copper_hoe",
 					"minecraft:iron_hoe",
 					"ae2:certus_quartz_hoe",
 					"ae2:fluix_hoe",
@@ -132,15 +134,15 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 			TagBuilder highTierHoeTag = this.getOrCreateRawBuilder(RightClickHarvest.HIGH_TIER_HOES);
 
 			for (String hoe : lowTierHoes) {
-				lowTierHoeTag.addOptionalElement(ResourceLocation.parse(hoe));
+				lowTierHoeTag.addOptionalElement(Identifier.parse(hoe));
 			}
 
 			for (String hoe : midTierHoes) {
-				midTierHoeTag.addOptionalElement(ResourceLocation.parse(hoe));
+				midTierHoeTag.addOptionalElement(Identifier.parse(hoe));
 			}
 
 			for (String hoe : highTierHoes) {
-				highTierHoeTag.addOptionalElement(ResourceLocation.parse(hoe));
+				highTierHoeTag.addOptionalElement(Identifier.parse(hoe));
 			}
 		}
 	}
@@ -150,9 +152,8 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 			super(output, registriesFuture);
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
-		protected void addTags(HolderLookup.Provider wrapperLookup) {
+		protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
 			valueLookupBuilder(RightClickHarvest.BLACKLIST)
 					.setReplace(false);
 			valueLookupBuilder(RightClickHarvest.HOE_NEVER_REQUIRED)
