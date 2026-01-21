@@ -34,6 +34,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.stats.Stats;
 import org.jetbrains.annotations.ApiStatus.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -241,6 +242,13 @@ public class RightClickHarvest {
             player.giveExperiencePoints(xp);
             
             RightClickHarvestPlatform.postAfterHarvestEvent(new HarvestContext(player, originalBlock));
+
+            // Award statistics for harvesting (mined) and replanting (used)
+            player.awardStat(Stats.BLOCK_MINED.get(originalBlock));
+            if (removeReplant) {
+                Item replantItem = state.getCloneItemStack(level, pos, true).getItem();
+                player.awardStat(Stats.ITEM_USED.get(replantItem));
+            }
         } else {
             player.playSound(state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED, 1.0f, 1.0f);
         }
