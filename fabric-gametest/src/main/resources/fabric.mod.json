@@ -20,6 +20,7 @@
       "io.github.jamalam360.rightclickharvest.gametest.CocoaBeanTestSuite",
       "io.github.jamalam360.rightclickharvest.gametest.ConfigTestSuite",
       "io.github.jamalam360.rightclickharvest.gametest.CropsTestSuite",
+      "io.github.jamalam360.rightclickharvest.gametest.StatsTestSuite",
       "io.github.jamalam360.rightclickharvest.gametest.TallPlantsTestSuite"
     ]
   }
