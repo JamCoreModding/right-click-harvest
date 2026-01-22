@@ -1,2 +1,1 @@
-- Add new modded hoes to the tier tags (#102).
-- Fix warning message spam (#99).
+- Grant statistics when harvesting (#110).
