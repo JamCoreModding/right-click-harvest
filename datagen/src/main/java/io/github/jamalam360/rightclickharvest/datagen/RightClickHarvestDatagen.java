@@ -28,6 +28,7 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 		@Override
 		protected void addTags(HolderLookup.Provider wrapperLookup) {
 			String[] lowTierHoes = new String[]{
+					"minecraft:copper_hoe",
 					"minecraft:iron_hoe",
 					"ae2:certus_quartz_hoe",
 					"ae2:fluix_hoe",
