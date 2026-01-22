@@ -18,6 +18,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -157,7 +158,11 @@ public class RightClickHarvest {
                     }
                 }
 
-                return completeHarvest(level, state, hitResult.getBlockPos(), player, hand, stackInHand, hoeInUse, true, () -> level.setBlockAndUpdate(hitResult.getBlockPos(), getReplantState(state)));
+                return completeHarvest(level, state, hitResult.getBlockPos(), player, hand, stackInHand, hoeInUse, true, () -> {
+                    BlockState replantState = getReplantState(state);
+                    level.setBlockAndUpdate(hitResult.getBlockPos(), replantState);
+                    player.awardStat(Stats.ITEM_USED.get(replantState.getBlock().asItem()));
+                });
             }
         } else if (state.getBlock() instanceof SugarCaneBlock || state.getBlock() instanceof CactusBlock) {
             if (hitResult.getDirection() == Direction.UP && ((stackInHand.getItem() == Items.SUGAR_CANE && state.getBlock() instanceof SugarCaneBlock) || (stackInHand.getItem() == Items.CACTUS && state.getBlock() instanceof CactusBlock))) {
@@ -223,6 +228,8 @@ public class RightClickHarvest {
                 return InteractionResult.FAIL;
             }
 
+            player.awardStat(Stats.BLOCK_MINED.get(state.getBlock()));
+            player.awardStat(Stats.ITEM_USED.get(stackInHand.getItem()));
             dropStacks(state, (ServerLevel) level, pos, player, player.getItemInHand(hand), removeReplant);
             setBlockAction.run();
 
@@ -251,7 +258,9 @@ public class RightClickHarvest {
     private static boolean isHarvestable(BlockState state) {
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
             return isMature(state);
-        } else return state.getBlock() instanceof SugarCaneBlock || state.getBlock() instanceof CactusBlock;
+        }
+
+        return state.getBlock() instanceof SugarCaneBlock || state.getBlock() instanceof CactusBlock;
     }
 
     private static boolean isHoe(ItemStack stack) {
