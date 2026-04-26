@@ -1,10 +1,6 @@
 package io.github.jamalam360.rightclickharvest;
 
 import dev.architectury.event.events.common.InteractionEvent;
-import dev.architectury.event.events.common.PlayerEvent;
-import dev.architectury.networking.NetworkManager;
-import dev.architectury.platform.Platform;
-import dev.architectury.utils.Env;
 import io.github.jamalam360.jamlib.JamLib;
 import io.github.jamalam360.jamlib.JamLibPlatform;
 import io.github.jamalam360.jamlib.config.ConfigManager;
@@ -16,7 +12,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.ItemTags;
@@ -39,10 +34,6 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 public class RightClickHarvest {
 
     public static final String MOD_ID = "rightclickharvest";
@@ -58,21 +49,10 @@ public class RightClickHarvest {
     public static final TagKey<Item> HIGH_TIER_HOES = TagKey.create(Registries.ITEM, id("high_tier_hoes"));
     public static final Direction[] CARDINAL_DIRECTIONS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static final IntProvider XP_PROVIDER = UniformInt.of(0, 2);
-    private static final List<UUID> PLAYERS_WARNED_FOR_NOT_USING_HOE = new ArrayList<>();
 
     public static void init() {
         LOGGER.info("Initializing Right Click Harvest on {}", JamLibPlatform.getPlatform().name());
         JamLib.checkForJarRenaming(RightClickHarvest.class);
-
-        if (Platform.getEnvironment() == Env.SERVER) {
-            NetworkManager.registerS2CPayloadType(HelloPacket.TYPE, HelloPacket.STREAM_CODEC);
-        }
-
-        PlayerEvent.PLAYER_JOIN.register((player) -> {
-            if (NetworkManager.canPlayerReceive(player, HelloPacket.TYPE)) {
-                NetworkManager.sendToPlayer(player, new HelloPacket());
-            }
-        });
         
         InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> RightClickHarvest.onBlockUse(player, player.level(), hand, new BlockHitResult(player.position(), face, pos, false), true)));
     }
@@ -201,17 +181,6 @@ public class RightClickHarvest {
                         )), false);
                 CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
                 CONFIG.save();
-            }
-        } else if (player instanceof ServerPlayer serverPlayer && !NetworkManager.canPlayerReceive(serverPlayer, HelloPacket.TYPE)) { // The mod is not installed on the client
-            if (!PLAYERS_WARNED_FOR_NOT_USING_HOE.contains(player.getUUID())) {
-                // Since the mod isn't installed clientside, we can't send translatable text
-                String playerLang = serverPlayer.clientInformation().language();
-                player.displayClientMessage(Component.translatable(
-                        ServerLangProvider.getUseHoeMessageByLanguage(playerLang),
-                        Component.literal(ServerLangProvider.getRequireHoeConfigByLanguage(playerLang)).withStyle(s -> s.withColor(ChatFormatting.GREEN)),
-                        Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
-                        )), false);
-                PLAYERS_WARNED_FOR_NOT_USING_HOE.add(player.getUUID());
             }
         }
     }
