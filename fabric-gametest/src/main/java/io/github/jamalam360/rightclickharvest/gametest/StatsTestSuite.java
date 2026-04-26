@@ -1,8 +1,8 @@
 package io.github.jamalam360.rightclickharvest.gametest;
 
 import com.mojang.authlib.GameProfile;
-import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stat;
@@ -21,7 +21,7 @@ public class StatsTestSuite {
 	private static final BlockPos CROP_CENTRE_POS = new BlockPos(4, 2, 4);
 	private final HashMap<Stat<?>, Integer> stats = new HashMap<>();
 
-	@GameTest(structure = "rightclickharvest-gametest:wheat")
+	@GameTest(template = "rightclickharvest-gametest:wheat")
 	public void testWheatStats(GameTestHelper helper) {
 		Player player = makeMockPlayerWithStats(helper.getLevel());
 		TestHelper.interact(helper, player, CROP_CENTRE_POS, Items.WOODEN_HOE.getDefaultInstance());
