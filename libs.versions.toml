@@ -1,29 +1,18 @@
 [versions]
-# https://modrinth.com/mod/architectury-api/versions
-architectury = "19.0.1"
-
-# https://parchmentmc.org/docs/getting-started
-parchment-minecraft = "1.21.11"
-parchment = "2025.12.20"
-
 # https://projects.neoforged.net/neoforged/neoforge
-neoforge = "21.11.25-beta"
+neoforge = "26.1.2.29-beta"
 
 # https://fabricmc.net/develop
-fabric-loader = "0.18.4"
-fabric-api = "0.141.1+1.21.11"
+fabric-loader = "0.19.2"
+fabric-api = "0.146.1+26.1.2"
 
 # https://maven.jamalam.tech/#/releases
-jamlib = "1.3.5+1.21.11"
+jamlib = "2.0.0+26.1.x"
 
 # https://modrinth.com/mod/modmenu/versions
-modmenu = "17.0.0-beta.1"
+modmenu = "18.0.0-alpha.8"
 
 [libraries]
-architectury-common = { module = "dev.architectury:architectury", version.ref = "architectury" }
-architectury-fabric = { module = "dev.architectury:architectury-fabric", version.ref = "architectury" }
-architectury-neoforge = { module = "dev.architectury:architectury-neoforge", version.ref = "architectury" }
-
 neoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }
 
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }

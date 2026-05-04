@@ -1,9 +1,10 @@
 package io.github.jamalam360.rightclickharvest;
 
 import blue.endless.jankson.Comment;
-import io.github.jamalam360.jamlib.config.ConfigExtensions;
-import io.github.jamalam360.jamlib.config.HiddenInGui;
 import java.util.List;
+
+import io.github.jamalam360.jamlib.api.config.ConfigExtensions;
+import io.github.jamalam360.jamlib.api.config.HiddenInGui;
 import net.minecraft.network.chat.Component;
 
 public class Config implements ConfigExtensions<Config> {
@@ -15,6 +16,11 @@ public class Config implements ConfigExtensions<Config> {
     @Comment("Modpack developers, set this to true to stop RCH telling users that they probably need to equip a hoe to harvest crops (if requireHoe is set to true). This message will only be displayed once.")
     @HiddenInGui
     public boolean hasUserBeenWarnedForNotUsingHoe = false;
+
+    @Comment("Deprecated for removal in Minecraft 26.1")
+    @HiddenInGui
+    @Deprecated(forRemoval = true, since = "4.6.2")
+    public boolean showServerWarning = false;
 
     @Override
     public List<Link> getLinks() {

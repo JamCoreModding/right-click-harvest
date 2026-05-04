@@ -8,7 +8,7 @@ modId = "rightclickharvest"
 version = "${version}"
 displayName = "Right Click Harvest"
 displayURL = "https://github.com/JamCoreModding/right-click-harvest"
-logoFile = "icon.png"
+logoFile = "assets/rightclickharvest/icon.png"
 authors = "Jamalam"
 description = "Right click crops to harvest them - with style."
 
@@ -24,13 +24,6 @@ modId = "minecraft"
 type = "required"
 versionRange = "[${minecraft_version},)"
 ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.rightclickharvest]]
-modId = "architectury"
-type = "required"
-versionRange = "[${architectury_version},)"
-ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.rightclickharvest]]

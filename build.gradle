@@ -1,19 +1,19 @@
 plugins {
-    id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "1.13-SNAPSHOT" apply false
-    id "me.shedaniel.unified-publishing" version "0.1.+" apply false
-    id "com.github.breadmoirai.github-release" version "2.4.1"
-    id "maven-publish"
+    id 'architectury-plugin' version '3.5-SNAPSHOT'
+    id 'dev.architectury.loom-no-remap' version '1.14-SNAPSHOT' apply false
+    id 'me.shedaniel.unified-publishing' version '0.1.+' apply false
+    id 'com.github.breadmoirai.github-release' version '2.4.1'
+    id 'maven-publish'
 }
 
-if (System.getenv("GITHUB_TOKEN") != null) {
+if (System.getenv('GITHUB_TOKEN') != null) {
     githubRelease {
-        token(System.getenv("GITHUB_TOKEN"))
-        owner("JamCoreModding")
-        repo("right-click-harvest")
-        tagName("${project.version}")
-        releaseName("V${project.version}")
-        body(project.rootProject.file("CHANGELOG.md").text)
+        token(System.getenv('GITHUB_TOKEN'))
+        owner('JamCoreModding')
+        repo('right-click-harvest')
+        tagName('${project.version}')
+        releaseName('V${project.version}')
+        body(project.rootProject.file('CHANGELOG.md').text)
         draft(false)
 
         if (project.branch != null) {
@@ -23,7 +23,7 @@ if (System.getenv("GITHUB_TOKEN") != null) {
 }
 
 subprojects {
-    apply plugin: "dev.architectury.loom"
+    apply plugin: 'dev.architectury.loom-no-remap'
 
     loom {
         silentMojangMappingsLicense()
@@ -42,69 +42,66 @@ subprojects {
                     'Implementation-Version': project.jar.archiveVersion,
                     'Built-On-Java'         : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
                     'Built-On-Minecraft'    : minecraft_version,
-                    'JamLib-File-Name'        : "rightclickharvest-${project.base.archivesName.get()}-${rootProject.version}.jar"
+                    'JamLib-File-Name'      : "rightclickharvest-${project.base.archivesName.get()}-${rootProject.version}.jar"
             ])
         }
     }
 
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        mappings loom.layered() {
-            officialMojangMappings()
-            parchment "org.parchmentmc.data:parchment-${libs.versions.parchment.minecraft.get()}:${libs.versions.parchment.asProvider().get()}@zip"
-        }
     }
 }
 
 allprojects {
-    apply plugin: "java"
-    apply plugin: "architectury-plugin"
-    apply plugin: "maven-publish"
+    apply plugin: 'java'
+    apply plugin: 'architectury-plugin'
+    apply plugin: 'maven-publish'
 
     version = rootProject.version
     group = rootProject.group
 
     base {
-        archivesName = "rightclickharvest"
+        archivesName = 'rightclickharvest'
     }
 
     repositories {
         mavenCentral()
+        mavenLocal()
 
         maven {
-            name = "Modrinth"
-            url = "https://api.modrinth.com/maven"
+            name = 'Modrinth'
+            url = 'https://api.modrinth.com/maven'
         }
 
         maven {
-            name = "Jamalam's Maven"
-            url = "https://maven.jamalam.tech/releases"
+            name = 'Jamalam Maven'
+            url = 'https://maven.jamalam.tech/releases'
         }
 
         maven {
-            name = "ParchmentMC"
-            url = "https://maven.parchmentmc.org"
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org'
         }
     }
 
     tasks.withType(JavaCompile) {
-        options.encoding = "UTF-8"
-        options.release = 21
+        options.encoding = 'UTF-8'
+        options.release = 25
     }
 
-    tasks.create("prepareWorkspace") {}
+    tasks.create('prepareWorkspace') {}
 
     java {
         withSourcesJar()
     }
 
     tasks.publish {
-        dependsOn("clean")
-        dependsOn(":githubRelease")
-        dependsOn("common:publishAllPublicationsToMavenRepository")
-        dependsOn("fabric:publishUnified")
-        dependsOn("fabric:publishAllPublicationsToMavenRepository")
-        dependsOn("neoforge:publishUnified")
-        dependsOn("neoforge:publishAllPublicationsToMavenRepository")
+        dependsOn('clean')
+        dependsOn(':githubRelease')
+        dependsOn('common:publishAllPublicationsToMavenRepository')
+        dependsOn('fabric:publishUnified')
+        dependsOn('fabric:publishAllPublicationsToMavenRepository')
+        dependsOn('neoforge:publishUnified')
+        dependsOn('neoforge:publishAllPublicationsToMavenRepository')
     }
 }

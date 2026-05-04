@@ -1,6 +1,6 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "8.1.1"
-    id "me.shedaniel.unified-publishing"
+    id 'com.gradleup.shadow' version '8.3.3'
+    id 'me.shedaniel.unified-publishing'
 }
 
 architectury {
@@ -9,7 +9,7 @@ architectury {
 }
 
 base {
-    archivesName = "rightclickharvest-neoforge"
+    archivesName = 'rightclickharvest-neoforge'
 }
 
 configurations {
@@ -22,73 +22,78 @@ configurations {
 
 repositories {
     maven {
-        name = "NeoForge"
-        url = "https://maven.neoforged.net/releases"
+        name = 'NeoForge'
+        url = 'https://maven.neoforged.net/releases'
     }
 }
 
 dependencies {
     neoForge libs.neoforge
-    modImplementation libs.architectury.neoforge
-    modImplementation libs.jamlib.neoforge
+    implementation libs.jamlib.neoforge
 
-    forgeRuntimeLibrary "blue.endless:jankson:1.2.3"
+    forgeRuntimeLibrary 'blue.endless:jankson:1.2.3'
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+    common(project(':common')) { transitive false }
+    shadowCommon(project(path: ':common', configuration: 'transformProductionNeoForge')) { transitive = false }
 }
 
-if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_KEY") != null) {
+if (System.getenv('CURSEFORGE_API_KEY') != null && System.getenv('MODRINTH_API_KEY') != null) {
     unifiedPublishing {
         project {
-            displayName = "V${project.version} (NeoForge ${project.minecraft_version})"
-            changelog = rootProject.file("CHANGELOG.md").text
-            releaseType = project.version.contains("beta") ? "beta" : "release"
-            gameVersions = [project.minecraft_version, *(project.additional_minecraft_versions == "" ? [] : project.additional_minecraft_versions.split(","))]
-            gameLoaders = ["neoforge"]
+            displayName = 'V${project.version} (NeoForge ${project.minecraft_version})'
+            changelog = rootProject.file('CHANGELOG.md').text
+            releaseType = project.version.contains('beta') ? 'beta' : 'release'
+            gameVersions = [project.minecraft_version, *(project.additional_minecraft_versions == '' ? [] : project.additional_minecraft_versions.split(','))]
+            gameLoaders = ['neoforge']
 
-            mainPublication tasks.remapJar
+            mainPublication tasks.shadowJar
 
             relations {
                 depends {
-                    curseforge = "architectury-api"
-                    modrinth = "architectury-api"
-                }
-
-                depends {
-                    curseforge = "jamlib"
-                    modrinth = "jamlib"
+                    curseforge = 'jamlib'
+                    modrinth = 'jamlib'
                 }
             }
 
             curseforge {
-                token = System.getenv("CURSEFORGE_API_KEY")
-                id = "452834"
+                token = System.getenv('CURSEFORGE_API_KEY')
+                id = '452834'
             }
 
             modrinth {
-                token = System.getenv("MODRINTH_API_KEY")
-                id = "Cnejf5xM"
+                token = System.getenv('MODRINTH_API_KEY')
+                id = 'Cnejf5xM'
             }
         }
+    }
+}
+
+configurations {
+    apiElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
+    runtimeElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
     }
 }
 
 publishing {
     publications {
         mavenNeoForge(MavenPublication) {
-            artifactId = rootProject.archivesBaseName + "-neoforge"
+            artifactId = rootProject.base.archivesName.get() + '-neoforge'
             from components.java
         }
     }
 
     repositories {
-        if (System.getenv("MAVEN_USERNAME") != null && System.getenv("MAVEN_PASSWORD") != null) {
+        if (System.getenv('MAVEN_USERNAME') != null && System.getenv('MAVEN_PASSWORD') != null) {
             maven {
-                url = "https://maven.jamalam.tech/releases"
+                url = 'https://maven.jamalam.tech/releases'
                 credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
+                    username = System.getenv('MAVEN_USERNAME')
+                    password = System.getenv('MAVEN_PASSWORD')
                 }
             }
         }
@@ -97,35 +102,34 @@ publishing {
 
 processResources {
     def substitutions = [
-            "version"             : project.version,
-            "minecraft_version"   : project.minimum_minecraft_version,
-            "neoforge_version"    : project.minimum_minecraft_version.substring(2),
-            "architectury_version": project.minimum_architectury_api_version,
-            "jamlib_version"      : project.minimum_jamlib_version
+            'version'             : project.version,
+            'minecraft_version'   : project.minimum_minecraft_version,
+            'neoforge_version'    : project.minimum_minecraft_version.substring(2),
+            'jamlib_version'      : project.minimum_jamlib_version
     ]
 
-    filesMatching("META-INF/neoforge.mods.toml") {
+    filesMatching('META-INF/neoforge.mods.toml') {
         expand substitutions
     }
 
     substitutions.each { inputs.property it.key, it.value }
 }
 
-shadowJar {
-    exclude "fabric.mod.json"
-    exclude "architectury.common.json"
-
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
+jar {
+    archiveClassifier = 'raw'
 }
 
-remapJar {
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
+shadowJar {
+    dependsOn(jar)
+    mainSpec.sourcePaths.clear()
+    from(zipTree(jar.archiveFile))
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = null
 }
 
 sourcesJar {
-    def commonSources = project(":common").sourcesJar
+    def commonSources = project(':common').sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
 }

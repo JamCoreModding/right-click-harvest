@@ -1,1 +1,3 @@
-- Grant statistics when harvesting (#110).
+- Switch to JamLib 2.0.0.
+  - Architectury API is no longer a dependency.
+- Update to 26.1.2

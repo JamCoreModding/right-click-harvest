@@ -1,36 +1,35 @@
 architectury {
-    common(rootProject.enabled_platforms.split(","))
+    common(rootProject.enabled_platforms.split(','))
 }
 
 sourceSets {
     main {
         resources {
-            srcDirs "src/generated/resources"
+            srcDirs 'src/generated/resources'
         }
     }
 }
 
 dependencies {
-    modImplementation libs.fabric.loader
-    modImplementation libs.architectury.common
-    modImplementation libs.jamlib.common
+    implementation libs.fabric.loader
+    implementation libs.jamlib.common
 }
 
 publishing {
     publications {
         mavenCommon(MavenPublication) {
-            artifactId = rootProject.archivesBaseName
+            artifactId = rootProject.base.archivesName.get()
             from components.java
         }
     }
 
     repositories {
-        if (System.getenv("MAVEN_USERNAME") != null && System.getenv("MAVEN_PASSWORD") != null) {
+        if (System.getenv('MAVEN_USERNAME') != null && System.getenv('MAVEN_PASSWORD') != null) {
             maven {
-                url = "https://maven.jamalam.tech/releases"
+                url = 'https://maven.jamalam.tech/releases'
                 credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
+                    username = System.getenv('MAVEN_USERNAME')
+                    password = System.getenv('MAVEN_PASSWORD')
                 }
             }
         }

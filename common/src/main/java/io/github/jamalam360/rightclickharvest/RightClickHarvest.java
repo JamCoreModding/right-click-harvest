@@ -1,9 +1,10 @@
 package io.github.jamalam360.rightclickharvest;
 
-import dev.architectury.event.events.common.InteractionEvent;
 import io.github.jamalam360.jamlib.JamLib;
-import io.github.jamalam360.jamlib.JamLibPlatform;
-import io.github.jamalam360.jamlib.config.ConfigManager;
+import io.github.jamalam360.jamlib.api.config.ConfigManager;
+import io.github.jamalam360.jamlib.api.events.InteractionEvent;
+import io.github.jamalam360.jamlib.api.events.core.EventResult;
+import io.github.jamalam360.jamlib.api.platform.Platform;
 import io.github.jamalam360.rightclickharvest.mixin.CropBlockAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -51,16 +52,16 @@ public class RightClickHarvest {
     private static final IntProvider XP_PROVIDER = UniformInt.of(0, 2);
 
     public static void init() {
-        LOGGER.info("Initializing Right Click Harvest on {}", JamLibPlatform.getPlatform().name());
+        LOGGER.info("Initializing Right Click Harvest on {}", Platform.getModLoader().name());
         JamLib.checkForJarRenaming(RightClickHarvest.class);
         
-        InteractionEvent.RIGHT_CLICK_BLOCK.register(((player, hand, pos, face) -> RightClickHarvest.onBlockUse(player, player.level(), hand, new BlockHitResult(player.position(), face, pos, false), true)));
+        InteractionEvent.USE_BLOCK.listen(((player, hand, pos, face) -> RightClickHarvest.onBlockUse(player, player.level(), hand, new BlockHitResult(player.position(), face, pos, false), true)));
     }
 
     @Internal
-    public static InteractionResult onBlockUse(Player player, Level level, InteractionHand hand, BlockHitResult hitResult, boolean initialCall) {
+    public static EventResult<InteractionResult> onBlockUse(Player player, Level level, InteractionHand hand, BlockHitResult hitResult, boolean initialCall) {
         if (player.isSpectator() || player.isCrouching() || hand != InteractionHand.MAIN_HAND) {
-            return InteractionResult.PASS;
+            return EventResult.pass();
         }
 
         BlockState state = level.getBlockState(hitResult.getBlockPos());
@@ -69,24 +70,24 @@ public class RightClickHarvest {
 
         // Check if the block is in the blacklist
         if (state.is(BLACKLIST)) {
-            return InteractionResult.PASS;
+            return EventResult.pass();
         }
 
         // Check for hunger, if config requires it
         if (CONFIG.get().hungerLevel != Config.HungerLevel.NONE && !player.getAbilities().instabuild && player.getFoodData().getFoodLevel() <= 0) {
-            return InteractionResult.PASS;
+            return EventResult.pass();
         }
         
         // Check for XP, if the config requires it
-        if (CONFIG.get().experienceType == Config.ExperienceType.COST && !player.getAbilities().instabuild && player.experienceLevel < XP_PROVIDER.getMaxValue()) {
-            return InteractionResult.PASS;
+        if (CONFIG.get().experienceType == Config.ExperienceType.COST && !player.getAbilities().instabuild && player.experienceLevel < XP_PROVIDER.maxInclusive()) {
+            return EventResult.pass();
         }
 
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
         if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe) {
             if (!isHoe(stackInHand)) {
                 warnPlayerForNotUsingHoe(player, state, stackInHand);
-                return InteractionResult.PASS;
+                return EventResult.pass();
             } else {
                 hoeInUse = true;
             }
@@ -94,7 +95,7 @@ public class RightClickHarvest {
 
         // If we are radius harvesting and the block cannot not be, return
         if (!initialCall && state.is(RADIUS_HARVEST_BLACKLIST)) {
-            return InteractionResult.PASS;
+            return EventResult.pass();
         }
 
         if (state.getBlock() instanceof CocoaBlock || state.getBlock() instanceof CropBlock || state.getBlock() instanceof NetherWartBlock) {
@@ -146,7 +147,7 @@ public class RightClickHarvest {
             }
         } else if (state.getBlock() instanceof SugarCaneBlock || state.getBlock() instanceof CactusBlock) {
             if (hitResult.getDirection() == Direction.UP && ((stackInHand.getItem() == Items.SUGAR_CANE && state.getBlock() instanceof SugarCaneBlock) || (stackInHand.getItem() == Items.CACTUS && state.getBlock() instanceof CactusBlock))) {
-                return InteractionResult.PASS;
+                return EventResult.pass();
             }
 
             Block lookingFor = state.getBlock() instanceof SugarCaneBlock ? Blocks.SUGAR_CANE : Blocks.CACTUS;
@@ -157,14 +158,14 @@ public class RightClickHarvest {
 
             // Only one block tall
             if (!level.getBlockState(bottom.above()).is(lookingFor)) {
-                return InteractionResult.PASS;
+                return EventResult.pass();
             }
 
             final BlockPos breakPos = bottom.above(1);
             return completeHarvest(level, state, breakPos, player, hand, stackInHand, hoeInUse, false, () -> level.removeBlock(breakPos, false));
         }
 
-        return InteractionResult.PASS;
+        return EventResult.pass();
     }
 
     private static void warnPlayerForNotUsingHoe(Player player, BlockState state, ItemStack stackInHand) {
@@ -174,27 +175,27 @@ public class RightClickHarvest {
 
         if (player.level().isClientSide()) {
             if (!CONFIG.get().hasUserBeenWarnedForNotUsingHoe) {
-                player.displayClientMessage(Component.translatable(
+                player.sendSystemMessage(Component.translatable(
                         "text.rightclickharvest.use_a_hoe_warning",
                         Component.translatable("config.rightclickharvest.requireHoe").withStyle(s -> s.withColor(ChatFormatting.GREEN)),
                         Component.literal("false").withStyle(s -> s.withColor(ChatFormatting.GREEN)
-                        )), false);
+                        )));
                 CONFIG.get().hasUserBeenWarnedForNotUsingHoe = true;
                 CONFIG.save();
             }
         }
     }
 
-    private static InteractionResult completeHarvest(Level level, BlockState state, BlockPos pos, Player player, InteractionHand hand, ItemStack stackInHand, boolean hoeInUse, boolean removeReplant, Runnable setBlockAction) {
+    private static EventResult<InteractionResult> completeHarvest(Level level, BlockState state, BlockPos pos, Player player, InteractionHand hand, ItemStack stackInHand, boolean hoeInUse, boolean removeReplant, Runnable setBlockAction) {
         if (!level.isClientSide()) {
             Block originalBlock = state.getBlock();
             // Event posts are for things like claim mods
             if (RightClickHarvestPlatform.postBreakEvent(level, pos, state, player)) {
-                return InteractionResult.FAIL;
+                return EventResult.cancel(InteractionResult.FAIL);
             }
 
             if (RightClickHarvestPlatform.postPlaceEvent(level, pos, player)) {
-                return InteractionResult.FAIL;
+                return EventResult.cancel(InteractionResult.FAIL);
             }
 
             player.awardStat(Stats.BLOCK_MINED.get(state.getBlock()));
@@ -221,7 +222,7 @@ public class RightClickHarvest {
             player.playSound(state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED, 1.0f, 1.0f);
         }
 
-        return InteractionResult.SUCCESS;
+        return EventResult.cancel(InteractionResult.SUCCESS);
     }
 
     private static boolean isHarvestable(BlockState state) {

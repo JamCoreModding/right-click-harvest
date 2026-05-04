@@ -27,7 +27,7 @@ There are also a number of block and item tags available to customise the mod's 
 - **The mod isn't working.** The most common issue is that **Require Hoe** is set to `true` in the config, meaning that you have to be holding a hoe to harvest crops.
 - **Can you update to [version]?** The versions I currently support for all of my mods are documented [here](https://docs.jamalam.tech/supported-versions/). If the version you want is not listed, the answer is probably no.
 - **How do I make the mod work with crops from Supplementaries?** A compatibility mod is available: [Curseforge](https://www.curseforge.com/minecraft/mc-mods/rightclickharvest-supplementaries-compat), [Modrinth](https://modrinth.com/mod/rch-supplementaries-compat)
-- **What are the dependencies of this mod?** Architectury API and JamLib are required, as well as Fabric API on Fabric.
+- **What are the dependencies of this mod?** JamLib is required, as well as Fabric API on Fabric.
 
 <h3 align="center">For any questions not listed above, please join the Discord by clicking on the banner below.</h3>
 

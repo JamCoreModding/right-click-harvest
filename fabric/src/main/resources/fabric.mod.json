@@ -24,9 +24,8 @@
     "rightclickharvest.mixins.json"
   ],
   "depends": {
-    "fabric": ">=${fabric_api_version}",
+    "fabric-api": ">=${fabric_api_version}",
     "minecraft": ">=${minecraft_version}",
-    "architectury": ">=${architectury_version}",
     "jamlib": ">=${jamlib_version}"
   }
 }

@@ -1,6 +1,3 @@
-plugins {
-}
-
 architectury {
     platformSetupLoomIde()
     fabric()
@@ -10,7 +7,7 @@ fabricApi {
     configureDataGeneration {
         createSourceSet = false
         addToResources = false
-        outputDirectory = project(":common").file("src/generated/resources")
+        outputDirectory = project(':common').file('src/generated/resources')
     }
 }
 
@@ -23,10 +20,9 @@ configurations {
 }
 
 dependencies {
-    modImplementation libs.fabric.loader
-    modImplementation libs.fabric.api
-    modImplementation libs.architectury.fabric
-    modImplementation libs.jamlib.fabric
+    implementation libs.fabric.loader
+    implementation libs.fabric.api
+    implementation libs.jamlib.fabric
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    common(project(':common')) { transitive false }
 }

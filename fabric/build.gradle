@@ -1,6 +1,6 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "8.1.1"
-    id "me.shedaniel.unified-publishing"
+    id 'com.gradleup.shadow' version '8.3.3'
+    id 'me.shedaniel.unified-publishing'
 }
 
 architectury {
@@ -9,7 +9,7 @@ architectury {
 }
 
 base {
-    archivesName = "rightclickharvest-fabric"
+    archivesName = 'rightclickharvest-fabric'
 }
 
 configurations {
@@ -21,72 +21,77 @@ configurations {
 }
 
 dependencies {
-    modImplementation libs.fabric.loader
-    modImplementation libs.fabric.api
-    modImplementation libs.architectury.fabric
-    modRuntimeOnly libs.modmenu
-    modImplementation libs.jamlib.fabric
+    implementation libs.fabric.loader
+    implementation libs.fabric.api
+    implementation libs.jamlib.fabric
+    runtimeOnly libs.modmenu
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+    common(project(':common')) { transitive false }
+    shadowCommon(project(path: ':common', configuration: 'transformProductionFabric')) { transitive false }
 }
 
-if (System.getenv("CURSEFORGE_API_KEY") != null && System.getenv("MODRINTH_API_KEY") != null) {
+if (System.getenv('CURSEFORGE_API_KEY') != null && System.getenv('MODRINTH_API_KEY') != null) {
     unifiedPublishing {
         project {
-            displayName = "V${project.version} (Fabric ${project.minecraft_version})"
-            changelog = rootProject.file("CHANGELOG.md").text
-            releaseType = project.version.contains("beta") ? "beta" : "release"
-            gameVersions = [project.minecraft_version, *(project.additional_minecraft_versions == "" ? [] : project.additional_minecraft_versions.split(","))]
-            gameLoaders = ["fabric", "quilt"]
+            displayName = 'V${project.version} (Fabric ${project.minecraft_version})'
+            changelog = rootProject.file('CHANGELOG.md').text
+            releaseType = project.version.contains('beta') ? 'beta' : 'release'
+            gameVersions = [project.minecraft_version, *(project.additional_minecraft_versions == '' ? [] : project.additional_minecraft_versions.split(','))]
+            gameLoaders = ['fabric', 'quilt']
 
-            mainPublication tasks.remapJar
+            mainPublication tasks.shadowJar
 
             relations {
                 depends {
-                    curseforge = "fabric-api"
-                    modrinth = "fabric-api"
+                    curseforge = 'fabric-api'
+                    modrinth = 'fabric-api'
                 }
 
                 depends {
-                    curseforge = "architectury-api"
-                    modrinth = "architectury-api"
-                }
-
-                depends {
-                    curseforge = "jamlib"
-                    modrinth = "jamlib"
+                    curseforge = 'jamlib'
+                    modrinth = 'jamlib'
                 }
             }
 
             curseforge {
-                token = System.getenv("CURSEFORGE_API_KEY")
-                id = "452834"
+                token = System.getenv('CURSEFORGE_API_KEY')
+                id = '452834'
             }
 
             modrinth {
-                token = System.getenv("MODRINTH_API_KEY")
-                id = "Cnejf5xM"
+                token = System.getenv('MODRINTH_API_KEY')
+                id = 'Cnejf5xM'
             }
         }
+    }
+}
+
+configurations {
+    apiElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
+    runtimeElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
     }
 }
 
 publishing {
     publications {
         mavenFabric(MavenPublication) {
-            artifactId = rootProject.archivesBaseName + "-fabric"
+            artifactId = rootProject.base.archivesName.get() + '-fabric'
             from components.java
         }
     }
 
     repositories {
-        if (System.getenv("MAVEN_USERNAME") != null && System.getenv("MAVEN_PASSWORD") != null) {
+        if (System.getenv('MAVEN_USERNAME') != null && System.getenv('MAVEN_PASSWORD') != null) {
             maven {
-                url = "https://maven.jamalam.tech/releases"
+                url = 'https://maven.jamalam.tech/releases'
                 credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
+                    username = System.getenv('MAVEN_USERNAME')
+                    password = System.getenv('MAVEN_PASSWORD')
                 }
             }
         }
@@ -97,14 +102,13 @@ publishing {
 processResources {
     processResources {
         def substitutions = [
-                "version"             : project.version,
-                "minecraft_version"   : project.minimum_minecraft_version,
-                "fabric_api_version"  : project.minimum_fabric_api_version,
-                "architectury_version": project.minimum_architectury_api_version,
-                "jamlib_version"      : project.minimum_jamlib_version
+                'version'             : project.version,
+                'minecraft_version'   : project.minimum_minecraft_version,
+                'fabric_api_version'  : project.minimum_fabric_api_version,
+                'jamlib_version'      : project.minimum_jamlib_version
         ]
 
-        filesMatching("fabric.mod.json") {
+        filesMatching('fabric.mod.json') {
             expand substitutions
         }
 
@@ -112,20 +116,22 @@ processResources {
     }
 }
 
-shadowJar {
-    exclude "architectury.common.json"
-
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier = "dev-shadow"
+jar {
+    archiveClassifier = 'raw'
 }
 
-remapJar {
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
+shadowJar {
+    dependsOn(jar)
+    mainSpec.sourcePaths.clear()
+    from(zipTree(jar.archiveFile))
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = null
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 sourcesJar {
-    def commonSources = project(":common").sourcesJar
+    def commonSources = project(':common').sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
 }

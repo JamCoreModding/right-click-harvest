@@ -7,14 +7,14 @@ loom {
     runs {
         gametest {
             server()
-            name "Game Test"
-            vmArg "-Dfabric-api.gametest"
+            name 'Game Test'
+            vmArg '-Dfabric-api.gametest'
         }
 
         gametestClient {
             client()
-            name "Game Test Client"
-            vmArg "-Dfabric-api.gametest"
+            name 'Game Test Client'
+            vmArg '-Dfabric-api.gametest'
         }
     }
 }
@@ -27,12 +27,11 @@ configurations {
 }
 
 dependencies {
-    modImplementation libs.fabric.loader
-    modImplementation libs.fabric.api
-    modImplementation libs.architectury.fabric
-    modImplementation libs.jamlib.fabric
+    implementation libs.fabric.loader
+    implementation libs.fabric.api
+    implementation libs.jamlib.fabric
 
-    implementation project(path: ":fabric", configuration: "namedElements")
-    implementation project(path: ":common", configuration: "namedElements")
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    implementation project(':fabric')
+//    implementation project(':common')
+    common(project(':common')) { transitive false }
 }
