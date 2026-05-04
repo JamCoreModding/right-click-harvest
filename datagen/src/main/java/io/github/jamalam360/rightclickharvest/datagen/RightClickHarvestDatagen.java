@@ -3,8 +3,8 @@ package io.github.jamalam360.rightclickharvest.datagen;
 import io.github.jamalam360.rightclickharvest.RightClickHarvest;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagBuilder;
@@ -21,9 +21,9 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 		pack.addProvider(BlockTagGenerator::new);
 	}
 
-	public static class ItemTagGenerator extends FabricTagProvider.ItemTagProvider {
-		public ItemTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-			super(output, registriesFuture);
+	public static class ItemTagGenerator extends FabricTagsProvider.ItemTagsProvider {
+		public ItemTagGenerator(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookupFuture) {
+			super(output, registryLookupFuture);
 		}
 
 		@Override
@@ -147,9 +147,9 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 		}
 	}
 
-	public static class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
-		public BlockTagGenerator(FabricDataOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
-			super(output, registriesFuture);
+	public static class BlockTagGenerator extends FabricTagsProvider.BlockTagsProvider {
+		public BlockTagGenerator(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookupFuture) {
+			super(output, registryLookupFuture);
 		}
 
 		@Override
