@@ -8,5 +8,5 @@ jobs:
   build:
     uses: JamCoreModding/.github/.github/workflows/mod.yml@main
     with:
-      java-version: 21
+      java-version: 25
       gametest-project-directory: fabric-gametest
