@@ -1,3 +1,1 @@
-- Switch to JamLib 2.0.0.
-  - Architectury API is no longer a dependency.
-- Update to 26.1.2
+Update to 26.2

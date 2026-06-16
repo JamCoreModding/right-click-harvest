@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -40,7 +40,7 @@ public class TallPlantsTestSuite {
 
         helper.succeedIf(() -> {
             this.assertHeight(helper, 1);
-            helper.assertEntityNotPresent(EntityType.ITEM);
+            helper.assertEntityNotPresent(EntityTypes.ITEM);
         });
     }
 

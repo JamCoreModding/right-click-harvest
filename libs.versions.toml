@@ -1,16 +1,16 @@
 [versions]
 # https://projects.neoforged.net/neoforged/neoforge
-neoforge = "26.1.2.29-beta"
+neoforge = "26.2.0.0-beta"
 
 # https://fabricmc.net/develop
-fabric-loader = "0.19.2"
-fabric-api = "0.146.1+26.1.2"
+fabric-loader = "0.19.3"
+fabric-api = "0.152.1+26.2"
 
 # https://maven.jamalam.tech/#/releases
-jamlib = "2.0.0+26.1.x"
+jamlib = "2.3.0+26.2.x"
 
 # https://modrinth.com/mod/modmenu/versions
-modmenu = "18.0.0-alpha.8"
+modmenu = "20.0.0-beta.2"
 
 [libraries]
 neoforge = { module = "net.neoforged:neoforge", version.ref = "neoforge" }

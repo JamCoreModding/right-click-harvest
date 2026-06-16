@@ -6,9 +6,9 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagBuilder;
-import net.minecraft.world.level.block.Blocks;
 import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -154,16 +154,16 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 
 		@Override
 		protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
-			valueLookupBuilder(RightClickHarvest.BLACKLIST)
+			builder(RightClickHarvest.BLACKLIST)
 					.setReplace(false);
-			valueLookupBuilder(RightClickHarvest.HOE_NEVER_REQUIRED)
+			builder(RightClickHarvest.HOE_NEVER_REQUIRED)
 					.setReplace(false)
-					.add(Blocks.COCOA);
-			valueLookupBuilder(RightClickHarvest.RADIUS_HARVEST_BLACKLIST)
+					.add(BlockItemIds.COCOA_CROP.block());
+			builder(RightClickHarvest.RADIUS_HARVEST_BLACKLIST)
 					.setReplace(false)
-					.add(Blocks.COCOA)
-					.add(Blocks.SUGAR_CANE)
-					.add(Blocks.CACTUS);
+					.add(BlockItemIds.COCOA_CROP.block())
+					.add(BlockItemIds.SUGAR_CANE.block())
+					.add(BlockItemIds.CACTUS.block());
 		}
 	}
 }
