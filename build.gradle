@@ -96,7 +96,7 @@ allprojects {
 
     tasks.publish {
         dependsOn('clean')
-        dependsOn(':githubRelease')
+//        dependsOn(':githubRelease')
         dependsOn('common:publishAllPublicationsToMavenRepository')
         dependsOn('fabric:publishMods')
         dependsOn('fabric:publishAllPublicationsToMavenRepository')
