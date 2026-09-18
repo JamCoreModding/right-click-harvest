@@ -21,9 +21,4 @@ public class RightClickHarvestPlatform {
 	public static boolean postPlaceEvent(Level level, BlockPos pos, Player player) {
 		return false;
 	}
-
-	@ExpectPlatform
-	public static boolean isHoeAccordingToPlatform(ItemStack stack) {
-		return false;
-	}
 }
