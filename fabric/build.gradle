@@ -1,6 +1,6 @@
 plugins {
     id 'com.gradleup.shadow' version '8.3.3'
-    id 'me.shedaniel.unified-publishing'
+    id 'me.modmuss50.mod-publish-plugin'
 }
 
 architectury {
@@ -31,37 +31,31 @@ dependencies {
 }
 
 if (System.getenv('CURSEFORGE_API_KEY') != null && System.getenv('MODRINTH_API_KEY') != null) {
-    unifiedPublishing {
-        project {
-            displayName = "V${project.version} (Fabric ${project.minecraft_version})"
-            changelog = rootProject.file('CHANGELOG.md').text
-            releaseType = project.version.contains('beta') ? 'beta' : 'release'
-            gameVersions = [project.minecraft_version, *(project.additional_minecraft_versions == '' ? [] : project.additional_minecraft_versions.split(','))]
-            gameLoaders = ['fabric', 'quilt']
+ publishMods {
+        file = tasks.shadowJar.archiveFile
+        displayName = "V${project.version} (Fabric ${project.minecraft_version})"
+        changelog = rootProject.file("CHANGELOG.md").text
+        type = project.version.contains("beta") ? BETA : STABLE
+        modLoaders.add("fabric")
 
-            mainPublication tasks.shadowJar
+        curseforge {
+            projectId = "452834"
+            accessToken = providers.environmentVariable("CURSEFORGE_API_KEY")
+            client = true
+            server = true
+            minecraftVersions.add(project.minecraft_version)
+            minecraftVersions.addAll(project.additional_minecraft_versions == "" ? [] : project.additional_minecraft_versions.split(","))
+            requires("fabric-api")
+            requires("jamlib")
+        }
 
-            relations {
-                depends {
-                    curseforge = 'fabric-api'
-                    modrinth = 'fabric-api'
-                }
-
-                depends {
-                    curseforge = 'jamlib'
-                    modrinth = 'jamlib'
-                }
-            }
-
-            curseforge {
-                token = System.getenv('CURSEFORGE_API_KEY')
-                id = '452834'
-            }
-
-            modrinth {
-                token = System.getenv('MODRINTH_API_KEY')
-                id = 'Cnejf5xM'
-            }
+        modrinth {
+            projectId = "Cnejf5xM"
+            accessToken = providers.environmentVariable("MODRINTH_API_KEY")
+            minecraftVersions.add(project.minecraft_version)
+            minecraftVersions.addAll(project.additional_minecraft_versions == "" ? [] : project.additional_minecraft_versions.split(","))
+            requires("fabric-api")
+            requires("jamlib")
         }
     }
 }
