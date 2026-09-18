@@ -98,9 +98,9 @@ allprojects {
         dependsOn('clean')
         dependsOn(':githubRelease')
         dependsOn('common:publishAllPublicationsToMavenRepository')
-        dependsOn('fabric:publishUnified')
+        dependsOn('fabric:publishMods')
         dependsOn('fabric:publishAllPublicationsToMavenRepository')
-        dependsOn('neoforge:publishUnified')
+        dependsOn('neoforge:publishMods')
         dependsOn('neoforge:publishAllPublicationsToMavenRepository')
     }
 }
