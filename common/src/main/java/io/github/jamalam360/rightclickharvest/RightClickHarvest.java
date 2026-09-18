@@ -9,6 +9,7 @@ import io.github.jamalam360.rightclickharvest.mixin.CropBlockAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.BlockTransformers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
@@ -238,7 +240,7 @@ public class RightClickHarvest {
                || stack.is(LOW_TIER_HOES)
                || stack.is(MID_TIER_HOES)
                || stack.is(HIGH_TIER_HOES)
-               || RightClickHarvestPlatform.isHoeAccordingToPlatform(stack);
+               || (stack.has(DataComponents.BLOCK_TRANSFORMER) && stack.get(DataComponents.BLOCK_TRANSFORMER).is(BlockTransformers.HOE));
     }
 
     private static boolean isMature(BlockState state) {

@@ -22,8 +22,4 @@ public class RightClickHarvestPlatformImpl {
         // no-op, fabric doesn't have a specific place block event.
         return false;
     }
-
-    public static boolean isHoeAccordingToPlatform(ItemStack stack) {
-        return false;
-    }
 }
