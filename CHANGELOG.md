@@ -1,1 +1,1 @@
-Update to 26.3
+- Blacklist Farmer's Delight tomato blocks from harvesting as they already provide their own functionality (closes #119). 
