@@ -1,1 +1,1 @@
-- Grant statistics when harvesting (#110).
+- Blacklist Farmer's Delight tomato blocks from harvesting as they already provide their own functionality (closes #119). 

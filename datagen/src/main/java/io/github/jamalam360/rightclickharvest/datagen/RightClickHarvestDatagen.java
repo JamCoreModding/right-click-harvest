@@ -152,8 +152,18 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 
 		@Override
 		protected void addTags(HolderLookup.Provider wrapperLookup) {
-			this.getOrCreateTagBuilder(RightClickHarvest.BLACKLIST)
+			String[] blacklistBlocks = new String[]{
+				"farmersdelight:tomatoes",
+				"farmersdelight:tomatoes_on_rope"
+			};
+
+			FabricTagBuilder blacklist = this.getOrCreateTagBuilder(RightClickHarvest.BLACKLIST)
 					.setReplace(false);
+
+			for (String block : blacklistBlocks) {
+				blacklist.addOptional(ResourceLocation.parse(block));
+			}
+
 			this.getOrCreateTagBuilder(RightClickHarvest.HOE_NEVER_REQUIRED)
 					.setReplace(false)
 					.add(Blocks.COCOA);

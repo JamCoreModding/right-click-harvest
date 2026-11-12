@@ -3,7 +3,7 @@
 architectury = "13.0.8"
 
 # https://projects.neoforged.net/neoforged/neoforge
-neoforge = "21.1.72"
+neoforge = "21.1.266"
 
 # https://fabricmc.net/develop
 fabric-loader = "0.16.9"
