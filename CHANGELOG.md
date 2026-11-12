@@ -1,3 +1,4 @@
 - Blacklist Farmer's Delight tomato blocks from harvesting as they already provide their own functionality (closes #119). 
 - Award XP orbs rather than directly giving XP to the player (closes #116).
 - Players can no longer harvest crops under spawn protection/outside of the world border.
+- Make sure that after harvest events are fired on Fabric.
