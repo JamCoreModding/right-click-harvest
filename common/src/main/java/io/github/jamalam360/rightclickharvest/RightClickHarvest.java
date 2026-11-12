@@ -249,8 +249,13 @@ public class RightClickHarvest {
 	            case REWARD -> XP_PROVIDER.sample(player.getRandom());
                 case NONE -> 0;
             };
-            player.giveExperiencePoints(xp);
-            
+
+            if (xp < 0) {
+            	player.giveExperiencePoints(xp);
+            } else if (xp > 0) {
+            	ExperienceOrb.award((ServerLevel) level, player.position(), xp);
+            }
+
             RightClickHarvestPlatform.postAfterHarvestEvent(new HarvestContext(player, originalBlock));
         } else {
             player.playSound(state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED, 1.0f, 1.0f);
