@@ -139,6 +139,10 @@ public class RightClickHarvest {
                     }
                 }
 
+                if (!level.mayInteract(player, hitResult.getBlockPos())) {
+                    return EventResult.pass();
+                }
+
                 return completeHarvest(level, state, hitResult.getBlockPos(), player, hand, stackInHand, hoeInUse, true, () -> {
                     BlockState replantState = getReplantState(state);
                     level.setBlockAndUpdate(hitResult.getBlockPos(), replantState);
@@ -162,6 +166,11 @@ public class RightClickHarvest {
             }
 
             final BlockPos breakPos = bottom.above(1);
+
+            if (!level.mayInteract(player, breakPos)) {
+                return EventResult.pass();
+            }
+
             return completeHarvest(level, state, breakPos, player, hand, stackInHand, hoeInUse, false, () -> level.removeBlock(breakPos, false));
         }
 
