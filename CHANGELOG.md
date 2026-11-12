@@ -1,3 +1,1 @@
-- Switch to JamLib 2.0.0.
-  - Architectury API is no longer a dependency.
-- Update to 26.1.2
+- Blacklist Farmer's Delight tomato blocks from harvesting as they already provide their own functionality (closes #119). 
