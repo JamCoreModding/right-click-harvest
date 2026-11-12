@@ -24,6 +24,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -217,8 +218,13 @@ public class RightClickHarvest {
 	            case REWARD -> XP_PROVIDER.sample(player.getRandom());
                 case NONE -> 0;
             };
-            player.giveExperiencePoints(xp);
-            
+
+            if (xp < 0) {
+            	player.giveExperiencePoints(xp);
+            } else if (xp > 0) {
+            	ExperienceOrb.award((ServerLevel) level, player.position(), xp);
+            }
+
             RightClickHarvestPlatform.postAfterHarvestEvent(new HarvestContext(player, originalBlock));
         } else {
             player.playSound(state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED, 1.0f, 1.0f);
