@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.world.level.block.Blocks;
@@ -152,8 +153,18 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 
 		@Override
 		protected void addTags(HolderLookup.Provider wrapperLookup) {
-			this.getOrCreateTagBuilder(RightClickHarvest.BLACKLIST)
+			String[] blacklistBlocks = new String[]{
+				"farmersdelight:tomatoes",
+				"farmersdelight:tomatoes_on_rope"
+			};
+
+			FabricTagBuilder blacklist = this.getOrCreateTagBuilder(RightClickHarvest.BLACKLIST)
 					.setReplace(false);
+
+			for (String block : blacklistBlocks) {
+				blacklist.addOptional(new ResourceLocation(block));
+			}
+
 			this.getOrCreateTagBuilder(RightClickHarvest.HOE_NEVER_REQUIRED)
 					.setReplace(false)
 					.add(Blocks.COCOA);
