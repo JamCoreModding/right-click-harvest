@@ -272,7 +272,7 @@ public class RightClickHarvest {
             	ExperienceOrb.award((ServerLevel) level, player.position(), xp);
             }
 
-            RightClickHarvestPlatform.postAfterHarvestEvent(new HarvestContext(player, originalBlock));
+            RightClickHarvestPlatform.postAfterHarvestEvent(new HarvestContext(player, originalBlock), level, pos, state, level.getBlockEntity(pos));
         } else {
             player.playSound(state.getBlock() instanceof NetherWartBlock ? SoundEvents.NETHER_WART_PLANTED : SoundEvents.CROP_PLANTED, 1.0f, 1.0f);
         }
