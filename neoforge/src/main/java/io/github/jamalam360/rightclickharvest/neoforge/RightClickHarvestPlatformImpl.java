@@ -5,15 +5,17 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.ItemAbilities;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import org.jetbrains.annotations.Nullable;
 
 public class RightClickHarvestPlatformImpl {
-	public static void postAfterHarvestEvent(HarvestContext context) {
-		RightClickHarvestNeoForgeEvents.AfterHarvest.post(context);
+	public static void postAfterHarvestEvent(HarvestContext ctx, Level level, BlockPos pos, BlockState state, @Nullable BlockEntity be) {
+		RightClickHarvestNeoForgeEvents.AfterHarvest.post(ctx);
 	}
 
 	public static boolean postBreakEvent(Level level, BlockPos pos, BlockState state, Player player) {
