@@ -87,13 +87,13 @@ public class RightClickHarvest {
         }
 
         // Check if the block requires a hoe; if so, check if a hoe is required and if the user has one.
-        if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe) {
-            if (!isHoe(stackInHand)) {
-                warnPlayerForNotUsingHoe(player, state, stackInHand);
-                return EventResult.pass();
-            } else {
-                hoeInUse = true;
-            }
+        if (!state.is(HOE_NEVER_REQUIRED) && CONFIG.get().requireHoe && !isHoe(stackInHand)) {
+            warnPlayerForNotUsingHoe(player, state, stackInHand);
+            return EventResult.pass();
+        }
+
+        if (isHoe(stackInHand)) {
+            hoeInUse = true;
         }
 
         // If we are radius harvesting and the block cannot not be, return
