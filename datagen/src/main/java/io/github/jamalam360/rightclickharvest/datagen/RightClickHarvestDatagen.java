@@ -6,12 +6,13 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagBuilder;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
@@ -157,17 +158,16 @@ public class RightClickHarvestDatagen implements DataGeneratorEntrypoint {
 
 		@Override
 		protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
-
 			String[] blacklistBlocks = new String[]{
 				"farmersdelight:tomatoes",
 				"farmersdelight:tomatoes_on_rope"
 			};
 
-			Builder blacklist = valueLookupBuilder(RightClickHarvest.BLACKLIST)
+			TagAppender<ResourceKey<Block>, Block> blacklist = builder(RightClickHarvest.BLACKLIST)
 					.setReplace(false);
 
 			for (String block : blacklistBlocks) {
-				blacklist.addOptional(ResourceKey.create(Registries.BLOCK, Identifier.parse(block)));
+				blacklist.addOptional(ResourceKey.create(BuiltInRegistries.BLOCK.key(), Identifier.parse(block)));
 			}
 
 			valueLookupBuilder(RightClickHarvest.HOE_NEVER_REQUIRED)
