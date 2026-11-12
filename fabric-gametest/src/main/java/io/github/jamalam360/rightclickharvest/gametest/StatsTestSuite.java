@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class StatsTestSuite {
-	private static final BlockPos CROP_CENTRE_POS = new BlockPos(4, 2, 4);
+	private static final BlockPos CROP_CENTRE_POS = new BlockPos(4, 3, 4);
 	private final HashMap<Stat<?>, Integer> stats = new HashMap<>();
 
 	@GameTest(template = "rightclickharvest-gametest:wheat")
@@ -41,8 +41,8 @@ public class StatsTestSuite {
 	private Player makeMockPlayerWithStats(Level level, BlockPos pos) {
 		return new Player(level, pos, 0, new GameProfile(UUID.randomUUID(), "test-mock-player")) {
 			@Override
-			public void awardStat(Stat<?> stat) {
-				stats.put(stat, stats.getOrDefault(stat, 0) + 1);
+			public void awardStat(Stat<?> stat, int i) {
+				stats.put(stat, stats.getOrDefault(stat, 0) + i);
 			}
 
 			@Override
