@@ -42,7 +42,7 @@ subprojects {
                     'Implementation-Version': project.jar.archiveVersion,
                     'Built-On-Java'         : "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
                     'Built-On-Minecraft'    : minecraft_version,
-                    'JamLib-File-Name'      : "rightclickharvest-${project.base.archivesName.get()}-${rootProject.version}.jar"
+                    'JamLib-File-Name'      : "rightclickharvest-${base.archivesName.get()}-${project.version.toString().replace('+', '-')}.jar"
             ])
         }
     }
@@ -86,6 +86,10 @@ allprojects {
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
         options.release = 25
+    }
+
+    tasks.withType(AbstractArchiveTask).configureEach {
+        archiveVersion = rootProject.version.toString().replace("+", "-")
     }
 
     tasks.create('prepareWorkspace') {}
